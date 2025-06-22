@@ -1,5 +1,4 @@
 using PrimeTween;
-using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace EC.Effects
@@ -10,8 +9,11 @@ namespace EC.Effects
         #region Data
         /* Example vars:
         public override bool ThisFloat => false;
-        public override bool ThisVector3 => false;
+        public override bool ThisString => false;
         public override bool ThisColor => false;
+        public override bool ThisGradient => false;
+        public override bool ThisVector2 => false;
+        public override bool ThisVector3 => false;
 
         [SerializeField, HideLabel, OnValueChanged("FloatUpdate", IncludeChildren = true), ShowIf("ThisFloat")] private EffectorComponentFuncData<RectTransform, FuncList, float> _dataFloat; public virtual void FloatUpdate() { _dataVector3.Func = _dataFloat.Func; _dataColor.Func = _dataFloat.Func; base.MarkDirty(); }
         [SerializeField, HideLabel, OnValueChanged("Vector3Update", IncludeChildren = true), ShowIf("ThisVector3")] private EffectorComponentFuncData<RectTransform, FuncList, Vector3> _dataVector3; public virtual void Vector3Update() { _dataFloat.Func = _dataVector3.Func; _dataColor.Func = _dataVector3.Func; base.MarkDirty(); }
@@ -22,7 +24,10 @@ namespace EC.Effects
         */
         public virtual EffectorEmpty Data { get; set; }
         public virtual bool ThisFloat => false;
+        public virtual bool ThisString => false;
         public virtual bool ThisColor => false;
+        public virtual bool ThisGradient => false;
+        public virtual bool ThisVector2 => false;
         public virtual bool ThisVector3 => false;
 
         #region Compiling
@@ -52,15 +57,19 @@ namespace EC.Effects
 
         public virtual void PlayMoment() { }
         public virtual void PlayMomentCustom(float value) { }
+        public virtual void PlayMomentCustom(string value) { }
         public virtual void PlayMomentCustom(Color value) { }
-        public virtual void PlayMomentCustom(Vector3 value) { }
         public virtual void PlayMomentCustom(Gradient value) { }
+        public virtual void PlayMomentCustom(Vector2 value) { }
+        public virtual void PlayMomentCustom(Vector3 value) { }
 
         public virtual void PlaySmooth() { }
         public virtual void PlaySmoothCustom(float value) { }
+        public virtual void PlaySmoothCustom(string value) { }
         public virtual void PlaySmoothCustom(Color value) { }
-        public virtual void PlaySmoothCustom(Vector3 value) { }
         public virtual void PlaySmoothCustom(Gradient value) { }
+        public virtual void PlaySmoothCustom(Vector2 value) { }
+        public virtual void PlaySmoothCustom(Vector3 value) { }
 
         public virtual void Stop() { }
         public virtual void Pause() { }

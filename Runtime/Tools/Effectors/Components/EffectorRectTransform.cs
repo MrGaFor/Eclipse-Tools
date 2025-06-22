@@ -1,5 +1,6 @@
 using PrimeTween;
 using Sirenix.OdinInspector;
+using System.Linq;
 using UnityEngine;
 
 namespace EC.Effects
@@ -8,11 +9,13 @@ namespace EC.Effects
     public class EffectorRectTransform : IEffectorComponent
     {
         #region Data
-        private enum FuncList { Position, LocalPosition, AnchoredPosition, Rotate, LocalRotate, Scale }
-        public override bool ThisVector3 => true;
+        private enum FuncList { Position, LocalPosition, AnchoredPosition, Rotate, LocalRotate, Scale, SizeDelta }
+        public override bool ThisVector2 => _dataVector2.Func == FuncList.SizeDelta;
+        public override bool ThisVector3 => new FuncList[] { FuncList.Position, FuncList.LocalPosition, FuncList.AnchoredPosition, FuncList.Rotate, FuncList.LocalRotate, FuncList.Scale }.Contains(_dataVector3.Func);
 
-        [SerializeField, HideLabel, OnValueChanged("Vector3Update", IncludeChildren = true), ShowIf("ThisVector3")] private EffectorComponentFuncData<RectTransform, FuncList, Vector3> _dataVector3; public virtual void Vector3Update() { base.MarkDirty(); }
-        public override EffectorEmpty Data => _data; private EffectorComponentFunc<RectTransform, FuncList> _data => ThisVector3 ? _dataVector3 : null;
+        [SerializeField, HideLabel, OnValueChanged("Vector2Update", IncludeChildren = true), ShowIf("ThisVector2")] private EffectorComponentFuncData<RectTransform, FuncList, Vector2> _dataVector2; public virtual void Vector2Update() { _dataVector3.Func = _dataVector2.Func; base.MarkDirty(); }
+        [SerializeField, HideLabel, OnValueChanged("Vector3Update", IncludeChildren = true), ShowIf("ThisVector3")] private EffectorComponentFuncData<RectTransform, FuncList, Vector3> _dataVector3; public virtual void Vector3Update() { _dataVector2.Func = _dataVector3.Func; base.MarkDirty(); }
+        public override EffectorEmpty Data => _data; private EffectorComponentFunc<RectTransform, FuncList> _data => ThisVector3 ? _dataVector3 : ThisVector2 ? _dataVector2 : null;
         #endregion
 
         #region Start|End Player
@@ -45,7 +48,19 @@ namespace EC.Effects
         #region Moment Player
         public override void PlayMoment()
         {
+            PlayMomentCustom(_dataVector2.Value);
             PlayMomentCustom(_dataVector3.Value);
+        }
+        public override void PlayMomentCustom(Vector2 value)
+        {
+            if (!ThisVector2) return;
+            StartPlayMoment();
+            switch (_data.Func)
+            {
+                case FuncList.SizeDelta:
+                    _data.Component.sizeDelta = value; break;
+            }
+            EndPlayMoment();
         }
         public override void PlayMomentCustom(Vector3 value)
         {
@@ -73,7 +88,19 @@ namespace EC.Effects
         #region Smooth Player
         public override void PlaySmooth()
         {
+            PlaySmoothCustom(_dataVector2.Value);
             PlaySmoothCustom(_dataVector3.Value);
+        }
+        public override void PlaySmoothCustom(Vector2 value)
+        {
+            if (!ThisVector2) return;
+            StartPlaySmooth();
+            switch (_data.Func)
+            {
+                case FuncList.SizeDelta:
+                    EffectTween = PrimeTween.Tween.UISizeDelta(_data.Component, value, CompiledSettings); break;
+            }
+            EndPlaySmooth();
         }
         public override void PlaySmoothCustom(Vector3 value)
         {

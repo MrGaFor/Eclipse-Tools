@@ -24,6 +24,18 @@ namespace EC.Effects
             foreach (var component in _components)
                 component.PlayMomentCustom(value);
         }
+        public override void PlayMomentCustom(string value)
+        {
+            Stop();
+            foreach (var component in _components)
+                component.PlayMomentCustom(value);
+        }
+        public override void PlayMomentCustom(Vector2 value)
+        {
+            Stop();
+            foreach (var component in _components)
+                component.PlayMomentCustom(value);
+        }
         public override void PlayMomentCustom(Vector3 value)
         {
             Stop();
@@ -31,6 +43,12 @@ namespace EC.Effects
                 component.PlayMomentCustom(value);
         }
         public override void PlayMomentCustom(Color value)
+        {
+            Stop();
+            foreach (var component in _components)
+                component.PlayMomentCustom(value);
+        }
+        public override void PlayMomentCustom(Gradient value)
         {
             Stop();
             foreach (var component in _components)
@@ -51,6 +69,18 @@ namespace EC.Effects
             foreach (var component in _components)
                 component.PlaySmoothCustom(value);
         }
+        public override void PlaySmoothCustom(string value)
+        {
+            Stop();
+            foreach (var component in _components)
+                component.PlaySmoothCustom(value);
+        }
+        public override void PlaySmoothCustom(Gradient value)
+        {
+            Stop();
+            foreach (var component in _components)
+                component.PlaySmoothCustom(value);
+        }
         public override void PlaySmoothCustom(Vector3 value)
         {
             Stop();
@@ -58,6 +88,12 @@ namespace EC.Effects
                 component.PlaySmoothCustom(value);
         }
         public override void PlaySmoothCustom(Color value)
+        {
+            Stop();
+            foreach (var component in _components)
+                component.PlaySmoothCustom(value);
+        }
+        public override void PlaySmoothCustom(Vector2 value)
         {
             Stop();
             foreach (var component in _components)

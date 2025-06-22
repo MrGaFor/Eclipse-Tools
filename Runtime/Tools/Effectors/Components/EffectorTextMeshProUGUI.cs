@@ -9,14 +9,16 @@ namespace EC.Effects
     public class EffectorTextMeshProUGUI : IEffectorComponent
     {
         #region Data
-        private enum FuncList { Alpha, Color, FontSize, OutlineWidth }
+        private enum FuncList { Text, Alpha, Color, FontSize, OutlineWidth }
         public override bool ThisFloat => _dataFloat.Func == FuncList.Alpha || _dataFloat.Func == FuncList.FontSize || _dataFloat.Func == FuncList.OutlineWidth;
+        public override bool ThisString => _dataFloat.Func == FuncList.Text;
         public override bool ThisColor => _dataColor.Func == FuncList.Color;
 
-        [SerializeField, HideLabel, OnValueChanged("FloatUpdate", IncludeChildren = true), ShowIf("ThisFloat")] private EffectorComponentFuncData<TMPro.TextMeshProUGUI, FuncList, float> _dataFloat; public virtual void FloatUpdate() { _dataColor.Func = _dataFloat.Func; base.MarkDirty(); }
-        [SerializeField, HideLabel, OnValueChanged("ColorUpdate", IncludeChildren = true), ShowIf("ThisColor")] private EffectorComponentFuncData<TMPro.TextMeshProUGUI, FuncList, Color> _dataColor; public virtual void ColorUpdate() { _dataFloat.Func = _dataColor.Func; base.MarkDirty(); }
+        [SerializeField, HideLabel, OnValueChanged("FloatUpdate", IncludeChildren = true), ShowIf("ThisFloat")] private EffectorComponentFuncData<TMPro.TextMeshProUGUI, FuncList, float> _dataFloat; public virtual void FloatUpdate() { _dataColor.Func = _dataFloat.Func; _dataString.Func = _dataFloat.Func; base.MarkDirty(); }
+        [SerializeField, HideLabel, OnValueChanged("StringUpdate", IncludeChildren = true), ShowIf("ThisString")] private EffectorComponentFuncData<TMPro.TextMeshProUGUI, FuncList, string> _dataString; public virtual void StringUpdate() { _dataColor.Func = _dataString.Func; _dataFloat.Func = _dataString.Func; base.MarkDirty(); }
+        [SerializeField, HideLabel, OnValueChanged("ColorUpdate", IncludeChildren = true), ShowIf("ThisColor")] private EffectorComponentFuncData<TMPro.TextMeshProUGUI, FuncList, Color> _dataColor; public virtual void ColorUpdate() { _dataFloat.Func = _dataColor.Func; _dataString.Func = _dataColor.Func; base.MarkDirty(); }
 
-        public override EffectorEmpty Data => _data; private EffectorComponentFunc<TMPro.TextMeshProUGUI, FuncList> _data => ThisFloat ? _dataFloat : ThisColor ? _dataColor : null;
+        public override EffectorEmpty Data => _data; private EffectorComponentFunc<TMPro.TextMeshProUGUI, FuncList> _data => ThisFloat ? _dataFloat : ThisColor ? _dataColor : ThisString ? _dataString : null;
         #endregion
 
         #region Start|End Player
@@ -50,6 +52,7 @@ namespace EC.Effects
         public override void PlayMoment()
         {
             PlayMomentCustom(_dataFloat.Value);
+            PlayMomentCustom(_dataString.Value);
             PlayMomentCustom(_dataColor.Value);
         }
         public override void PlayMomentCustom(float value)
@@ -64,6 +67,17 @@ namespace EC.Effects
                     _data.Component.fontSize = value; break;
                 case FuncList.OutlineWidth:
                     _data.Component.outlineWidth = value; break;
+            }
+            EndPlayMoment();
+        }
+        public override void PlayMomentCustom(string value)
+        {
+            if (!ThisString) return;
+            StartPlayMoment();
+            switch (_data.Func)
+            {
+                case FuncList.Text:
+                    _data.Component.text = value; break;
             }
             EndPlayMoment();
         }
@@ -84,6 +98,7 @@ namespace EC.Effects
         public override void PlaySmooth()
         {
             PlaySmoothCustom(_dataFloat.Value);
+            PlaySmoothCustom(_dataString.Value);
             PlaySmoothCustom(_dataColor.Value);
         }
         public override void PlaySmoothCustom(float value)
@@ -98,6 +113,17 @@ namespace EC.Effects
                     EffectTween = Tween.Custom(_data.Component.fontSize, value, CompiledSettings, newvalue => _data.Component.fontSize = newvalue); break;
                 case FuncList.OutlineWidth:
                     EffectTween = Tween.Custom(_data.Component.outlineWidth, value, CompiledSettings, newvalue => _data.Component.outlineWidth = newvalue); break;
+            }
+            EndPlaySmooth();
+        }
+        public override void PlaySmoothCustom(string value)
+        {
+            if (!ThisString) return;
+            StartPlaySmooth();
+            switch (_data.Func)
+            {
+                case FuncList.Text:
+                    EffectTween = PrimeTween.Tween.TextMaxVisibleCharacters(_data.Component, value.Length, CompiledSettings); _data.Component.text = value; break;
             }
             EndPlaySmooth();
         }
