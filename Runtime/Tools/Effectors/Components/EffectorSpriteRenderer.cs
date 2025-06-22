@@ -17,7 +17,8 @@ namespace EC.Effects
         [SerializeField, HideLabel, OnValueChanged("ColorUpdate", IncludeChildren = true), ShowIf("ThisColor")] private EffectorComponentFuncData<SpriteRenderer, FuncList, Color> _dataColor; public virtual void ColorUpdate() { _dataFloat.Func = _dataColor.Func; base.MarkDirty(); }
 
         public override EffectorEmpty Data => _data; private EffectorComponentFunc<SpriteRenderer, FuncList> _data => ThisFloat ? _dataFloat : ThisColor ? _dataColor : null;
-#endregion
+        public SpriteRenderer Component => _data?.Component;
+        #endregion
 
         #region Start|End Player
         private void StartPlayMoment()

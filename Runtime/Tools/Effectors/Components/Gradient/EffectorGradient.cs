@@ -13,6 +13,7 @@ namespace EC.Effects
         [SerializeField, HideLabel, OnValueChanged("ColorUpdate", IncludeChildren = true), ShowIf("ThisColor")] private EffectorComponentValue<Material, Gradient> _dataColor; public virtual void ColorUpdate() { base.MarkDirty(); }
 
         public override EffectorEmpty Data => _data; private EffectorComponentValue<Material, Gradient> _data => ThisColor ? _dataColor : null;
+        public Material Component => _data?.Component;
 
         private void Awake()
         {

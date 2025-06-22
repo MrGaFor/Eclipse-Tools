@@ -13,6 +13,7 @@ namespace EC.Effects
 
         [SerializeField, HideLabel, OnValueChanged("Vector3Update", IncludeChildren = true), ShowIf("ThisVector3")] private EffectorComponentFuncData<Transform, FuncList, Vector3> _dataVector3; public virtual void Vector3Update() { base.MarkDirty(); }
         public override EffectorEmpty Data => _data; private EffectorComponentFunc<Transform, FuncList> _data => ThisVector3 ? _dataVector3 : null;
+        public Transform Component => _data?.Component;
         #endregion
 
         #region Start|End Player

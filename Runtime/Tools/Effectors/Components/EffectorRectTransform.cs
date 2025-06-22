@@ -15,7 +15,9 @@ namespace EC.Effects
 
         [SerializeField, HideLabel, OnValueChanged("Vector2Update", IncludeChildren = true), ShowIf("ThisVector2")] private EffectorComponentFuncData<RectTransform, FuncList, Vector2> _dataVector2; public virtual void Vector2Update() { _dataVector3.Func = _dataVector2.Func; base.MarkDirty(); }
         [SerializeField, HideLabel, OnValueChanged("Vector3Update", IncludeChildren = true), ShowIf("ThisVector3")] private EffectorComponentFuncData<RectTransform, FuncList, Vector3> _dataVector3; public virtual void Vector3Update() { _dataVector2.Func = _dataVector3.Func; base.MarkDirty(); }
+        
         public override EffectorEmpty Data => _data; private EffectorComponentFunc<RectTransform, FuncList> _data => ThisVector3 ? _dataVector3 : ThisVector2 ? _dataVector2 : null;
+        public RectTransform Component => _data?.Component;
         #endregion
 
         #region Start|End Player

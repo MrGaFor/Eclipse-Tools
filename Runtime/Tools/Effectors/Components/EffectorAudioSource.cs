@@ -12,7 +12,9 @@ namespace EC.Effects
         public override bool ThisFloat => true;
 
         [SerializeField, HideLabel, OnValueChanged("FloatUpdate", IncludeChildren = true), ShowIf("ThisFloat")] private EffectorComponentFuncData<AudioSource, FuncList, float> _dataFloat; public virtual void FloatUpdate() { base.MarkDirty(); }
+        
         public override EffectorEmpty Data => _data; private EffectorComponentFunc<AudioSource, FuncList> _data => ThisFloat ? _dataFloat : null;
+        public AudioSource Component => _data?.Component;
         #endregion
 
         #region Start|End Player
