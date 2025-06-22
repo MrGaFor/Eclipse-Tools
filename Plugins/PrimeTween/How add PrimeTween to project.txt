@@ -1,0 +1,2 @@
+Add to manifest.json:
+"com.kyrylokuzyk.primetween": "file:../Assets/Eclipse-Tools/Plugins/PrimeTween/internal/com.kyrylokuzyk.primetween.tgz",
