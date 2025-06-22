@@ -1,5 +1,5 @@
 {
-    "name": "PrimeTween.Installer",
+    "name": "PrimeTween.Editor",
     "rootNamespace": "",
     "references": [
         "PrimeTween.Runtime"
@@ -13,12 +13,6 @@
     "precompiledReferences": [],
     "autoReferenced": true,
     "defineConstraints": [],
-    "versionDefines": [
-        {
-            "name": "com.kyrylokuzyk.primetween",
-            "expression": "1.0.0",
-            "define": "PRIME_TWEEN_INSTALLED"
-        }
-    ],
+    "versionDefines": [],
     "noEngineReferences": false
 }
