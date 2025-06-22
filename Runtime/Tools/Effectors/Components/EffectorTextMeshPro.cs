@@ -124,7 +124,7 @@ namespace EC.Effects
             switch (_data.Func)
             {
                 case FuncList.Text:
-                    EffectTween = PrimeTween.Tween.TextMaxVisibleCharacters(_data.Component, value.Length, CompiledSettings); _data.Component.text = value; break;
+                    _data.Component.maxVisibleCharacters = 0; _data.Component.text = value; EffectTween = PrimeTween.Tween.TextMaxVisibleCharacters(_data.Component, value.Length, CompiledSettings); break;
             }
             EndPlaySmooth();
         }
