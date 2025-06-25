@@ -1,5 +1,6 @@
 using Sirenix.OdinInspector;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -10,7 +11,7 @@ namespace EC.Inputer
     public class InputController : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler, IPointerMoveHandler
     {
         #region RESULT EVENT
-        [SerializeField] private InputComponent[] _events;
+        [SerializeField] private List<InputComponent> _events;
 
         #region InvokeEvent()
         private void InvokeEvent(EventVariant eventType, float value)
@@ -195,6 +196,31 @@ namespace EC.Inputer
                 Click(touch);
             }
         }
+        #endregion
+
+        #region EDITOR
+#if UNITY_EDITOR
+        private void OnDrawGizmosSelected()
+        {
+            InputComponent[] components = gameObject.GetComponents<InputComponent>();
+            bool haveChanges = false;
+            if (_events.Count > 0)
+                for (int i = _events.Count - 1; i >= 0; i--)
+                    if (!_events[i])
+                    {
+                        _events.RemoveAt(i);
+                        haveChanges = true;
+                    }
+            foreach (var component in components)
+                if (!_events.Contains(component))
+                {
+                    _events.Add(component);
+                    haveChanges = true;
+                }
+            if (haveChanges)
+                UnityEditor.EditorUtility.SetDirty(this);
+        }
+#endif
         #endregion
     }
 }
