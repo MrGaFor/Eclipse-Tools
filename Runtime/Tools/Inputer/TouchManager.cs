@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-namespace EC.Input
+namespace EC.Inputer
 {
     public class TouchManager
     {
