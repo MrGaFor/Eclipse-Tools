@@ -16,8 +16,7 @@ namespace EC
             Updater.UpdaterCore.Init();
             Coroutine.Coroutines.Init();
             GPU.GPUInstance.Init();
-            Settings.SettingsSystem.Init();
-            Input.InputSystem.Init();
+            Inputer.InputKeyController.Init();
         }
     }
 }
