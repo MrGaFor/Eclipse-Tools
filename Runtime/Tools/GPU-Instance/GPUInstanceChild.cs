@@ -11,7 +11,8 @@ namespace EC.GPU
         private void Start()
         {
             foreach (Renderer renderer in _renderer)
-                renderer.SetPropertyBlock(GPUInstance.GetBlockForMaterial(renderer.sharedMaterial));
+                if (!renderer.GetComponent<GPUInstanceLocalDisable>())
+                    renderer.SetPropertyBlock(GPUInstance.GetBlockForMaterial(renderer.sharedMaterial));
         }
 
 #if UNITY_EDITOR

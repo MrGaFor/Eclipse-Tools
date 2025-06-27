@@ -30,7 +30,7 @@ namespace EC.GPU
         {
             Renderer[] renderers = GameObject.FindObjectsByType<Renderer>(FindObjectsInactive.Exclude, FindObjectsSortMode.None);
             foreach (Renderer renderer in renderers)
-                if (renderer && renderer.sharedMaterial)
+                if (renderer && renderer.sharedMaterial && !renderer.GetComponent<GPUInstanceLocalDisable>())
                     renderer.SetPropertyBlock(GetBlockForMaterial(renderer.sharedMaterial));
 #if UNITY_EDITOR
             Debug.Log("Instanced renderers = " + renderers.Length.ToString());
