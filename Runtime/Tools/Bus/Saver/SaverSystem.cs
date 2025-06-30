@@ -36,6 +36,7 @@ namespace EC.Saver
         {
             int i => i.ToString(InvariantCulture),
             float f => f.ToString(InvariantCulture),
+            bool b => b.ToString(),
             string s => s,
             Enum e => e.ToString(),
             Vector2 v2 => $"{v2.x.ToString(InvariantCulture)},{v2.y.ToString(InvariantCulture)}",
@@ -52,6 +53,7 @@ namespace EC.Saver
             {
                 Type _ when t == typeof(int) => int.Parse(str, InvariantCulture),
                 Type _ when t == typeof(float) => float.Parse(str, InvariantCulture),
+                Type _ when t == typeof(bool) => bool.Parse(str),
                 Type _ when t == typeof(string) => str,
                 Type _ when t == typeof(Vector2) => ParseVec2(str),
                 Type _ when t == typeof(Vector3) => ParseVec3(str),
