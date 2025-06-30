@@ -11,12 +11,11 @@ namespace EC.Saver
     {
         private static List<string> ActiveVariables = new();
 
-        public static void AddVariable<T>(string key)
+        public static void AddVariable<T>(string key, T defaultValue = default)
         {
             if (ActiveVariables.Contains(key)) return;
             ActiveVariables.Add(key);
-            if (PlayerPrefs.HasKey(key))
-                Bus.BusSystem.Set<T>(key, FromString<T>(PlayerPrefs.GetString(key)));
+            Bus.BusSystem.Set<T>(key, FromString<T>(PlayerPrefs.GetString(key, ToString<T>(defaultValue))));
             Bus.BusSystem.Subscribe<T>(key, (value) => OnChangeVariable(key, value));
         }
         public static void RemoveVariable(string key)
