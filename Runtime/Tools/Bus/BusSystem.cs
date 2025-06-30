@@ -66,6 +66,13 @@ namespace EC.Bus
         }
         #endregion
 
+        #region --- HASKEY ---
+        public static bool HasKey(string key)
+        {
+            return Variables.ContainsKey(key);
+        }
+        #endregion
+
         #region --- EVENT ---
         public static void CallEvent(IBusInSettings settings)
         {
