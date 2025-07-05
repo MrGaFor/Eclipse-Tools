@@ -40,7 +40,7 @@ namespace EC.Effects
         protected TweenSettings CompiledSettings;
         protected Tween EffectTween;
 
-        protected void CompileSettings()
+        protected virtual void CompileSettings()
         {
             IsCompiled = true;
             CompiledSettings = new TweenSettings();
