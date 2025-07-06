@@ -31,12 +31,12 @@ namespace EC.Inputer
         public void OnDown()
         {
             if (_callCount == CallCount.Limit && _leftCount == 0) return;
-            if (_callCount == CallCount.Limit) _leftCount--;
             _onDown?.Invoke();
         }
         public void OnUp()
         {
             if (_callCount == CallCount.Limit && _leftCount == 0) return;
+            if (_callCount == CallCount.Limit) _leftCount--;
             _onUp?.Invoke();
         }
     }
