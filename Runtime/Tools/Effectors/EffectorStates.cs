@@ -95,7 +95,7 @@ namespace EC.Effects
         {
             if (_states.Length < 2)
             {
-                Debug.LogErrorFormat("Effects: States massive size less than 2!", this);
+                //Debug.LogErrorFormat("Effects: States massive size less than 2!", this);
                 return;
             }
             if (firstSecond)
@@ -111,14 +111,14 @@ namespace EC.Effects
                     PlayMoment(i);
                     return;
                 }
-            Debug.LogErrorFormat("Effects: State dont include in massive!", this);
+            //Debug.LogErrorFormat("Effects: State dont include in massive!", this);
         }
         public void PlayMoment(int state)
         {
             Stop();
             if (state < 0 || state >= _states.Length)
             {
-                Debug.LogErrorFormat("Effects: State out massive size!", this);
+                //Debug.LogErrorFormat("Effects: State out massive size!", this);
                 return;
             }
             _state = state;
@@ -130,7 +130,7 @@ namespace EC.Effects
         {
             if (_states.Length < 2)
             {
-                Debug.LogErrorFormat("Effects: States massive size less than 2!", this);
+                //Debug.LogErrorFormat("Effects: States massive size less than 2!", this);
                 return;
             }
             if (firstSecond)
@@ -146,14 +146,14 @@ namespace EC.Effects
                     PlaySmooth(i);
                     return;
                 }
-            Debug.LogErrorFormat("Effects: State dont include in massive!", this);
+            //Debug.LogErrorFormat("Effects: State dont include in massive!", this);
         }
         public void PlaySmooth(int state)
         {
             Stop();
             if (state < 0 || state >= _states.Length)
             {
-                Debug.LogErrorFormat("Effects: State out massive size!", this);
+                //Debug.LogErrorFormat("Effects: State out massive size!", this);
                 return;
             }
             _state = state;
