@@ -7,12 +7,13 @@ namespace EC.Inputer
     [HideMonoScript]
     public class InputKeyComponent : MonoBehaviour
     {
-        [SerializeField] private KeyCode _key;
-        [SerializeField, HorizontalGroup("evs")] private UnityEvent _onDown;
-        [SerializeField, HorizontalGroup("evs")] private UnityEvent _onUp;
-        [SerializeField, HorizontalGroup("evs")] private UnityEvent _onClick;
+        private enum CallCount { Any, Limit }
+        [SerializeField, HorizontalGroup("sett"), LabelWidth(60)] private KeyCode _key;
+        [SerializeField, HorizontalGroup("sett", 140), LabelWidth(60), LabelText("Count")] private CallCount _callCount;
+        [SerializeField, HorizontalGroup("sett", 80), HideLabel, ShowIf("_callCount", CallCount.Limit)] private int _limitCount;
+        [SerializeField, FoldoutGroup("Events"), HorizontalGroup("Events/evs")] private UnityEvent _onDown;
+        [SerializeField, FoldoutGroup("Events"), HorizontalGroup("Events/evs")] private UnityEvent _onUp;
 
-        private bool _isDown;
 
         private void OnEnable()
         {
@@ -28,17 +29,10 @@ namespace EC.Inputer
         public void OnDown()
         {
             _onDown?.Invoke();
-            _isDown = true;
         }
         public void OnUp()
         {
             _onUp?.Invoke();
-            if (_isDown)
-            {
-                _isDown = false;
-                OnClick();
-            }
         }
-        public void OnClick() => _onClick?.Invoke();
     }
 }
