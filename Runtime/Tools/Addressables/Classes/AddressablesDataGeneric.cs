@@ -26,8 +26,8 @@ namespace EC.Addressables
         private string[] GetIds() => Editor.AddressablesIdCache.GetAddressesOfType<T>();
         [ValueDropdown("GetIds")]
 #endif
-        [SerializeField, DisableInPlayMode] private string _key;
-        [HideInEditorMode, ReadOnly, SerializeField] private LoadState _loadState = LoadState.Unloaded;
+        [SerializeField, DisableInPlayMode, HorizontalGroup("Key"), LabelWidth(100)] private string _key;
+        [HideInEditorMode, ReadOnly, SerializeField, HorizontalGroup("Key"), LabelWidth(100)] private LoadState _loadState = LoadState.Unloaded;
 
         public LoadState LoadState => _loadState;
 
