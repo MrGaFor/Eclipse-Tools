@@ -13,7 +13,7 @@ namespace EC.Scenes
             _ui = Resources.Load<SceneLoaderUI>("[SceneLoaderUI]");
             if (_ui == null)
             {
-                Debug.LogError("[SceneLoaderUI] prefab not found in Resources folder. Please create a [SceneLoaderUI] prefab and place it in the Resources folder.");
+                Debug.LogWarning("[SceneLoaderUI] prefab not found in Resources folder. Please create a <<[SceneLoaderUI]>> prefab and place it in the Resources folder.");
                 return;
             }
             _ui = GameObject.Instantiate(_ui);
@@ -31,8 +31,6 @@ namespace EC.Scenes
             _ui.PlaySmooth(isShowing);
             await Task.Delay((int)((isShowing ? _ui.ShowDuration : _ui.HideDuration) * 1000));
         }
-
-
 
         public static async Task LoadScene(int sceneIndex)
         {
@@ -52,7 +50,5 @@ namespace EC.Scenes
             await UnityEngine.AddressableAssets.Addressables.LoadSceneAsync(address, UnityEngine.SceneManagement.LoadSceneMode.Single, true).Task;
             await SetUI(false);
         }
-
-
     }
 }

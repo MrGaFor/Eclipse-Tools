@@ -8,10 +8,11 @@ namespace EC.Cursors
     {
         [SerializeField] private Camera _camera;
 
+#if !UNITY_IOS && !UNITY_ANDROID
         private void Awake()
         {
             CursorManager.SetCursor(_camera);
         }
-
+#endif
     }
 }

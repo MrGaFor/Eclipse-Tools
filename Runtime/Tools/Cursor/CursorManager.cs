@@ -6,13 +6,14 @@ namespace EC.Cursors
     [HideMonoScript]
     public class CursorManager : MonoBehaviour
     {
+#if !UNITY_IOS && !UNITY_ANDROID
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
         private static void Init()
         {
             I = Resources.Load<CursorManager>("[Cursors]");
             if (I == null)
             {
-                Debug.LogError("[Cursors] prefab not found in Resources folder. Please create a [Cursors] prefab and place it in the Resources folder.");
+                Debug.LogError("[Cursors] prefab not found in Resources folder. Please create a <<[Cursors]>> prefab and place it in the Resources folder.");
                 return;
             }
             I = Instantiate(I);
@@ -32,13 +33,11 @@ namespace EC.Cursors
             Cursor.visible = false;
         }
 
-
         public static void SetCursor(Camera targetCamera)
         {
             I._targetCamera = targetCamera;
             I._canvas.worldCamera = targetCamera;
         }
-
 
         private void LateUpdate()
         {
@@ -51,5 +50,6 @@ namespace EC.Cursors
         {
             Cursor.visible = !focus;
         }
+#endif
     }
 }
