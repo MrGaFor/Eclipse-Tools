@@ -1,5 +1,6 @@
 using Sirenix.OdinInspector;
 using System.Collections;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
 
@@ -32,6 +33,7 @@ namespace EC.Audio
         [SerializeField, BoxGroup("3D"), ShowIf("@_rolloffMode == AudioRolloffMode.Custom && _use3D")] private AnimationCurve _customRolloffCurve = AnimationCurve.Linear(0, 1, 1, 0);
 
         private Pool.ComponentPool<AudioSource> _pool;
+        private Dictionary<AudioSource, UnityEngine.Coroutine> _sourceDisableTimers;
 
         private async void Awake()
         {
@@ -60,17 +62,16 @@ namespace EC.Audio
         private void OnEnable()
         {
             Bus.BusSystem.Subscribe<float>(_volumeKey, OnChangeVolume);
+            ResumeAll();
         }
         private void OnDisable()
         {
             Bus.BusSystem.Unsubscribe<float>(_volumeKey, OnChangeVolume);
-            if (_pool != null)
-                foreach (var source in _pool.GetAll())
-                    if (source.isActiveAndEnabled)
-                    {
-                        source.Stop();
-                        _pool.ReturnOne(source);
-                    }
+            PauseAll();
+        }
+        public void OnDestroy()
+        {
+            StopAll();
         }
         private void OnChangeVolume(float newVolume)
         {
@@ -85,25 +86,92 @@ namespace EC.Audio
         {
             if (_pool == null) return;
             AudioSource source = _pool.GetOne();
-            source.volume = Bus.BusSystem.Get<float>(_volumeKey, 1f) * _volumeMult;
-            source.pitch = _pitchRandom ? Random.Range(_pitchRange.x, _pitchRange.y) : _pitch;
-            source.Play();
-            if (!_loop) StartCoroutine(EndTimerDisable(source));
+            SetParametersAndPlay(source);
+            CheckLoop(source);
+        }
+        public void Play(AudioClip clip)
+        {
+            if (_pool == null) return;
+            AudioSource source = _pool.GetOne();
+            source.clip = clip;
+            SetParametersAndPlay(source);
+            CheckLoop(source);
         }
         public void Play(out AudioSource source)
         {
             if (_pool == null) { source = null; return; }
             source = _pool.GetOne();
+            SetParametersAndPlay(source);
+            CheckLoop(source);
+        }
+        public void Play(AudioClip clip, out AudioSource source)
+        {
+            if (_pool == null) { source = null; return; }
+            source = _pool.GetOne();
+            source.clip = clip;
+            SetParametersAndPlay(source);
+            CheckLoop(source);
+        }
+
+        public void Pause(AudioSource source)
+        {
+            if (!source.gameObject.activeSelf) return;
+            if (!_loop && _sourceDisableTimers.TryGetValue(source, out UnityEngine.Coroutine timer))
+                StopCoroutine(timer);
+            source.Pause();
+        }
+        public void PauseAll()
+        {
+            if (_pool == null) return;
+            foreach (AudioSource source in _pool.GetAll())
+                Pause(source);
+        }
+
+        public void Resume(AudioSource source)
+        {
+            if (!source.gameObject.activeSelf) return;
+            if (!_loop && _sourceDisableTimers.ContainsKey(source))
+                _sourceDisableTimers[source] = StartCoroutine(EndTimerDisable(source));
+            source.UnPause();
+        }
+        public void ResumeAll()
+        {
+            if (_pool == null) return;
+            foreach (AudioSource source in _pool.GetAll())
+                Resume(source);
+        }
+
+        public void Stop(AudioSource source)
+        {
+            if (!_loop && _sourceDisableTimers.TryGetValue(source, out UnityEngine.Coroutine timer))
+            {
+                StopCoroutine(timer);
+                _sourceDisableTimers.Remove(source);
+            }
+            source.Stop();
+            source.gameObject.SetActive(false);
+        }
+        public void StopAll()
+        {
+            if (_pool == null) return;
+            foreach (AudioSource source in _pool.GetAll())
+                Stop(source);
+        }
+
+        private void SetParametersAndPlay(AudioSource source)
+        {
             source.volume = Bus.BusSystem.Get<float>(_volumeKey, 1f) * _volumeMult;
             source.pitch = _pitchRandom ? Random.Range(_pitchRange.x, _pitchRange.y) : _pitch;
             source.Play();
-            if (!_loop) StartCoroutine(EndTimerDisable(source));
         }
-
-
+        private void CheckLoop(AudioSource source)
+        {
+            if (!_loop) _sourceDisableTimers.Add(source, StartCoroutine(EndTimerDisable(source)));
+        }
         private IEnumerator EndTimerDisable(AudioSource source)
         {
-            yield return new WaitForSeconds(source.clip.length);
+            yield return new WaitForSeconds(source.clip.length - source.time);
+            _sourceDisableTimers.Remove(source);
             source.gameObject.SetActive(false);
         }
 
