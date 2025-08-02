@@ -6,11 +6,11 @@ namespace EC.GPU
     [HideMonoScript]
     public class GPUInstanceChild : MonoBehaviour
     {
-        [SerializeField] private Renderer[] _renderer;
+        [SerializeField] private MeshRenderer[] _renderer;
 
         private void Start()
         {
-            foreach (Renderer renderer in _renderer)
+            foreach (MeshRenderer renderer in _renderer)
                 if (!renderer.GetComponent<GPUInstanceLocalDisable>())
                     renderer.SetPropertyBlock(GPUInstance.GetBlockForMaterial(renderer.sharedMaterial));
         }
@@ -19,8 +19,8 @@ namespace EC.GPU
         private void OnValidate()
         {
             if (Application.isPlaying) return;
-            if (_renderer == null || _renderer != gameObject.GetComponentsInChildren<Renderer>())
-                _renderer = gameObject.GetComponentsInChildren<Renderer>();
+            if (_renderer == null || _renderer != gameObject.GetComponentsInChildren<MeshRenderer>())
+                _renderer = gameObject.GetComponentsInChildren<MeshRenderer>();
         }
 #endif
     }

@@ -28,8 +28,8 @@ namespace EC.GPU
         public static void ReInstance(Scene scene, LoadSceneMode mode = LoadSceneMode.Single) => ReInstance();
         public static void ReInstance()
         {
-            Renderer[] renderers = GameObject.FindObjectsByType<Renderer>(FindObjectsInactive.Exclude, FindObjectsSortMode.None);
-            foreach (Renderer renderer in renderers)
+            MeshRenderer[] renderers = GameObject.FindObjectsByType<MeshRenderer>(FindObjectsInactive.Exclude, FindObjectsSortMode.None);
+            foreach (MeshRenderer renderer in renderers)
                 if (renderer && renderer.sharedMaterial && !renderer.GetComponent<GPUInstanceLocalDisable>())
                     renderer.SetPropertyBlock(GetBlockForMaterial(renderer.sharedMaterial));
 #if UNITY_EDITOR

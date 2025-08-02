@@ -3,10 +3,10 @@ using UnityEngine;
 
 namespace EC.GPU
 {
-    [HideMonoScript, RequireComponent(typeof(Renderer))]
+    [HideMonoScript, RequireComponent(typeof(MeshRenderer))]
     public class GPUInstanceLocal : MonoBehaviour
     {
-        [SerializeField] private Renderer _renderer;
+        [SerializeField] private MeshRenderer _renderer;
 
         private void Start()
         {
@@ -18,7 +18,7 @@ namespace EC.GPU
         {
             if (Application.isPlaying) return;
             if (!_renderer)
-                _renderer = GetComponent<Renderer>();
+                _renderer = GetComponent<MeshRenderer>();
         }
 #endif
     }
