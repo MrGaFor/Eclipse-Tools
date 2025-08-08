@@ -30,8 +30,32 @@ namespace EC.Cursors
 
         [System.Serializable] private class CursorVariant
         {
-            [HorizontalGroup, LabelWidth(50)] public string Id;
-            [HorizontalGroup, LabelWidth(50)] public GameObject Cursor;
+            private enum ReactType { OneState, TwoState }
+            [SerializeField, HorizontalGroup("settings"), LabelWidth(60)] private string _id;
+            [SerializeField, HorizontalGroup("settings"), LabelWidth(60), LabelText("React")] private ReactType _reactState;
+            [SerializeField, HorizontalGroup("variants"), LabelWidth(60)] private GameObject _freeVar;
+            [SerializeField, HorizontalGroup("variants"), LabelWidth(60), ShowIf("_reactState", ReactType.TwoState)] private GameObject _holdVar;
+
+            public string Id => _id;
+            public void SetActive(bool isActive)
+            {
+                if (_reactState == ReactType.OneState)
+                {
+                    _freeVar.SetActive(isActive);
+                    return;
+                }
+                else
+                {
+                    _holdVar.SetActive(isActive && Input.GetMouseButton(0));
+                    _freeVar.SetActive(isActive && !Input.GetMouseButton(0));
+                }
+            }
+            public void UpdateState(bool isDown)
+            {
+                if (_reactState == ReactType.OneState) return;
+                _holdVar.SetActive(isDown);
+                _freeVar.SetActive(!isDown);
+            }
         }
 
         private static int SelectionIndex = 0;
@@ -42,7 +66,7 @@ namespace EC.Cursors
             if (!HasManager) return;
             Cursor.visible = false;
             foreach (var item in _variants)
-                item.Cursor.SetActive(false);
+                item.SetActive(false);
             SelectCursor(0);
         }
 
@@ -56,15 +80,15 @@ namespace EC.Cursors
         public static void SetVisible(bool isVisible)
         {
             if (!HasManager) return;
-            I._variants[SelectionIndex].Cursor.SetActive(isVisible);
+            I._variants[SelectionIndex].SetActive(isVisible);
         }
 
         public static void SelectCursor(int cursorNo)
         {
             if (!HasManager) return;
-            I._variants[SelectionIndex].Cursor.SetActive(false);
+            I._variants[SelectionIndex].SetActive(false);
             SelectionIndex = cursorNo;
-            I._variants[SelectionIndex].Cursor.SetActive(true);
+            I._variants[SelectionIndex].SetActive(true);
         }
         public static void SelectCursor(string cursorId)
         {
@@ -88,6 +112,7 @@ namespace EC.Cursors
             Vector3 mousePos = Input.mousePosition;
             mousePos.z = _canvas.planeDistance;
             _pivot.position = Vector3.Lerp(_pivot.position, _canvas.worldCamera.ScreenToWorldPoint(mousePos), _lerpValue);
+            _variants[SelectionIndex].UpdateState(Input.GetMouseButton(0));
         }
         private static bool HasManager 
         { 
