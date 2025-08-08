@@ -11,7 +11,7 @@ namespace EC.Cursors
 #if !UNITY_IOS && !UNITY_ANDROID
         private void Awake()
         {
-            CursorManager.SetCursor(_camera);
+            CursorManager.InstanceCamera(_camera);
         }
 #endif
     }
