@@ -1,0 +1,21 @@
+namespace EC.Behaviour
+{
+    [System.Serializable]
+    public abstract class BehaviourClass
+    {
+        public virtual void Awake() { }
+        public virtual void Start() { }
+        public virtual void Update() { }
+        public virtual void FixedUpdate() { }
+        public virtual void LateUpdate() { }
+        public virtual void OnEnable() { }
+        public virtual void OnDisable() { }
+        public virtual void OnDestroy() { }
+
+#if UNITY_EDITOR
+        public virtual void OnValidate() { }
+        public virtual void OnDrawGizmos() { }
+        public virtual void OnDrawGizmosSelected() { }
+#endif
+    }
+}
