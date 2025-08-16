@@ -1,12 +1,9 @@
-using UnityEngine;
-
 namespace EC.Behaviour
 {
     [System.Serializable]
     public abstract class BehaviourClass<T> : BehaviourClass
     {
         public T Core { get; protected set; }
-
         public virtual void Initialize(T core) { Core = core; }
     }
     [System.Serializable]
