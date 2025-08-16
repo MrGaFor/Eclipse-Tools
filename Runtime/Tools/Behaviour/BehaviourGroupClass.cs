@@ -23,7 +23,7 @@ namespace EC.Behaviour
     [HideMonoScript]
     public abstract class BehaviourGroupClass : MonoBehaviour
     {
-        public virtual BehaviourClass<BehaviourGroupClass>[] BehaviourClasses { get; protected set; }
+        public virtual BehaviourClass[] BehaviourClasses { get; protected set; }
 
         public virtual void Awake()
         {

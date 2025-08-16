@@ -25,7 +25,6 @@ namespace EC.Behaviour
         public virtual void OnValidate() { }
         public virtual void OnDrawGizmos() { }
         public virtual void OnDrawGizmosSelected() { }
-        
 #endif
     }
 }
