@@ -1,7 +1,16 @@
+using UnityEngine;
+
 namespace EC.Behaviour
 {
     [System.Serializable]
-    public abstract class BehaviourClass
+    public abstract class BehaviourClass<T> : BehaviourClass
+    {
+        public T Core { get; protected set; }
+
+        public virtual void Initialize(T core) { Core = core; }
+    }
+    [System.Serializable]
+    public abstract class  BehaviourClass
     {
         public virtual void Awake() { }
         public virtual void Start() { }
@@ -16,6 +25,7 @@ namespace EC.Behaviour
         public virtual void OnValidate() { }
         public virtual void OnDrawGizmos() { }
         public virtual void OnDrawGizmosSelected() { }
+        
 #endif
     }
 }
