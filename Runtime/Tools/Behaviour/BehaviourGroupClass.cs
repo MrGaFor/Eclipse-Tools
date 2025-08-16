@@ -4,7 +4,7 @@ using Sirenix.OdinInspector;
 namespace EC.Behaviour
 {
     [HideMonoScript]
-    public abstract class BehaviourGroupClass<T> : BehaviourGroupClass
+    public abstract class BehaviourGroupClass<T> : BehaviourGroupClass 
     {
         public virtual new BehaviourClass<BehaviourGroupClass<T>>[] BehaviourClasses { get; protected set; }
 
