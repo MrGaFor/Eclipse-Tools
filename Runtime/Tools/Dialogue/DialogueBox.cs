@@ -10,6 +10,7 @@ namespace EC.Dialogue
     {
         [SerializeField, HideLabel] private DialogueBox _box = new();
 
+        public virtual void Awake() => Initialize();
         public virtual void Initialize() => _box.Initialize();
         public virtual void StartDialogue() => _box.StartDialogue();
         public virtual void StopDialogue() => _box.StopDialogue();

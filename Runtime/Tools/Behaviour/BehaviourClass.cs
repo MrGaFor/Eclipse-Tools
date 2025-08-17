@@ -1,13 +1,11 @@
 namespace EC.Behaviour
 {
-    [System.Serializable]
-    public abstract class BehaviourClass<T> : BehaviourClass
+    public class BehaviourClass<T> : BehaviourClass
     {
-        public T Core { get; protected set; }
+        public T Core;
         public virtual void Initialize(T core) { Core = core; }
     }
-    [System.Serializable]
-    public abstract class  BehaviourClass
+    public class BehaviourClass
     {
         public virtual void Awake() { }
         public virtual void Start() { }
