@@ -10,15 +10,20 @@ namespace EC.Dialogue
     {
         [SerializeField, HideLabel] private DialogueBox _box = new();
 
-        public virtual void InitializeRunner() => _box.InitializeRunner();
+        public virtual void Initialize() => _box.Initialize();
         public virtual void StartDialogue() => _box.StartDialogue();
+        public virtual void StopDialogue() => _box.StopDialogue();
 
         public virtual void HandleDialogueEvent(IConversationEvent e) => _box.HandleDialogueEvent(e);
 
         public virtual void OnMessageEvent(MessageEvent message) => _box.OnMessageEvent(message);
+        public virtual void OnMessageClick(MessageEvent message) => _box.OnMessageClick(message);
+
         public virtual void OnChoiceEvent(ChoiceEvent choice) => _box.OnChoiceEvent(choice);
+        public virtual void OnChoiceClick(ChoiceEvent choice, int optionIndex) => _box.OnChoiceClick(choice, optionIndex);
+
         public virtual void OnUserEvent(UserEvent user) => _box.OnUserEvent(user);
-        public virtual void StopDialogue() => _box.StopDialogue();
+        public virtual void OnUserEventClick(UserEvent user) => _box.OnUserEventClick(user);
     }
     [System.Serializable]
     public class DialogueBox
@@ -26,7 +31,7 @@ namespace EC.Dialogue
         [SerializeField] private Conversation _conversation;
         private ConversationRunner _runner;
 
-        public virtual void InitializeRunner()
+        public virtual void Initialize()
         {
             _runner = new ConversationRunner(_conversation);
             _runner.OnConversationEvent.AddListener(HandleDialogueEvent);
@@ -35,6 +40,7 @@ namespace EC.Dialogue
         {
             _runner.Begin();
         }
+        public virtual void StopDialogue() { }
 
         public virtual void HandleDialogueEvent(IConversationEvent e)
         {
@@ -56,8 +62,23 @@ namespace EC.Dialogue
         }
 
         public virtual void OnMessageEvent(MessageEvent message) { }
+        public virtual void OnMessageClick(MessageEvent message)
+        {
+            message.Advance();
+        }
+
         public virtual void OnChoiceEvent(ChoiceEvent choice) { }
+        public virtual void OnChoiceClick(ChoiceEvent choice, int optionIndex)
+        {
+            if (optionIndex < 0 || optionIndex >= choice.Options.Count) return;
+            var option = choice.Options[optionIndex];
+            option.Advance();
+        }
+
         public virtual void OnUserEvent(UserEvent user) { }
-        public virtual void StopDialogue() { }
+        public virtual void OnUserEventClick(UserEvent user)
+        {
+            user.Advance();
+        }
     }
 }
