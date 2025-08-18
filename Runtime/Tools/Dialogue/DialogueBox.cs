@@ -2,6 +2,7 @@ using Sirenix.OdinInspector;
 using Conversa.Runtime;
 using Conversa.Runtime.Interfaces;
 using Conversa.Runtime.Events;
+using Conversa.Runtime.Nodes;
 
 namespace EC.Dialogue
 {
@@ -49,7 +50,7 @@ namespace EC.Dialogue
         }
         public virtual void OnMessageUse()
         {
-            CurrentMessageEvent?.Advance.Invoke();
+            CurrentMessageEvent?.Advance();
             CurrentMessageEvent = null;
         }
         #endregion
@@ -62,7 +63,7 @@ namespace EC.Dialogue
         }
         public virtual void OnChoiceUse(int optionIndex)
         {
-            CurrentChoiceEvent?.Options[optionIndex].Advance.Invoke();
+            CurrentChoiceEvent?.Options[optionIndex].Advance();
             CurrentChoiceEvent = null;
         }
         #endregion
@@ -75,7 +76,7 @@ namespace EC.Dialogue
         }
         public virtual void OnUserEventUse()
         {
-            CurrentUserEvent?.Advance.Invoke();
+            CurrentUserEvent?.Advance();
             CurrentUserEvent = null;
         }
         #endregion
