@@ -2,7 +2,7 @@ namespace EC.Behaviour
 {
     public class BehaviourClass<T> : BehaviourClass
     {
-        public T Core;
+        [UnityEngine.HideInInspector] public T Core;
         public virtual void Initialize(T core) { Core = core; }
     }
     public class BehaviourClass
