@@ -57,7 +57,7 @@ namespace EC.Dialogue
                     MessageEvents.RemoveAt(i);
                 }
         }
-        private void OnMessageEvent(MessageEvent message)
+        public virtual void OnMessageEvent(MessageEvent message)
         {
             MessageEvents.Add(message);
         }
@@ -71,7 +71,7 @@ namespace EC.Dialogue
                     ChoiceEvents.RemoveAt(i);
                 }
         }
-        private void OnChoiceEvent(ChoiceEvent choice)
+        public virtual void OnChoiceEvent(ChoiceEvent choice)
         {
             ChoiceEvents.Add(choice);
         }
@@ -85,7 +85,7 @@ namespace EC.Dialogue
                     UserEvents.RemoveAt(i);
                 }
         }
-        private void OnUserEvent(UserEvent user)
+        public virtual void OnUserEvent(UserEvent user)
         {
             UserEvents.Add(user);
         }
