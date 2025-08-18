@@ -33,7 +33,7 @@ namespace EC.Audio
         [SerializeField, BoxGroup("3D"), ShowIf("@_rolloffMode == AudioRolloffMode.Custom && _use3D")] private AnimationCurve _customRolloffCurve = AnimationCurve.Linear(0, 1, 1, 0);
 
         private Pool.ComponentPool<AudioSource> _pool;
-        private Dictionary<AudioSource, UnityEngine.Coroutine> _sourceDisableTimers;
+        private Dictionary<AudioSource, UnityEngine.Coroutine> _sourceDisableTimers = new();
 
         private async void Awake()
         {
