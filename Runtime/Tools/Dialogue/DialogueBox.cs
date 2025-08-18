@@ -3,6 +3,8 @@ using Conversa.Runtime;
 using Conversa.Runtime.Interfaces;
 using Conversa.Runtime.Events;
 using Conversa.Runtime.Nodes;
+using System;
+using System.Collections.Generic;
 
 namespace EC.Dialogue
 {
@@ -11,6 +13,10 @@ namespace EC.Dialogue
     {
         public Conversation Dialogue;
         [HideInEditorMode, ReadOnly] public ConversationRunner Runner;
+
+        public List<MessageEvent> MessageEvents = new();
+        public List<ChoiceEvent> ChoiceEvents = new();
+        public List<UserEvent> UserEvents = new();
 
         public virtual void Initialize()
         {
@@ -42,43 +48,46 @@ namespace EC.Dialogue
             }
         }
 
-        #region MessageEvent
-        public MessageEvent CurrentMessageEvent;
-        public virtual void OnMessageEvent(MessageEvent message) 
+        public virtual void UseMessage()
         {
-            CurrentMessageEvent = message;
+            if (MessageEvents.Count > 0)
+                for (int i = MessageEvents.Count - 1; i >= 0; i--)
+                {
+                    MessageEvents[i].Advance();
+                    MessageEvents.RemoveAt(i);
+                }
         }
-        public virtual void OnMessageUse()
+        private void OnMessageEvent(MessageEvent message)
         {
-            CurrentMessageEvent?.Advance();
-            CurrentMessageEvent = null;
+            MessageEvents.Add(message);
         }
-        #endregion
 
-        #region ChoiceEvent
-        public ChoiceEvent CurrentChoiceEvent;
-        public virtual void OnChoiceEvent(ChoiceEvent choice) 
+        public virtual void UseChoice(int optionIndex)
         {
-            CurrentChoiceEvent = choice;
+            if (ChoiceEvents.Count > 0)
+                for (int i = ChoiceEvents.Count - 1; i >= 0; i--)
+                {
+                    ChoiceEvents[i].Options[optionIndex].Advance();
+                    ChoiceEvents.RemoveAt(i);
+                }
         }
-        public virtual void OnChoiceUse(int optionIndex)
+        private void OnChoiceEvent(ChoiceEvent choice)
         {
-            CurrentChoiceEvent?.Options[optionIndex].Advance();
-            CurrentChoiceEvent = null;
+            ChoiceEvents.Add(choice);
         }
-        #endregion
 
-        #region UserEvent
-        public UserEvent CurrentUserEvent;
-        public virtual void OnUserEvent(UserEvent user)
+        public virtual void UseUserEvent()
         {
-            CurrentUserEvent = user;
+            if (UserEvents.Count > 0)
+                for (int i = UserEvents.Count - 1; i >= 0; i--)
+                {
+                    UserEvents[i].Advance();
+                    UserEvents.RemoveAt(i);
+                }
         }
-        public virtual void OnUserEventUse()
+        private void OnUserEvent(UserEvent user)
         {
-            CurrentUserEvent?.Advance();
-            CurrentUserEvent = null;
+            UserEvents.Add(user);
         }
-        #endregion
     }
 }
