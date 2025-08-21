@@ -63,7 +63,6 @@ namespace EC.Cursors
 
         private void Awake()
         {
-            if (!HasManager) return;
             Cursor.visible = false;
             foreach (var item in _variants)
                 item.SetActive(false);
@@ -131,6 +130,8 @@ namespace EC.Cursors
                     I._pivot.gameObject.SetActive(true);
                 else if ((!TargetCamera || !HasManager) && I._pivot.gameObject.activeSelf)
                     I._pivot.gameObject.SetActive(false);
+                if (TargetCamera && I._canvas.worldCamera != TargetCamera)
+                    I._canvas.worldCamera = TargetCamera;
                 return TargetCamera;
             }
         }
