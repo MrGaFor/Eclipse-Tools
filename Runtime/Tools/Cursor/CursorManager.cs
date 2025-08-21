@@ -127,10 +127,10 @@ namespace EC.Cursors
         {
             get
             {
-                if (TargetCamera && I && !I._pivot.gameObject.activeSelf)
-                    I._pivot.gameObject.SetActive(false);
-                else if (!TargetCamera && I && I._pivot.gameObject.activeSelf)
+                if (TargetCamera && HasManager && !I._pivot.gameObject.activeSelf)
                     I._pivot.gameObject.SetActive(true);
+                else if ((!TargetCamera || !HasManager) && I._pivot.gameObject.activeSelf)
+                    I._pivot.gameObject.SetActive(false);
                 return TargetCamera;
             }
         }
