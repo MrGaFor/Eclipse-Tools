@@ -1,5 +1,5 @@
+using Cysharp.Threading.Tasks;
 using Sirenix.OdinInspector;
-using System.Threading.Tasks;
 using UnityEngine;
 
 namespace EC.Addressables
@@ -12,7 +12,7 @@ namespace EC.Addressables
 
         public LoadState LoadState => _data.LoadState;
 
-        public async Task Load()
+        public async UniTask Load()
         {
             await _data.Load();
         }
@@ -21,7 +21,7 @@ namespace EC.Addressables
             _data.Unload();
         }
 
-        public async Task<T> GetObject()
+        public async UniTask<T> GetObject()
         {
             return await _data.GetObject();
         }
@@ -30,7 +30,7 @@ namespace EC.Addressables
         private void Awake()
         {
             if (_autoLoad)
-                Load();
+                Load().Forget();
         }
         private void OnDestroy()
         {

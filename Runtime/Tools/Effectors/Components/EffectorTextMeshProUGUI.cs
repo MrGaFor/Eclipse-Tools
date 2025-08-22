@@ -1,3 +1,4 @@
+using Cysharp.Threading.Tasks;
 using PrimeTween;
 using Sirenix.OdinInspector;
 using System;
@@ -96,16 +97,19 @@ namespace EC.Effects
         #endregion
 
         #region Smooth Player
-        public override void PlaySmooth()
+        public override async UniTask PlaySmooth()
         {
-            PlaySmoothCustom(_dataFloat.Value);
-            PlaySmoothCustom(_dataString.Value);
-            PlaySmoothCustom(_dataColor.Value);
+            await PlaySmoothCustom(_dataFloat.Value);
+            await PlaySmoothCustom(_dataString.Value);
+            await PlaySmoothCustom(_dataColor.Value);
         }
-        public override void PlaySmoothCustom(float value)
+        public override async UniTask PlaySmoothCustom(float value, float duration)
         {
             if (!ThisFloat) return;
             StartPlaySmooth();
+            float buffDuration = Data.Time.Duration;
+            if (duration != Data.Time.Duration) Data.Time.Duration = duration;
+            bool used = true;
             switch (_data.Func)
             {
                 case FuncList.Alpha:
@@ -114,29 +118,47 @@ namespace EC.Effects
                     EffectTween = Tween.Custom(_data.Component.fontSize, value, CompiledSettings, newvalue => _data.Component.fontSize = newvalue); break;
                 case FuncList.OutlineWidth:
                     EffectTween = Tween.Custom(_data.Component.outlineWidth, value, CompiledSettings, newvalue => _data.Component.outlineWidth = newvalue); break;
+                default:
+                    used = false; break;
             }
+            if (buffDuration != Data.Time.Duration) Data.Time.Duration = buffDuration;
+            if (used) await EffectTween;
             EndPlaySmooth();
         }
-        public override void PlaySmoothCustom(string value)
+        public override async UniTask PlaySmoothCustom(string value, float duration)
         {
             if (!ThisString) return;
             StartPlaySmooth();
+            float buffDuration = Data.Time.Duration;
+            if (duration != Data.Time.Duration) Data.Time.Duration = duration;
+            bool used = true;
             switch (_data.Func)
             {
                 case FuncList.Text:
                     _data.Component.ForceMeshUpdate(); _data.Component.maxVisibleCharacters = 0; _data.Component.text = value; EffectTween = PrimeTween.Tween.TextMaxVisibleCharacters(_data.Component, value.Length, CompiledSettings); break;
+                default:
+                    used = false; break;
             }
+            if (buffDuration != Data.Time.Duration) Data.Time.Duration = buffDuration;
+            if (used) await EffectTween;
             EndPlaySmooth();
         }
-        public override void PlaySmoothCustom(Color value)
+        public override async UniTask PlaySmoothCustom(Color value, float duration)
         {
             if (!ThisColor) return;
             StartPlaySmooth();
+            float buffDuration = Data.Time.Duration;
+            if (duration != Data.Time.Duration) Data.Time.Duration = duration;
+            bool used = true;
             switch (_data.Func)
             {
                 case FuncList.Color:
                     EffectTween = Tween.Color(_data.Component, value, CompiledSettings); break;
+                default:
+                    used = false; break;
             }
+            if (buffDuration != Data.Time.Duration) Data.Time.Duration = buffDuration;
+            if (used) await EffectTween;
             EndPlaySmooth();
         }
         #endregion

@@ -1,4 +1,4 @@
-using PrimeTween;
+using Cysharp.Threading.Tasks;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
@@ -26,7 +26,7 @@ namespace EC.Effects
         }
         private void PlayState(string state)
         {
-            _states.PlaySmooth(state);
+            _states.PlaySmooth(state).Forget();
         }
         #endregion
     }

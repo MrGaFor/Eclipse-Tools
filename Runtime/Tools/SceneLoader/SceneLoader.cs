@@ -1,4 +1,4 @@
-using System.Threading.Tasks;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 namespace EC.Scenes
@@ -8,7 +8,7 @@ namespace EC.Scenes
         private static SceneLoaderUI _ui;
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
-        private static void Init()
+        private static async UniTask Init()
         {
             _ui = Resources.Load<SceneLoaderUI>("[SceneLoaderUI]");
             if (_ui == null)
@@ -19,32 +19,31 @@ namespace EC.Scenes
             _ui = GameObject.Instantiate(_ui);
             GameObject.DontDestroyOnLoad(_ui.gameObject);
             _ui.PlayMoment(true);
-            _ui.PlaySmooth(false);
+            await _ui.PlaySmooth(false);
 
             EC.Bus.BusSystem.Subscribe<int>("LoadSceneIndex", async (index) => await LoadScene(index));
             EC.Bus.BusSystem.Subscribe<string>("LoadSceneName", async (name) => await LoadScene(name));
             EC.Bus.BusSystem.Subscribe<string>("LoadSceneAddressablesName", async (name) => await LoadSceneAddressables(name));
         }
-        private static async Task SetUI(bool isShowing)
+        private static async UniTask SetUI(bool isShowing)
         {
             if (_ui == null) return;
-            _ui.PlaySmooth(isShowing);
-            await Task.Delay((int)((isShowing ? _ui.ShowDuration : _ui.HideDuration) * 1000));
+            await _ui.PlaySmooth(isShowing);
         }
 
-        public static async Task LoadScene(int sceneIndex)
+        public static async UniTask LoadScene(int sceneIndex)
         {
             await SetUI(true);
             await UnityEngine.SceneManagement.SceneManager.LoadSceneAsync(sceneIndex);
             await SetUI(false);
         }
-        public static async Task LoadScene(string sceneName)
+        public static async UniTask LoadScene(string sceneName)
         {
             await SetUI(true);
             await UnityEngine.SceneManagement.SceneManager.LoadSceneAsync(sceneName);
             await SetUI(false);
         }
-        public static async Task LoadSceneAddressables(string address)
+        public static async UniTask LoadSceneAddressables(string address)
         {
             await SetUI(true);
             await UnityEngine.AddressableAssets.Addressables.LoadSceneAsync(address, UnityEngine.SceneManagement.LoadSceneMode.Single, true).Task;

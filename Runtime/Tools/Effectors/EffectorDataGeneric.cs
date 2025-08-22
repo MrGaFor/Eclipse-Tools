@@ -54,6 +54,8 @@ namespace EC.Effects
             [HorizontalGroup("delay"), LabelWidth(70), MinValue(0)] public float StartDelay;
             [HorizontalGroup("delay"), LabelWidth(70), MinValue(0)] public float EndDelay;
             [HorizontalGroup("duration"), LabelWidth(70), MinValue(0)] public float Duration;
+
+            public float AllDuration => StartDelay + Duration + EndDelay;
         }
         [System.Serializable]
         public class EffectSettingsLoopModule

@@ -1,6 +1,7 @@
 using Sirenix.OdinInspector;
 using UnityEngine;
 using PrimeTween;
+using Cysharp.Threading.Tasks;
 
 namespace EC.Effects
 {
@@ -64,16 +65,20 @@ namespace EC.Effects
         #endregion
 
         #region Smooth Player
-        public override void PlaySmooth()
+        public override async UniTask PlaySmooth()
         {
-            PlaySmoothCustom(_dataColor.Value);
+            await PlaySmoothCustom(_dataColor.Value);
         }
-        public override void PlaySmoothCustom(Gradient value)
+        public override async UniTask PlaySmoothCustom(Gradient value, float duration)
         {
             if (!ThisColor) return;
             StartPlaySmooth();
+            float buffDuration = Data.Time.Duration;
+            if (duration != Data.Time.Duration) Data.Time.Duration = duration;
             Gradient gradientLast = _gradientLast;
             EffectTween = Tween.Custom(0f, 1f, CompiledSettings, time => {  UpdateGradient(LerpGradient(gradientLast, value, time)); });
+            if (buffDuration != Data.Time.Duration) Data.Time.Duration = buffDuration;
+            await EffectTween;
             EndPlaySmooth();
         }
         #endregion

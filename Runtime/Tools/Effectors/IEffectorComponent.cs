@@ -1,3 +1,4 @@
+using Cysharp.Threading.Tasks;
 using PrimeTween;
 using UnityEngine;
 
@@ -29,6 +30,8 @@ namespace EC.Effects
         public virtual bool ThisGradient => false;
         public virtual bool ThisVector2 => false;
         public virtual bool ThisVector3 => false;
+
+        public virtual EffectSettingsTimeModule GetTime() => Data.Time;
 
         #region Compiling
         protected void MarkDirty()
@@ -63,13 +66,21 @@ namespace EC.Effects
         public virtual void PlayMomentCustom(Vector2 value) { }
         public virtual void PlayMomentCustom(Vector3 value) { }
 
-        public virtual void PlaySmooth() { }
-        public virtual void PlaySmoothCustom(float value) { }
-        public virtual void PlaySmoothCustom(string value) { }
-        public virtual void PlaySmoothCustom(Color value) { }
-        public virtual void PlaySmoothCustom(Gradient value) { }
-        public virtual void PlaySmoothCustom(Vector2 value) { }
-        public virtual void PlaySmoothCustom(Vector3 value) { }
+#pragma warning disable CS1998
+        public virtual async UniTask PlaySmooth() { }
+        public virtual async UniTask PlaySmoothCustom(float value) { await PlaySmoothCustom(value, Data.Time.Duration); }
+        public virtual async UniTask PlaySmoothCustom(float value, float duration) { }
+        public virtual async UniTask PlaySmoothCustom(string value) { await PlaySmoothCustom(value, Data.Time.Duration); }
+        public virtual async UniTask PlaySmoothCustom(string value, float duration) { }
+        public virtual async UniTask PlaySmoothCustom(Color value) { await PlaySmoothCustom(value, Data.Time.Duration); }
+        public virtual async UniTask PlaySmoothCustom(Color value, float duration) { }
+        public virtual async UniTask PlaySmoothCustom(Gradient value) { await PlaySmoothCustom(value, Data.Time.Duration); }
+        public virtual async UniTask PlaySmoothCustom(Gradient value, float duration) { }
+        public virtual async UniTask PlaySmoothCustom(Vector2 value) { await PlaySmoothCustom(value, Data.Time.Duration); }
+        public virtual async UniTask PlaySmoothCustom(Vector2 value, float duration) { }
+        public virtual async UniTask PlaySmoothCustom(Vector3 value) { await PlaySmoothCustom(value, Data.Time.Duration); }
+        public virtual async UniTask PlaySmoothCustom(Vector3 value, float duration) { }
+#pragma warning restore CS1998
 
         public virtual void Stop() { }
         public virtual void Pause() { }

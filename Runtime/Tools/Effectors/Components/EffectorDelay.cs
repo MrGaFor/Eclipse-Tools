@@ -1,3 +1,4 @@
+using Cysharp.Threading.Tasks;
 using PrimeTween;
 using Sirenix.OdinInspector;
 using System;
@@ -65,17 +66,18 @@ namespace EC.Effects
         #endregion
 
         #region Smooth Player
-        public override void PlaySmooth()
+        public override async UniTask PlaySmooth()
         {
-            PlaySmoothCustom(_data.Time);
+            await PlaySmoothCustom(_data.Time);
         }
-        public override void PlaySmoothCustom(float value)
+        public override async UniTask PlaySmoothCustom(float value)
         {
             StartPlaySmooth();
             float defaultDuration = CompiledSettings.duration;
             CompiledSettings.duration = value;
             EffectTween = Tween.Custom(0f, 1f, CompiledSettings, data => { });
             CompiledSettings.duration = defaultDuration;
+            await EffectTween;
             EndPlaySmooth();
         }
         #endregion

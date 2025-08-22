@@ -1,3 +1,4 @@
+using Cysharp.Threading.Tasks;
 using PrimeTween;
 using Sirenix.OdinInspector;
 using UnityEngine;
@@ -70,14 +71,17 @@ namespace EC.Effects
         #endregion
 
         #region Smooth Player
-        public override void PlaySmooth()
+        public override async UniTask PlaySmooth()
         {
-            PlaySmoothCustom(_dataVector3.Value);
+            await PlaySmoothCustom(_dataVector3.Value);
         }
-        public override void PlaySmoothCustom(Vector3 value)
+        public override async UniTask PlaySmoothCustom(Vector3 value, float duration)
         {
             if (!ThisVector3) return;
             StartPlaySmooth();
+            float buffDuration = Data.Time.Duration;
+            if (duration != Data.Time.Duration) Data.Time.Duration = duration;
+            bool used = true;
             switch (_data.Func)
             {
                 case FuncList.Position:
@@ -90,7 +94,11 @@ namespace EC.Effects
                     EffectTween = Tween.LocalRotation(_data.Component, value, CompiledSettings); break;
                 case FuncList.Scale:
                     EffectTween = Tween.Scale(_data.Component, value, CompiledSettings); break;
+                default:
+                    used = false; break;
             }
+            if (buffDuration != Data.Time.Duration) Data.Time.Duration = buffDuration;
+            if (used) await EffectTween;
             EndPlaySmooth();
         }
         #endregion

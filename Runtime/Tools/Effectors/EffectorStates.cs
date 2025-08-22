@@ -1,6 +1,10 @@
+using Cysharp.Threading.Tasks;
 using PrimeTween;
 using Sirenix.OdinInspector;
+using System.Linq;
+using System.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace EC.Effects
 {
@@ -36,7 +40,7 @@ namespace EC.Effects
             if (!_isAutomatic) return;
             PlayMoment(_automaticFrom);
             if (_automaticMethod == EnableVariant.Moment) PlayMoment(_automaticTo);
-            else if (_automaticMethod == EnableVariant.Smooth) PlaySmooth(_automaticTo);
+            else if (_automaticMethod == EnableVariant.Smooth) PlaySmooth(_automaticTo).Forget();
         }
         #endregion
 
@@ -56,17 +60,32 @@ namespace EC.Effects
         {
             [SerializeField, LabelWidth(70)] private string _id; public string ID => _id;
             [SerializeField] private IEffectorComponent[] _effects;
+            [SerializeField, FoldoutGroup("Events"), HorizontalGroup("Events/hor")] private UnityEvent _onPlay;
+            [SerializeField, FoldoutGroup("Events"), HorizontalGroup("Events/hor")] private UnityEvent _onComplete;
 
             #region IEffectorComponent
+            private void CallOnPlay()
+            {
+                _onPlay?.Invoke();
+            }
+            private void CallOnComplete()
+            {
+                _onComplete?.Invoke();
+            }
             public void PlayMoment()
             {
+                CallOnPlay();
                 foreach (var effect in _effects)
                     effect.PlayMoment();
+                CallOnComplete();
             }
-            public void PlaySmooth()
+            public async Task PlaySmooth()
             {
+                CallOnPlay();
                 foreach (var effect in _effects)
-                    effect.PlaySmooth();
+                    await effect.PlaySmooth();
+                await UniTask.Delay(Mathf.RoundToInt(_effects.Max(v => v.Data.Time.StartDelay + v.Data.Time.Duration + v.Data.Time.EndDelay) * 1000f));
+                CallOnComplete();
             }
             public void Stop()
             {
@@ -87,6 +106,11 @@ namespace EC.Effects
         }
         private int GetStatesCount() => _states != null ? _states.Length : 0;
         private int GetMaxStateId() => GetStatesCount() - 1;
+
+        public int GetState() => _state;
+        public string GetStateId() => _states[_state].ID;
+        public bool CheckIsState(int state) => state == _state;
+        public bool CheckIsState(string idstate) => _states[_state].ID == idstate;
         #endregion
 
         #region IEffectorComponent
@@ -95,7 +119,7 @@ namespace EC.Effects
         {
             if (_states.Length < 2)
             {
-                //Debug.LogErrorFormat("Effects: States massive size less than 2!", this);
+                Debug.LogErrorFormat("Effects: States massive size less than 2!", this);
                 return;
             }
             if (firstSecond)
@@ -111,14 +135,14 @@ namespace EC.Effects
                     PlayMoment(i);
                     return;
                 }
-            //Debug.LogErrorFormat("Effects: State dont include in massive!", this);
+            Debug.LogErrorFormat("Effects: State dont include in massive!", this);
         }
         public void PlayMoment(int state)
         {
             Stop();
             if (state < 0 || state >= _states.Length)
             {
-                //Debug.LogErrorFormat("Effects: State out massive size!", this);
+                Debug.LogErrorFormat("Effects: State out massive size!", this);
                 return;
             }
             _state = state;
@@ -126,38 +150,38 @@ namespace EC.Effects
         }
         #endregion
         #region Smooth
-        public void PlaySmooth(bool firstSecond)
+        public async UniTask PlaySmooth(bool firstSecond)
         {
             if (_states.Length < 2)
             {
-                //Debug.LogErrorFormat("Effects: States massive size less than 2!", this);
+                Debug.LogErrorFormat("Effects: States massive size less than 2!", this);
                 return;
             }
             if (firstSecond)
-                PlaySmooth(0);
+                await PlaySmooth(0);
             else
-                PlaySmooth(1);
+                await PlaySmooth(1);
         }
-        public void PlaySmooth(string idstate)
+        public async UniTask PlaySmooth(string idstate)
         {
             for (int i = 0; i < _states.Length; i++)
                 if (_states[i].ID == idstate)
                 {
-                    PlaySmooth(i);
+                    await PlaySmooth(i);
                     return;
                 }
-            //Debug.LogErrorFormat("Effects: State dont include in massive!", this);
+            Debug.LogErrorFormat("Effects: State dont include in massive!", this);
         }
-        public void PlaySmooth(int state)
+        public async UniTask PlaySmooth(int state)
         {
             Stop();
             if (state < 0 || state >= _states.Length)
             {
-                //Debug.LogErrorFormat("Effects: State out massive size!", this);
+                Debug.LogErrorFormat("Effects: State out massive size!", this);
                 return;
             }
             _state = state;
-            _states[_state].PlaySmooth();
+            await _states[_state].PlaySmooth();
         }
         #endregion
         #region Pause|Resume
@@ -180,8 +204,8 @@ namespace EC.Effects
 
         #region Editor
 #if UNITY_EDITOR
-        [SerializeField, HorizontalGroup("st"), HideInEditorMode, Button("<Prev"), PropertyOrder(-1)] private void PlayPrevState() { PlaySmooth((int)Mathf.Repeat(_state - 1, GetStatesCount())); }
-        [SerializeField, HorizontalGroup("st"), HideInEditorMode, Button("Next>"), PropertyOrder(-1)] private void PlayNextState() { PlaySmooth((int)Mathf.Repeat(_state + 1, GetStatesCount())); }
+        [SerializeField, HorizontalGroup("st"), HideInEditorMode, Button("<Prev"), PropertyOrder(-1)] private void PlayPrevState() { PlaySmooth((int)Mathf.Repeat(_state - 1, GetStatesCount())).Forget(); }
+        [SerializeField, HorizontalGroup("st"), HideInEditorMode, Button("Next>"), PropertyOrder(-1)] private void PlayNextState() { PlaySmooth((int)Mathf.Repeat(_state + 1, GetStatesCount())).Forget(); }
 
         private void OnValidate()
         {

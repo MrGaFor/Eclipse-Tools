@@ -1,3 +1,4 @@
+using Cysharp.Threading.Tasks;
 using PrimeTween;
 using Sirenix.OdinInspector;
 using System;
@@ -88,17 +89,20 @@ namespace EC.Effects
         #endregion
 
         #region Smooth Player
-        public override void PlaySmooth()
+        public override async UniTask PlaySmooth()
         {
-            PlaySmoothCustom(_dataFloat.Value);
-            PlaySmoothCustom(_dataColor.Value);
+            await PlaySmoothCustom(_dataFloat.Value);
+            await PlaySmoothCustom(_dataColor.Value);
         }
-        public override void PlaySmoothCustom(float value)
+        public override async UniTask PlaySmoothCustom(float value, float duration)
         {
             if (!ThisFloat) return;
             StartPlaySmooth();
             var main = _data.Component.main;
             var emiss = _data.Component.emission;
+            float buffDuration = Data.Time.Duration;
+            if (duration != Data.Time.Duration) Data.Time.Duration = duration;
+            bool used = true;
             switch (_data.Func)
             {
                 case FuncList.StartLifetime:
@@ -109,20 +113,31 @@ namespace EC.Effects
                     EffectTween = Tween.Custom(main.startSize.constant, value, CompiledSettings, newvalue => main.startSize = newvalue); break;
                 case FuncList.EmissionRate:
                     EffectTween = Tween.Custom(emiss.rateOverTime.constant, value, CompiledSettings, newvalue => emiss.rateOverTime = newvalue); break;
+                default:
+                    used = false; break;
             }
+            if (buffDuration != Data.Time.Duration) Data.Time.Duration = buffDuration;
+            if (used) await EffectTween;
             EndPlaySmooth();
         }
-        public override void PlaySmoothCustom(Color value)
+        public override async UniTask PlaySmoothCustom(Color value, float duration)
         {
             if (!ThisColor) return;
             StartPlaySmooth();
             var main = _data.Component.main;
             var emiss = _data.Component.emission;
+            float buffDuration = Data.Time.Duration;
+            if (duration != Data.Time.Duration) Data.Time.Duration = duration;
+            bool used = true;
             switch (_data.Func)
             {
                 case FuncList.Color:
                     EffectTween = Tween.Custom(main.startColor.color, value, CompiledSettings, newvalue => SetColor(_data.Component, newvalue)); break;
+                default:
+                    used = false; break;
             }
+            if (buffDuration != Data.Time.Duration) Data.Time.Duration = buffDuration;
+            if (used) await EffectTween;
             EndPlaySmooth();
         
         }

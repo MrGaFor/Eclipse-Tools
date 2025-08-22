@@ -1,5 +1,7 @@
+using Cysharp.Threading.Tasks;
 using PrimeTween;
 using Sirenix.OdinInspector;
+using System.Linq;
 using UnityEngine;
 
 namespace EC.Effects
@@ -57,47 +59,56 @@ namespace EC.Effects
         #endregion
 
         #region Smooth Player
-        public override void PlaySmooth()
+        private int DurationInTicks => Mathf.RoundToInt(_components.Max(v => v.GetTime().AllDuration) * 1000f);
+
+        public override async UniTask PlaySmooth()
         {
             Stop();
             foreach (var component in _components)
-                component.PlaySmooth();
+                component.PlaySmooth().Forget();
+            await UniTask.Delay(DurationInTicks);
         }
-        public override void PlaySmoothCustom(float value)
+        public override async UniTask PlaySmoothCustom(float value)
         {
             Stop();
             foreach (var component in _components)
-                component.PlaySmoothCustom(value);
+                component.PlaySmoothCustom(value).Forget();
+            await UniTask.Delay(DurationInTicks);
         }
-        public override void PlaySmoothCustom(string value)
+        public override async UniTask PlaySmoothCustom(string value)
         {
             Stop();
             foreach (var component in _components)
-                component.PlaySmoothCustom(value);
+                component.PlaySmoothCustom(value).Forget();
+            await UniTask.Delay(DurationInTicks);
         }
-        public override void PlaySmoothCustom(Gradient value)
+        public override async UniTask PlaySmoothCustom(Gradient value)
         {
             Stop();
             foreach (var component in _components)
-                component.PlaySmoothCustom(value);
+                component.PlaySmoothCustom(value).Forget();
+            await UniTask.Delay(DurationInTicks);
         }
-        public override void PlaySmoothCustom(Vector3 value)
+        public override async UniTask PlaySmoothCustom(Vector3 value)
         {
             Stop();
             foreach (var component in _components)
-                component.PlaySmoothCustom(value);
+                component.PlaySmoothCustom(value).Forget();
+            await UniTask.Delay(DurationInTicks);
         }
-        public override void PlaySmoothCustom(Color value)
+        public override async UniTask PlaySmoothCustom(Color value)
         {
             Stop();
             foreach (var component in _components)
-                component.PlaySmoothCustom(value);
+                component.PlaySmoothCustom(value).Forget();
+            await UniTask.Delay(DurationInTicks);
         }
-        public override void PlaySmoothCustom(Vector2 value)
+        public override async UniTask PlaySmoothCustom(Vector2 value)
         {
             Stop();
             foreach (var component in _components)
-                component.PlaySmoothCustom(value);
+                component.PlaySmoothCustom(value).Forget();
+            await UniTask.Delay(DurationInTicks);
         }
         #endregion
 

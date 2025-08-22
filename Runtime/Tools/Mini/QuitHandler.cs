@@ -1,5 +1,5 @@
+using Cysharp.Threading.Tasks;
 using Sirenix.OdinInspector;
-using System.Threading.Tasks;
 using UnityEngine;
 
 namespace EC.Mini
@@ -14,11 +14,11 @@ namespace EC.Mini
 
         public void OnQuitDelay(float delay)
         {
-            QuitDelayed(delay);
+            QuitDelayed(delay).Forget();
         }
-        private async Task QuitDelayed(float delay)
+        private async UniTask QuitDelayed(float delay)
         {
-            await Task.Delay(Mathf.RoundToInt(delay * 1000f));
+            await UniTask.Delay(Mathf.RoundToInt(delay * 1000f));
             Application.Quit();
         }
 

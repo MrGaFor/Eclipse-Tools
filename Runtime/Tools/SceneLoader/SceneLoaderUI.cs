@@ -1,4 +1,6 @@
+using Cysharp.Threading.Tasks;
 using Sirenix.OdinInspector;
+using System.Linq;
 using UnityEngine;
 
 namespace EC.Scenes
@@ -6,16 +8,17 @@ namespace EC.Scenes
     [HideMonoScript]
     public class SceneLoaderUI : MonoBehaviour
     {
-        [SerializeField, BoxGroup("Settings", ShowLabel = false), HorizontalGroup("Settings/dur"), LabelWidth(100)] private float _showDuration = 0.2f; public float ShowDuration => _showDuration;
-        [SerializeField, HorizontalGroup("Settings/dur"), LabelWidth(100)] private float _hideDuration = 0.2f; public float HideDuration => _hideDuration;
+        public int ShowDuration => Mathf.RoundToInt(_onShow.Max(v => v.GetTime().AllDuration) * 1000f);
+        public int HideDuration => Mathf.RoundToInt(_onHide.Max(v => v.GetTime().AllDuration) * 1000f);
 
         [SerializeField, HorizontalGroup("Settings/effs")] private EC.Effects.IEffectorComponent[] _onShow;
         [SerializeField, HorizontalGroup("Settings/effs")] private EC.Effects.IEffectorComponent[] _onHide;
 
-        public void PlaySmooth(bool isShowing)
+        public async UniTask PlaySmooth(bool isShowing)
         {
             foreach (var eff in (isShowing ? _onShow : _onHide))
-                eff.PlaySmooth();
+                eff.PlaySmooth().Forget();
+            await UniTask.Delay(isShowing ? ShowDuration : HideDuration);
         }
         public void PlayMoment(bool isShowing)
         {
