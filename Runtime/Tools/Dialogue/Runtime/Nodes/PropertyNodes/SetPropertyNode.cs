@@ -1,10 +1,11 @@
-using System;
-using System.Linq;
 using Conversa.Runtime;
 using Conversa.Runtime.Interfaces;
 using Conversa.Runtime.Properties;
+using System;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Scripting.APIUpdating;
+using UnityEngine.UIElements;
 
 namespace unity_conversa.Runtime.Nodes.PropertyNodes
 {
@@ -30,24 +31,30 @@ namespace unity_conversa.Runtime.Nodes.PropertyNodes
             var property = conversation.GetProperty(PropertyGuid);
             switch (property)
             {
+                case IntProperty intProperty:
+                    {
+                        var newValue = conversation.GetConnectedValueTo<int>(this, "new-int-value");
+                        intProperty.Value = newValue;
+                        break;
+                    }
                 case FloatProperty floatProperty:
-                {
-                    var newValue = conversation.GetConnectedValueTo<float>(this, "new-float-value");
-                    floatProperty.Value = newValue;
-                    break;
-                }
+                    {
+                        var newValue = conversation.GetConnectedValueTo<float>(this, "new-float-value");
+                        floatProperty.Value = newValue;
+                        break;
+                    }
                 case StringProperty stringProperty:
-                {
-                    var newValue = conversation.GetConnectedValueTo<string>(this, "new-string-value");
-                    stringProperty.Value = newValue;
-                    break;
-                }
+                    {
+                        var newValue = conversation.GetConnectedValueTo<string>(this, "new-string-value");
+                        stringProperty.Value = newValue;
+                        break;
+                    }
                 case BooleanProperty booleanProperty:
-                {
-                    var newValue = conversation.GetConnectedValueTo<bool>(this, "new-bool-value");
-                    booleanProperty.Value = newValue;
-                    break;
-                }
+                    {
+                        var newValue = conversation.GetConnectedValueTo<bool>(this, "new-bool-value");
+                        booleanProperty.Value = newValue;
+                        break;
+                    }
             }
 
             var nextPort = GetNodePort("next");

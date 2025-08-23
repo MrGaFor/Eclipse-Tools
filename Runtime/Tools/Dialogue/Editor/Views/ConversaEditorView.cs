@@ -8,6 +8,7 @@ namespace Conversa.Editor
     {
         public UnityEvent OnSave { get; } = new UnityEvent();
         public UnityEvent OnReset { get; } = new UnityEvent();
+        public UnityEvent<string> OnChangelanguage { get; } = new UnityEvent<string>();
 
         private readonly Inspector inspector;
 
@@ -18,6 +19,7 @@ namespace Conversa.Editor
             var toolbar = new GraphToolbar();
             toolbar.OnSave.AddListener(OnSave.Invoke);
             toolbar.OnReset.AddListener(OnReset.Invoke);
+            toolbar.OnLanguageChange.AddListener(OnChangelanguage.Invoke);
             toolbar.OnToggleInspector.AddListener(HandleToggleInspector);
 
             var content = new VisualElement {name = "content"};

@@ -196,8 +196,8 @@ PropertyActions {
 
 #content GridBackground {
     --grid-background-color: rgb(34, 34, 34);
-    --line-color: rgb(29, 29, 29);
-    --thick-line-color: rgb(23, 23, 23);
+    --line-color: rgb(31, 31, 31);
+    --thick-line-color: rgb(28, 28, 28);
     --spacing: 20;
 }
 
@@ -316,5 +316,5 @@ PropertyNodeView #contents > #top > #output {
 }
 
 .graphElement.node.expanded .body-container {
-    background-color: rgb(66, 66, 66);
+    background-color: rgb(80, 80, 80);
 }

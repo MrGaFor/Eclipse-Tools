@@ -1,7 +1,9 @@
 {
-    "name": "EC.Dialogue.Runtime",
-    "rootNamespace": "EC.Dialogue.Runtime",
-    "references": [],
+    "name": "EC.Dialogue",
+    "rootNamespace": "",
+    "references": [
+        "GUID:f1ebc8b5fccaecd479cc0870a8f79677"
+    ],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,

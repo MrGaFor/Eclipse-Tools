@@ -6,7 +6,7 @@ namespace Conversa.Runtime.Properties
 {
 	[MovedFrom(true, null, "Assembly-CSharp")]
 	[Serializable]
-	[ConversationProperty("Boolean", 0.18f, 0.49f, 0.20f)]
+	[ConversationProperty("Boolean", 70, 160, 70)]
 	public class BooleanProperty : ValueProperty<bool>
 	{
 		public BooleanProperty(string name) : base(name) { }

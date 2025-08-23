@@ -48,34 +48,44 @@ namespace Conversa.Editor
         {
             switch (property)
             {
+                case IntProperty intProperty:
+                    {
+                        var field = new IntegerField("Initial value") { value = intProperty.InitialValue };
+                        field.RegisterValueChangedCallback(evt => intProperty.InitialValue = evt.newValue);
+                        field.isDelayed = true;
+
+                        Add(field);
+
+                        return;
+                    }
                 case FloatProperty floatProperty:
-                {
-                    var field = new FloatField("Initial value") { value = floatProperty.InitialValue };
-                    field.RegisterValueChangedCallback(evt => floatProperty.InitialValue = evt.newValue);
-                    field.isDelayed = true;
-                    
-                    Add(field);
-                    
-                    return;
-                }
+                    {
+                        var field = new FloatField("Initial value") { value = floatProperty.InitialValue };
+                        field.RegisterValueChangedCallback(evt => floatProperty.InitialValue = evt.newValue);
+                        field.isDelayed = true;
+
+                        Add(field);
+
+                        return;
+                    }
                 case BooleanProperty booleanProperty:
-                {
-                    var field = new Toggle("Initial value") { value = booleanProperty.InitialValue };
-                    field.RegisterValueChangedCallback(evt => booleanProperty.InitialValue = evt.newValue);
-                    
-                    Add(field);
+                    {
+                        var field = new Toggle("Initial value") { value = booleanProperty.InitialValue };
+                        field.RegisterValueChangedCallback(evt => booleanProperty.InitialValue = evt.newValue);
 
-                    break;
-                }
+                        Add(field);
+
+                        break;
+                    }
                 case StringProperty stringProperty:
-                {
-                    var field = new TextField("Initial value") { value = stringProperty.InitialValue };
-                    field.RegisterValueChangedCallback(evt => stringProperty.InitialValue = evt.newValue);
-                    
-                    Add(field);
+                    {
+                        var field = new TextField("Initial value") { value = stringProperty.InitialValue };
+                        field.RegisterValueChangedCallback(evt => stringProperty.InitialValue = evt.newValue);
 
-                    break;
-                }
+                        Add(field);
+
+                        break;
+                    }
             }
         }
 

@@ -1,0 +1,29 @@
+using System;
+using System.Linq;
+using Conversa.Runtime;
+using Conversa.Runtime.Interfaces;
+using UnityEngine;
+
+[Serializable]
+[Port("Previous", "previous", typeof(BaseNode), Flow.In, Capacity.Many)]
+[Port("Next", "next", typeof(BaseNode), Flow.Out, Capacity.One)]
+public class SimpleMessageNode : BaseNode, IEventNode
+{
+    public string tag;
+    public EC.Localization.LocalizationElement<string> actor = new();
+    public EC.Localization.LocalizationElement<string> message = new();
+
+    public SimpleMessageNode() { }
+
+    public void Process(Conversation conversation, ConversationEvents conversationEvents)
+    {
+        void Advance()
+        {
+            var nextNode = conversation.GetOppositeNodes(GetNodePort("next")).FirstOrDefault();
+            conversation.Process(nextNode, conversationEvents);
+        }
+
+        var e = new SimpleMessageEvent(tag, actor, message, Advance);
+        conversationEvents.OnConversationEvent.Invoke(e);
+    }
+}
