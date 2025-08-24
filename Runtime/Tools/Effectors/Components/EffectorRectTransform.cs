@@ -89,12 +89,12 @@ namespace EC.Effects
         #endregion
 
         #region Smooth Player
-        public override async UniTask PlaySmooth()
+        public override async UniTask PlaySmoothAsync()
         {
-            await PlaySmoothCustom(_dataVector2.Value);
-            await PlaySmoothCustom(_dataVector3.Value);
+            await PlaySmoothCustomAsync(_dataVector2.Value);
+            await PlaySmoothCustomAsync(_dataVector3.Value);
         }
-        public override async UniTask PlaySmoothCustom(Vector2 value, float duration)
+        public override async UniTask PlaySmoothCustomAsync(Vector2 value, float duration)
         {
             if (!ThisVector2) return;
             StartPlaySmooth();
@@ -112,7 +112,7 @@ namespace EC.Effects
             if (used) await EffectTween;
             EndPlaySmooth();
         }
-        public override async UniTask PlaySmoothCustom(Vector3 value, float duration)
+        public override async UniTask PlaySmoothCustomAsync(Vector3 value, float duration)
         {
             if (!ThisVector3) return;
             StartPlaySmooth();

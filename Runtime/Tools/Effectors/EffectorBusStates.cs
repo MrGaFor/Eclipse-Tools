@@ -26,7 +26,7 @@ namespace EC.Effects
         }
         private void PlayState(string state)
         {
-            _states.PlaySmooth(state).Forget();
+            _states.PlaySmooth(state);
         }
         #endregion
     }

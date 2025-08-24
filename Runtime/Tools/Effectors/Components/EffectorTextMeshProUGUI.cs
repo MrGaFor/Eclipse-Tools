@@ -97,13 +97,13 @@ namespace EC.Effects
         #endregion
 
         #region Smooth Player
-        public override async UniTask PlaySmooth()
+        public override async UniTask PlaySmoothAsync()
         {
-            await PlaySmoothCustom(_dataFloat.Value);
-            await PlaySmoothCustom(_dataString.Value);
-            await PlaySmoothCustom(_dataColor.Value);
+            await PlaySmoothCustomAsync(_dataFloat.Value);
+            await PlaySmoothCustomAsync(_dataString.Value);
+            await PlaySmoothCustomAsync(_dataColor.Value);
         }
-        public override async UniTask PlaySmoothCustom(float value, float duration)
+        public override async UniTask PlaySmoothCustomAsync(float value, float duration)
         {
             if (!ThisFloat) return;
             StartPlaySmooth();
@@ -125,7 +125,7 @@ namespace EC.Effects
             if (used) await EffectTween;
             EndPlaySmooth();
         }
-        public override async UniTask PlaySmoothCustom(string value, float duration)
+        public override async UniTask PlaySmoothCustomAsync(string value, float duration)
         {
             if (!ThisString) return;
             StartPlaySmooth();
@@ -143,7 +143,7 @@ namespace EC.Effects
             if (used) await EffectTween;
             EndPlaySmooth();
         }
-        public override async UniTask PlaySmoothCustom(Color value, float duration)
+        public override async UniTask PlaySmoothCustomAsync(Color value, float duration)
         {
             if (!ThisColor) return;
             StartPlaySmooth();

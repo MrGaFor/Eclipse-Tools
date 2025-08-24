@@ -66,20 +66,34 @@ namespace EC.Effects
         public virtual void PlayMomentCustom(Vector2 value) { }
         public virtual void PlayMomentCustom(Vector3 value) { }
 
+        public virtual void PlaySmooth() { }
+        public virtual void PlaySmoothCustom(float value) { PlaySmoothCustom(value, Data.Time.Duration); }
+        public virtual void PlaySmoothCustom(float value, float duration) { PlaySmoothCustomAsync(value, duration).Forget(); }
+        public virtual void PlaySmoothCustom(string value) { PlaySmoothCustom(value, Data.Time.Duration); }
+        public virtual void PlaySmoothCustom(string value, float duration) { PlaySmoothCustomAsync(value, duration).Forget(); }
+        public virtual void PlaySmoothCustom(Color value) { PlaySmoothCustom(value, Data.Time.Duration); }
+        public virtual void PlaySmoothCustom(Color value, float duration) { PlaySmoothCustomAsync(value, duration).Forget(); }
+        public virtual void PlaySmoothCustom(Gradient value) { PlaySmoothCustom(value, Data.Time.Duration); }
+        public virtual void PlaySmoothCustom(Gradient value, float duration) { PlaySmoothCustomAsync(value, duration).Forget(); }
+        public virtual void PlaySmoothCustom(Vector2 value) { PlaySmoothCustom(value, Data.Time.Duration); }
+        public virtual void PlaySmoothCustom(Vector2 value, float duration) { PlaySmoothCustomAsync(value, duration).Forget(); }
+        public virtual void PlaySmoothCustom(Vector3 value) { PlaySmoothCustom(value, Data.Time.Duration); }
+        public virtual void PlaySmoothCustom(Vector3 value, float duration) { PlaySmoothCustomAsync(value, duration).Forget(); }
+
 #pragma warning disable CS1998
-        public virtual async UniTask PlaySmooth() { }
-        public virtual async UniTask PlaySmoothCustom(float value) { await PlaySmoothCustom(value, Data.Time.Duration); }
-        public virtual async UniTask PlaySmoothCustom(float value, float duration) { }
-        public virtual async UniTask PlaySmoothCustom(string value) { await PlaySmoothCustom(value, Data.Time.Duration); }
-        public virtual async UniTask PlaySmoothCustom(string value, float duration) { }
-        public virtual async UniTask PlaySmoothCustom(Color value) { await PlaySmoothCustom(value, Data.Time.Duration); }
-        public virtual async UniTask PlaySmoothCustom(Color value, float duration) { }
-        public virtual async UniTask PlaySmoothCustom(Gradient value) { await PlaySmoothCustom(value, Data.Time.Duration); }
-        public virtual async UniTask PlaySmoothCustom(Gradient value, float duration) { }
-        public virtual async UniTask PlaySmoothCustom(Vector2 value) { await PlaySmoothCustom(value, Data.Time.Duration); }
-        public virtual async UniTask PlaySmoothCustom(Vector2 value, float duration) { }
-        public virtual async UniTask PlaySmoothCustom(Vector3 value) { await PlaySmoothCustom(value, Data.Time.Duration); }
-        public virtual async UniTask PlaySmoothCustom(Vector3 value, float duration) { }
+        public virtual async UniTask PlaySmoothAsync() { }
+        public virtual async UniTask PlaySmoothCustomAsync(float value) { await PlaySmoothCustomAsync(value, Data.Time.Duration); }
+        public virtual async UniTask PlaySmoothCustomAsync(float value, float duration) { }
+        public virtual async UniTask PlaySmoothCustomAsync(string value) { await PlaySmoothCustomAsync(value, Data.Time.Duration); }
+        public virtual async UniTask PlaySmoothCustomAsync(string value, float duration) { }
+        public virtual async UniTask PlaySmoothCustomAsync(Color value) { await PlaySmoothCustomAsync(value, Data.Time.Duration); }
+        public virtual async UniTask PlaySmoothCustomAsync(Color value, float duration) { }
+        public virtual async UniTask PlaySmoothCustomAsync(Gradient value) { await PlaySmoothCustomAsync(value, Data.Time.Duration); }
+        public virtual async UniTask PlaySmoothCustomAsync(Gradient value, float duration) { }
+        public virtual async UniTask PlaySmoothCustomAsync(Vector2 value) { await PlaySmoothCustomAsync(value, Data.Time.Duration); }
+        public virtual async UniTask PlaySmoothCustomAsync(Vector2 value, float duration) { }
+        public virtual async UniTask PlaySmoothCustomAsync(Vector3 value) { await PlaySmoothCustomAsync(value, Data.Time.Duration); }
+        public virtual async UniTask PlaySmoothCustomAsync(Vector3 value, float duration) { }
 #pragma warning restore CS1998
 
         public virtual void Stop() { }

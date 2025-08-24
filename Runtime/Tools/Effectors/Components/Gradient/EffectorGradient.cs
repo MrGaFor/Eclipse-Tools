@@ -65,11 +65,11 @@ namespace EC.Effects
         #endregion
 
         #region Smooth Player
-        public override async UniTask PlaySmooth()
+        public override async UniTask PlaySmoothAsync()
         {
-            await PlaySmoothCustom(_dataColor.Value);
+            await PlaySmoothCustomAsync(_dataColor.Value);
         }
-        public override async UniTask PlaySmoothCustom(Gradient value, float duration)
+        public override async UniTask PlaySmoothCustomAsync(Gradient value, float duration)
         {
             if (!ThisColor) return;
             StartPlaySmooth();

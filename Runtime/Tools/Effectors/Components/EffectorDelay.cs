@@ -66,11 +66,11 @@ namespace EC.Effects
         #endregion
 
         #region Smooth Player
-        public override async UniTask PlaySmooth()
+        public override async UniTask PlaySmoothAsync()
         {
-            await PlaySmoothCustom(_data.Time);
+            await PlaySmoothCustomAsync(_data.Time);
         }
-        public override async UniTask PlaySmoothCustom(float value)
+        public override async UniTask PlaySmoothCustomAsync(float value)
         {
             StartPlaySmooth();
             float defaultDuration = CompiledSettings.duration;

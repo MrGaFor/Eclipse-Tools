@@ -17,7 +17,7 @@ namespace EC.Scenes
         public async UniTask PlaySmooth(bool isShowing)
         {
             foreach (var eff in (isShowing ? _onShow : _onHide))
-                eff.PlaySmooth().Forget();
+                eff.PlaySmoothAsync().Forget();
             await UniTask.Delay(isShowing ? ShowDuration : HideDuration);
         }
         public void PlayMoment(bool isShowing)
