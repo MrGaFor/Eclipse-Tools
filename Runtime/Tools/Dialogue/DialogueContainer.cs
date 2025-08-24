@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Conversa.Runtime;
 using Conversa.Runtime.Events;
 using Conversa.Runtime.Interfaces;
+using Cysharp.Threading.Tasks;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
@@ -32,22 +33,23 @@ namespace EC.Dialogue
             Runner.OnConversationEvent.AddListener(HandleEvent);
         }
 
-        public virtual void StartDialogue()
+        public virtual async UniTask StartDialogue()
         {
             if (Runner == null) Initialize();
             IsActive = true;
-            OnStarted();
+            await OnStarted();
             Runner.Begin();
         }
 
-        public virtual void StopDialogue()
+        public virtual async UniTask StopDialogue()
         {
             if (Runner != null) Runner.OnConversationEvent.RemoveListener(HandleEvent);
+            Runner = null;
             IsActive = false;
             _messages.Clear();
             _choices.Clear();
             _users.Clear();
-            OnStopped();
+            await OnStopped();
         }
 
         protected virtual void HandleEvent(IConversationEvent e)
@@ -56,64 +58,77 @@ namespace EC.Dialogue
             {
                 case SimpleMessageEvent m:
                     _messages.Enqueue(m);
-                    OnMessageQueued(m);
+                    OnMessageQueued(m).Forget();
                     break;
 
                 case SimpleChoiceEvent c:
                     _choices.Enqueue(c);
-                    OnChoiceQueued(c);
+                    OnChoiceQueued(c).Forget();
                     break;
 
                 case SimpleEventEvent u:
                     _users.Enqueue(u);
-                    OnUserEventQueued(u);
+                    OnUserEventQueued(u).Forget();
                     break;
 
                 case EndEvent:
-                    OnEnd();
-                    StopDialogue();
+                    StopDialogue().ContinueWith(() => OnEnd()).Forget();
                     break;
             }
         }
 
-        public void ProcessNextMessage()
+        public void ProcessNextMessage() => OnProcessNextMessage().Forget();
+        public async UniTask OnProcessNextMessage()
         {
             if (_messages.Count == 0) return;
             var m = _messages.Dequeue();
-            OnMessage(m);
+            await OnMessageUse(m);
             m.Advance();
         }
 
-        public void ProcessAllMessages()
+        public void ProcessAllMessages() => OnProcessAllMessages().Forget();
+        public async UniTask OnProcessAllMessages()
         {
-            while (_messages.Count > 0) ProcessNextMessage();
+            while (_messages.Count > 0) 
+            { 
+                await OnProcessNextMessage(); 
+                await UniTask.WaitForEndOfFrame(); 
+            }
         }
 
-        public void Choose(int optionIndex)
+        public void Choose(int optionIndex) => OnChoose(optionIndex).Forget();
+        public async UniTask OnChoose(int optionIndex)
         {
             if (_choices.Count == 0) return;
             var c = _choices.Dequeue();
-            OnChoice(c, optionIndex);
+            await OnChoiceUse(c, optionIndex);
             c.Options[optionIndex].Advance();
         }
 
-        public void ProcessNextUserEvent()
+        public void ProcessNextUserEvent() => OnProcessNextUserEvent().Forget();
+        public async UniTask OnProcessNextUserEvent()
         {
             if (_users.Count == 0) return;
             var u = _users.Dequeue();
-            OnUserEvent(u);
+            await OnUserEventUse(u);
             u.Advance();
         }
 
-        protected virtual void OnMessage(SimpleMessageEvent e) { }
-        protected virtual void OnChoice(SimpleChoiceEvent e, int optionIndex) { }
-        protected virtual void OnUserEvent(SimpleEventEvent e) { }
+#pragma warning disable CS1998
+        // Process
+        protected virtual async UniTask OnStarted() { }
+        protected virtual async UniTask OnStopped() { }
+        protected virtual async UniTask OnEnd() { }
 
-        protected virtual void OnMessageQueued(SimpleMessageEvent e) { }
-        protected virtual void OnChoiceQueued(SimpleChoiceEvent e) { }
-        protected virtual void OnUserEventQueued(SimpleEventEvent e) { }
-        protected virtual void OnStarted() { }
-        protected virtual void OnStopped() { }
-        protected virtual void OnEnd() { }
+        // Add Block
+        protected virtual async UniTask OnMessageQueued(SimpleMessageEvent e) { }
+        protected virtual async UniTask OnChoiceQueued(SimpleChoiceEvent e) { }
+        protected virtual async UniTask OnUserEventQueued(SimpleEventEvent e) { }
+
+        // Use Block
+        protected virtual async UniTask OnMessageUse(SimpleMessageEvent e) { }
+        protected virtual async UniTask OnChoiceUse(SimpleChoiceEvent e, int optionIndex) { }
+        protected virtual async UniTask OnUserEventUse(SimpleEventEvent e) { }
+#pragma warning restore CS1998
     }
 }
