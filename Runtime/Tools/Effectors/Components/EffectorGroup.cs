@@ -61,6 +61,49 @@ namespace EC.Effects
         #region Smooth Player
         private int DurationInTicks => Mathf.RoundToInt(_components.Max(v => v.GetTime().AllDuration) * 1000f);
 
+        public override void PlaySmooth()
+        {
+            Stop();
+            foreach (var component in _components)
+                component.PlaySmooth();
+        }
+        public override void PlaySmoothCustom(float value)
+        {
+            Stop();
+            foreach (var component in _components)
+                component.PlaySmoothCustom(value);
+        }
+        public override void PlaySmoothCustom(string value)
+        {
+            Stop();
+            foreach (var component in _components)
+                component.PlaySmoothCustom(value);
+        }
+        public override void PlaySmoothCustom(Gradient value)
+        {
+            Stop();
+            foreach (var component in _components)
+                component.PlaySmoothCustom(value);
+        }
+        public override void PlaySmoothCustom(Vector3 value)
+        {
+            Stop();
+            foreach (var component in _components)
+                component.PlaySmoothCustom(value);
+        }
+        public override void PlaySmoothCustom(Color value)
+        {
+            Stop();
+            foreach (var component in _components)
+                component.PlaySmoothCustom(value);
+        }
+        public override void PlaySmoothCustom(Vector2 value)
+        {
+            Stop();
+            foreach (var component in _components)
+                component.PlaySmoothCustom(value);
+        }
+
         public override async UniTask PlaySmoothAsync()
         {
             Stop();

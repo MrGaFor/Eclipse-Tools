@@ -89,6 +89,20 @@ namespace EC.Effects
         #endregion
 
         #region Smooth Player
+        public override void PlaySmooth()
+        {
+            PlaySmoothCustom(_dataFloat.Value);
+            PlaySmoothCustom(_dataColor.Value);
+        }
+        public override void PlaySmoothCustom(float value, float duration)
+        {
+            SmoothFloatPart(value, duration);
+        }
+        public override void PlaySmoothCustom(Color value, float duration)
+        {
+            SmoothColorPart(value, duration);
+        }
+
         public override async UniTask PlaySmoothAsync()
         {
             await PlaySmoothCustomAsync(_dataFloat.Value);
@@ -96,7 +110,16 @@ namespace EC.Effects
         }
         public override async UniTask PlaySmoothCustomAsync(float value, float duration)
         {
-            if (!ThisFloat) return;
+            if (SmoothFloatPart(value, duration)) await EffectTween;
+        }
+        public override async UniTask PlaySmoothCustomAsync(Color value, float duration)
+        {
+            if (SmoothColorPart(value, duration)) await EffectTween;
+        }
+
+        private bool SmoothFloatPart(float value, float duration)
+        {
+            if (!ThisFloat) return false;
             StartPlaySmooth();
             var main = _data.Component.main;
             var emiss = _data.Component.emission;
@@ -116,13 +139,13 @@ namespace EC.Effects
                 default:
                     used = false; break;
             }
-            if (buffDuration != Data.Time.Duration) Data.Time.Duration = buffDuration;
-            if (used) await EffectTween;
             EndPlaySmooth();
+            if (buffDuration != Data.Time.Duration) Data.Time.Duration = buffDuration;
+            return used;
         }
-        public override async UniTask PlaySmoothCustomAsync(Color value, float duration)
+        private bool SmoothColorPart(Color value, float duration)
         {
-            if (!ThisColor) return;
+            if (!ThisColor) return false;
             StartPlaySmooth();
             var main = _data.Component.main;
             var emiss = _data.Component.emission;
@@ -136,10 +159,9 @@ namespace EC.Effects
                 default:
                     used = false; break;
             }
-            if (buffDuration != Data.Time.Duration) Data.Time.Duration = buffDuration;
-            if (used) await EffectTween;
             EndPlaySmooth();
-        
+            if (buffDuration != Data.Time.Duration) Data.Time.Duration = buffDuration;
+            return used;
         }
         private void SetColor(ParticleSystem ps, Color color)
         {

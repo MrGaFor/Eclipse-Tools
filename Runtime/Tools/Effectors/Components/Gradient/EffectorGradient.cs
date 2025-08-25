@@ -9,7 +9,7 @@ namespace EC.Effects
     public class EffectorGradient : IEffectorComponent
     {
         #region Data
-        public override bool ThisColor => true;
+        public override bool ThisGradient => true;
 
         [SerializeField, HideLabel, OnValueChanged("ColorUpdate", IncludeChildren = true), ShowIf("ThisColor")] private EffectorComponentValue<Material, Gradient> _dataColor; public virtual void ColorUpdate() { base.MarkDirty(); }
 
@@ -65,21 +65,36 @@ namespace EC.Effects
         #endregion
 
         #region Smooth Player
+        public override void PlaySmooth()
+        {
+            PlaySmoothCustom(_dataColor.Value);
+        }
+        public override void PlaySmoothCustom(Gradient value, float duration)
+        {
+            SmoothGradientPart(value, duration);
+        }
+
         public override async UniTask PlaySmoothAsync()
         {
             await PlaySmoothCustomAsync(_dataColor.Value);
         }
         public override async UniTask PlaySmoothCustomAsync(Gradient value, float duration)
         {
-            if (!ThisColor) return;
+            if (SmoothGradientPart(value, duration)) await EffectTween;
+        }
+
+        private bool SmoothGradientPart(Gradient value, float duration)
+        {
+            if (!ThisGradient) return false;
             StartPlaySmooth();
             float buffDuration = Data.Time.Duration;
             if (duration != Data.Time.Duration) Data.Time.Duration = duration;
             Gradient gradientLast = _gradientLast;
-            EffectTween = Tween.Custom(0f, 1f, CompiledSettings, time => {  UpdateGradient(LerpGradient(gradientLast, value, time)); });
+            EffectTween = Tween.Custom(0f, 1f, CompiledSettings, time => { UpdateGradient(LerpGradient(gradientLast, value, time)); });
             if (buffDuration != Data.Time.Duration) Data.Time.Duration = buffDuration;
-            await EffectTween;
             EndPlaySmooth();
+            if (buffDuration != Data.Time.Duration) Data.Time.Duration = buffDuration;
+            return true;
         }
         #endregion
 

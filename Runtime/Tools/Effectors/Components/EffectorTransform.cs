@@ -71,13 +71,28 @@ namespace EC.Effects
         #endregion
 
         #region Smooth Player
+        public override void PlaySmooth()
+        {
+            PlaySmoothCustom(_dataVector3.Value);
+        }
+        public override void PlaySmoothCustom(Vector3 value, float duration)
+        {
+            SmoothVectorPart(value, duration);
+        }
+
         public override async UniTask PlaySmoothAsync()
         {
             await PlaySmoothCustomAsync(_dataVector3.Value);
         }
         public override async UniTask PlaySmoothCustomAsync(Vector3 value, float duration)
         {
-            if (!ThisVector3) return;
+            if (SmoothVectorPart(value, duration))
+                await EffectTween;
+        }
+
+        private bool SmoothVectorPart(Vector3 value, float duration)
+        {
+            if (!ThisVector3) return false;
             StartPlaySmooth();
             float buffDuration = Data.Time.Duration;
             if (duration != Data.Time.Duration) Data.Time.Duration = duration;
@@ -97,9 +112,9 @@ namespace EC.Effects
                 default:
                     used = false; break;
             }
-            if (buffDuration != Data.Time.Duration) Data.Time.Duration = buffDuration;
-            if (used) await EffectTween;
             EndPlaySmooth();
+            if (buffDuration != Data.Time.Duration) Data.Time.Duration = buffDuration;
+            return used;
         }
         #endregion
 
