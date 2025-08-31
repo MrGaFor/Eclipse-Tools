@@ -27,16 +27,6 @@ public class SimpleChoiceNodeView : BaseNodeView<SimpleChoiceNode>
         VisualElement tagsContainer = new VisualElement();
         tagsContainer.style.flexDirection = FlexDirection.Column;
         tags.style.marginBottom = 5;
-        GenericDropdownMenu tagsMenu = new GenericDropdownMenu();
-        foreach (var t in EC.Dialogue.TagConfig.Tags)
-            tagsMenu.AddItem(t, false, () =>
-            {
-                var list = Data.tags.ToList();
-                if (!list.Contains(t))
-                    list.Add(t);
-                Data.tags = list.ToArray();
-                RefreshTags();
-            });
 
         VisualElement tagsField = new VisualElement();
         tagsField.style.flexDirection = FlexDirection.Row;
@@ -61,7 +51,24 @@ public class SimpleChoiceNodeView : BaseNodeView<SimpleChoiceNode>
         tagButton.style.marginTop = 0;
         tagButton.style.height = 20;
         tagButton.style.width = 20;
-        tagButton.clicked += () => { tagsMenu.DropDown(tagButton.worldBound, tagButton, false); };
+        tagButton.clicked += () =>
+        {
+            GenericDropdownMenu tagsMenu = new GenericDropdownMenu();
+            foreach (var t in EC.Dialogue.TagConfig.Tags)
+            {
+                tagsMenu.AddItem(t, Data.tags.Contains(t), () =>
+                {
+                    var list = Data.tags.ToList();
+                    if (!list.Contains(t))
+                        list.Add(t);
+                    else
+                        list.Remove(t);
+                    Data.tags = list.ToArray();
+                    RefreshTags();
+                });
+            }
+            tagsMenu.DropDown(tagButton.worldBound, tagButton, false);
+        }; 
         tagsField.Add(tagsLabel);
         tagsField.Add(tagField);
         tagsField.Add(tagButton);
