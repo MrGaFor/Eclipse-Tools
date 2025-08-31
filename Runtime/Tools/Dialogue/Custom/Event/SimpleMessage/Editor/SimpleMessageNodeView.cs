@@ -2,6 +2,8 @@ using Conversa.Editor;
 using Conversa.Runtime;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.VisualScripting.YamlDotNet.Core.Tokens;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -19,22 +21,90 @@ public class SimpleMessageNodeView : BaseNodeView<SimpleMessageNode>
     {
         string lang = EC.Localization.LocalizationSystem.ActiveLanguageEditor;
 
-        VisualElement tag = new VisualElement();
-        tag.style.flexDirection = new StyleEnum<FlexDirection>(FlexDirection.Row);
-        tag.style.marginTop = 5;
-        tag.style.marginRight = 5;
-        tag.style.marginLeft = 5;
-        Label tagLabel = new Label("Tag");
-        tagLabel.style.width = 70;
-        tag.style.unityFontStyleAndWeight = new StyleEnum<FontStyle>(FontStyle.Bold);
-        tag.Add(tagLabel);
+        VisualElement tags = new VisualElement();
+        tags.style.flexDirection = FlexDirection.Column;
+        tags.style.marginTop = 5;
+        tags.style.marginRight = 5;
+        tags.style.marginLeft = 5;
+        VisualElement tagsContainer = new VisualElement();
+        tagsContainer.style.flexDirection = FlexDirection.Column;
+        tags.style.marginBottom = 5;
+        GenericDropdownMenu tagsMenu = new GenericDropdownMenu();
+        foreach (var t in EC.Dialogue.TagConfig.Tags)
+            tagsMenu.AddItem(t, false, () =>
+            {
+                var list = Data.tags.ToList();
+                if (!list.Contains(t))
+                    list.Add(t);
+                Data.tags = list.ToArray();
+                RefreshTags();
+            });
+
+        VisualElement tagsField = new VisualElement();
+        tagsField.style.flexDirection = FlexDirection.Row;
+        Label tagsLabel = new Label("Tags");
+        tagsLabel.style.width = 70;
         TextField tagField = new TextField();
-        tagField.style.width = 130;
-        tagField.SetValueWithoutNotify(Data.tag);
-        tagField.RegisterValueChangedCallback(e => Data.tag = e.newValue);
+        tagField.style.width = 110;
         tagField.isDelayed = true;
-        tag.Add(tagField);
-        bodyContainer.Add(tag);
+        tagField.RegisterCallback<KeyDownEvent>(e =>
+        {
+            if (e.keyCode == KeyCode.Return && !string.IsNullOrEmpty(tagField.value))
+            {
+                var list = Data.tags.ToList();
+                list.Add(tagField.value);
+                Data.tags = list.ToArray();
+                tagField.value = "";
+                RefreshTags();
+            }
+        });
+        var tagButton = new Button();
+        tagButton.text = "...";
+        tagButton.style.marginTop = 0;
+        tagButton.style.height = 20;
+        tagButton.style.width = 20;
+        tagButton.clicked += () => { tagsMenu.DropDown(tagButton.worldBound, tagButton, false); };
+        tagsField.Add(tagsLabel);
+        tagsField.Add(tagField);
+        tagsField.Add(tagButton);
+        tags.Add(tagsField);
+        tags.Add(tagsContainer);
+
+        bodyContainer.Add(tags);
+        RefreshTags();
+        void RefreshTags()
+        {
+            tagsContainer.Clear();
+            foreach (var t in Data.tags)
+            {
+                var tagChip = new VisualElement();
+                tagChip.style.flexDirection = FlexDirection.Row;
+                tagChip.style.marginRight = 4;
+                tagChip.style.backgroundColor = new Color(0.2f, 0.2f, 0.2f, 0.5f);
+                tagChip.style.paddingLeft = 4;
+                tagChip.style.paddingRight = 2;
+                tagChip.style.alignItems = Align.Center;
+
+                var label = new Label(t);
+                label.style.unityTextAlign = TextAnchor.MiddleLeft;
+                label.style.flexGrow = 1;
+
+                var removeBtn = new Button(() =>
+                {
+                    Data.tags = Data.tags.Where(x => x != t).ToArray();
+                    RefreshTags();
+                })
+                {
+                    text = "x"
+                };
+                removeBtn.style.width = 16;
+                removeBtn.style.height = 16;
+
+                tagChip.Add(label);
+                tagChip.Add(removeBtn);
+                tagsContainer.Add(tagChip);
+            }
+        }
 
         VisualElement actor = new VisualElement();
         actor.style.flexDirection = new StyleEnum<FlexDirection>(FlexDirection.Row);

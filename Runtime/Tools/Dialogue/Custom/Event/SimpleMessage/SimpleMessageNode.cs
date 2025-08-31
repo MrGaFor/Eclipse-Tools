@@ -9,7 +9,7 @@ using UnityEngine;
 [Port("Next", "next", typeof(BaseNode), Flow.Out, Capacity.One)]
 public class SimpleMessageNode : BaseNode, IEventNode
 {
-    public string tag;
+    public string[] tags = new string[] { };
     public EC.Localization.LocalizationElement<string> actor = new();
     public string emotion;
     public EC.Localization.LocalizationElement<string> message = new();
@@ -24,7 +24,7 @@ public class SimpleMessageNode : BaseNode, IEventNode
             conversation.Process(nextNode, conversationEvents);
         }
 
-        var e = new SimpleMessageEvent(tag, actor, emotion, message, Advance);
+        var e = new SimpleMessageEvent(tags, actor, emotion, message, Advance);
         conversationEvents.OnConversationEvent.Invoke(e);
     }
 }

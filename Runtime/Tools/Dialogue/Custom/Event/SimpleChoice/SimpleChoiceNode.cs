@@ -9,7 +9,7 @@ using System.Linq;
 [Port("Previous", "previous", typeof(BaseNode), Flow.In, Capacity.Many)]
 public class SimpleChoiceNode : BaseNode, IEventNode
 {
-    public string tag;
+    public string[] tags = new string[] { };
     public EC.Localization.LocalizationElement<string> actor = new();
     public string emotion;
     public EC.Localization.LocalizationElement<string> message = new();
@@ -33,7 +33,7 @@ public class SimpleChoiceNode : BaseNode, IEventNode
 
         SimpleOption NodePortToOption(SimplePortDefinition<BaseNode> portDefinition) => new SimpleOption(portDefinition.Value, () => HandleClickOption(portDefinition));
 
-        var choiceEvent = new SimpleChoiceEvent(tag, actor, emotion, message, options.Select(NodePortToOption).ToList());
+        var choiceEvent = new SimpleChoiceEvent(tags, actor, emotion, message, options.Select(NodePortToOption).ToList());
         conversationEvents.OnConversationEvent.Invoke(choiceEvent);
     }
 

@@ -8,16 +8,16 @@ namespace Conversa.Runtime.Events
 {
     public class SimpleChoiceEvent : IConversationEvent
     {
-        public string Tag { get; }
+        public string[] Tags { get; }
         public EC.Localization.LocalizationElement<string> Actor { get; }
         public string Emotion { get; }
         public EC.Localization.LocalizationElement<string> Message { get; }
         public List<SimpleOption> Options { get; }
 
-        public SimpleChoiceEvent(string tag, EC.Localization.LocalizationElement<string> actor, string emotion, 
+        public SimpleChoiceEvent(string[] tags, EC.Localization.LocalizationElement<string> actor, string emotion, 
             EC.Localization.LocalizationElement<string> message, List<SimpleOption> options)
         {
-            Tag = tag;
+            Tags = tags;
             Actor = actor;
             Emotion = emotion;
             Message = message;
