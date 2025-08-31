@@ -2,8 +2,6 @@ using Conversa.Editor;
 using Conversa.Runtime;
 using System.Collections.Generic;
 using System.Linq;
-using Unity.VisualScripting.YamlDotNet.Core.Tokens;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -30,6 +28,10 @@ public class SimpleMessageNodeView : BaseNodeView<SimpleMessageNode>
         tagsContainer.style.flexDirection = FlexDirection.Column;
         tags.style.marginBottom = 5;
         GenericDropdownMenu tagsMenu = new GenericDropdownMenu();
+        string debugTags = "";
+        foreach (var t in EC.Dialogue.TagConfig.Tags)
+            debugTags += t + ", ";
+        Debug.Log(debugTags);
         foreach (var t in EC.Dialogue.TagConfig.Tags)
             tagsMenu.AddItem(t, false, () =>
             {
