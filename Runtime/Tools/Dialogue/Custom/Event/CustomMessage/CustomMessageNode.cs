@@ -12,6 +12,7 @@ public class CustomMessageNode : BaseNode, IEventNode
 {
     public string tag;
     public EC.Localization.LocalizationElement<string> actor = new();
+    public string emotion = string.Empty;
 
     public CustomMessageNode() { }
 
@@ -23,7 +24,7 @@ public class CustomMessageNode : BaseNode, IEventNode
             conversation.Process(nextNode, conversationEvents);
         }
 
-        var e = new SimpleMessageEvent(tag, actor, ProcessPort(conversation, "message", new EC.Localization.LocalizationElement<string>()), Advance);
+        var e = new SimpleMessageEvent(tag, actor, emotion, ProcessPort(conversation, "message", new EC.Localization.LocalizationElement<string>()), Advance);
         conversationEvents.OnConversationEvent.Invoke(e);
     }
 }

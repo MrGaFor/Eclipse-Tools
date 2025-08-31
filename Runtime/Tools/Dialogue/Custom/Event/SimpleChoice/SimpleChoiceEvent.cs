@@ -10,14 +10,16 @@ namespace Conversa.Runtime.Events
     {
         public string Tag { get; }
         public EC.Localization.LocalizationElement<string> Actor { get; }
+        public string Emotion { get; }
         public EC.Localization.LocalizationElement<string> Message { get; }
         public List<SimpleOption> Options { get; }
 
-        public SimpleChoiceEvent(string tag, EC.Localization.LocalizationElement<string> actor, 
+        public SimpleChoiceEvent(string tag, EC.Localization.LocalizationElement<string> actor, string emotion, 
             EC.Localization.LocalizationElement<string> message, List<SimpleOption> options)
         {
             Tag = tag;
             Actor = actor;
+            Emotion = emotion;
             Message = message;
             Options = options;
         }

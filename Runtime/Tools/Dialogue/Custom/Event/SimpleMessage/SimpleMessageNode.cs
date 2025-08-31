@@ -11,6 +11,7 @@ public class SimpleMessageNode : BaseNode, IEventNode
 {
     public string tag;
     public EC.Localization.LocalizationElement<string> actor = new();
+    public string emotion;
     public EC.Localization.LocalizationElement<string> message = new();
 
     public SimpleMessageNode() { }
@@ -23,7 +24,7 @@ public class SimpleMessageNode : BaseNode, IEventNode
             conversation.Process(nextNode, conversationEvents);
         }
 
-        var e = new SimpleMessageEvent(tag, actor, message, Advance);
+        var e = new SimpleMessageEvent(tag, actor, emotion, message, Advance);
         conversationEvents.OnConversationEvent.Invoke(e);
     }
 }

@@ -11,6 +11,7 @@ public class SimpleChoiceNode : BaseNode, IEventNode
 {
     public string tag;
     public EC.Localization.LocalizationElement<string> actor = new();
+    public string emotion;
     public EC.Localization.LocalizationElement<string> message = new();
     public List<SimplePortDefinition<BaseNode>> options = new List<SimplePortDefinition<BaseNode>>
         {
@@ -32,7 +33,7 @@ public class SimpleChoiceNode : BaseNode, IEventNode
 
         SimpleOption NodePortToOption(SimplePortDefinition<BaseNode> portDefinition) => new SimpleOption(portDefinition.Value, () => HandleClickOption(portDefinition));
 
-        var choiceEvent = new SimpleChoiceEvent(tag, actor, message, options.Select(NodePortToOption).ToList());
+        var choiceEvent = new SimpleChoiceEvent(tag, actor, emotion, message, options.Select(NodePortToOption).ToList());
         conversationEvents.OnConversationEvent.Invoke(choiceEvent);
     }
 
