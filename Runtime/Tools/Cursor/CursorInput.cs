@@ -6,6 +6,7 @@ namespace EC.Cursors
     [HideMonoScript]
     public class CursorInput : MonoBehaviour
     {
+#if !UNITY_IOS && !UNITY_ANDROID
         private enum InputType { No, Id }
         [SerializeField, BoxGroup("UI", false), LabelWidth(100)] private InputType _inputType = InputType.Id;
 #if UNITY_EDITOR
@@ -28,6 +29,7 @@ namespace EC.Cursors
 #if UNITY_EDITOR
         private string[] GetIds() => CursorManager.GetIds();
         private int GetIdsCound() => GetIds().Length - 1;
+#endif
 #endif
     }
 }
