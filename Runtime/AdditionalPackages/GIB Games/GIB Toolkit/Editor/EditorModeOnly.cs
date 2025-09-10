@@ -60,7 +60,7 @@ namespace GIB.EditorUtilities
         public static void OnPostprocessScene()
         {
             if (!EditorModeOnly._enabled) return;
-            GIBUtils.Log("Destroying EditorOnly Objects.");
+            UnityEngine.Debug.Log("Destroying EditorOnly Objects.");
 
             GameObject[] editorModeTaggedObjects = FindGameObjectsByTag(EditorModeOnlyTag);
 

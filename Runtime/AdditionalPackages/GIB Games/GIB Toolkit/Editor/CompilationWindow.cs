@@ -11,7 +11,7 @@ namespace GIB.EditorUtilities
         [MenuItem("Tools/GIB Toolkit/Request Script Compilation")]
         private static void DoRequest()
         {
-            GIBUtils.Log("Requesting script compilation...");
+            UnityEngine.Debug.Log("Requesting script compilation...");
             CompilationPipeline.RequestScriptCompilation();
         }
     }
