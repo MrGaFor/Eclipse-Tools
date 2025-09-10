@@ -1,3 +1,4 @@
+#if UNITY_EDITOR
 using UnityEditor;
 using UnityEditor.Compilation;
 
@@ -16,3 +17,4 @@ namespace GIB.EditorUtilities
         }
     }
 }
+#endif

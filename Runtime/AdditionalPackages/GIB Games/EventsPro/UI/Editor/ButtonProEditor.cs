@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿#if UNITY_EDITOR
+using UnityEngine;
 using UnityEngine.UI;
 
 namespace UnityEditor.UI
@@ -31,3 +32,4 @@ namespace UnityEditor.UI
 		}
 	}
 }
+#endif

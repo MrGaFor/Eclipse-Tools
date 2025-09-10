@@ -1,4 +1,5 @@
-﻿using UnityEngine.UI;
+﻿#if UNITY_EDITOR
+using UnityEngine.UI;
 
 namespace UnityEditor.UI
 {
@@ -95,3 +96,4 @@ namespace UnityEditor.UI
 		}
 	}
 }
+#endif

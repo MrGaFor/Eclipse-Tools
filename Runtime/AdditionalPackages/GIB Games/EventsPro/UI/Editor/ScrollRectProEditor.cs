@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿#if UNITY_EDITOR
+using UnityEngine;
 using UnityEngine.UI;
 using UnityEditor.AnimatedValues;
 
@@ -171,3 +172,4 @@ namespace UnityEditor.UI
 		}
 	}
 }
+#endif

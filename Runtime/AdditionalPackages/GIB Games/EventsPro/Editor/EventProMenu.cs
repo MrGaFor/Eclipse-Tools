@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿#if UNITY_EDITOR
+using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 #if TMP_PRESENT
@@ -724,3 +725,4 @@ namespace UnityEditor.UI
 		}
 	}
 }
+#endif

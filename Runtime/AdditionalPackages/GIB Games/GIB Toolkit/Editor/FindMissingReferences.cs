@@ -1,3 +1,4 @@
+#if UNITY_EDITOR
 using System.Collections;
 using System.Reflection;
 using System.Linq;
@@ -126,3 +127,4 @@ namespace GIB.EditorUtilities
         }
     }
 }
+#endif

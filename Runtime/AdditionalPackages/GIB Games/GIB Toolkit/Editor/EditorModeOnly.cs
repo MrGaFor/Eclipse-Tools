@@ -1,3 +1,4 @@
+#if UNITY_EDITOR
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEditor.Callbacks;
@@ -89,3 +90,4 @@ namespace GIB.EditorUtilities
 
     }
 }
+#endif

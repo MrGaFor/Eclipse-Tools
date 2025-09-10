@@ -1,3 +1,4 @@
+#if UNITY_EDITOR
 using UnityEngine;
 using UnityEditor;
 using GIB.Triggers;
@@ -28,3 +29,4 @@ public class TriggerCounterItemDrawer : PropertyDrawer
         return EditorGUI.GetPropertyHeight(property.FindPropertyRelative("OnTargetValue"), label, true);
     }
 }
+#endif
