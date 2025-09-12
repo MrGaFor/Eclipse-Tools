@@ -46,14 +46,15 @@ namespace EC.Effects
         protected virtual void CompileSettings()
         {
             IsCompiled = true;
-            CompiledSettings = new TweenSettings();
-            CompiledSettings.startDelay = Data.Time.StartDelay;
-            CompiledSettings.endDelay = Data.Time.EndDelay;
-            CompiledSettings.duration = Data.Time.Duration;
-            CompiledSettings.ease = Data.Curve.CurveType == EffectSettingsCurveModule.CurveTypes.Ease ? Data.Curve.Ease : Ease.Custom;
-            if (Data.Curve.CurveType != EffectSettingsCurveModule.CurveTypes.Ease) CompiledSettings.customEase = Data.Curve.Curve;
-            CompiledSettings.cycleMode = Data.Loop.LoopMode;
-            CompiledSettings.cycles = Data.Loop.LoopType == EffectSettingsLoopModule.LoopTypes.None ? 0 : (Data.Loop.LoopType == EffectSettingsLoopModule.LoopTypes.Loop ? -1 : Data.Loop.LoopCount);
+            TweenSettings sett = new TweenSettings();
+            sett.startDelay = Data.Time.StartDelay;
+            sett.endDelay = Data.Time.EndDelay;
+            sett.duration = Data.Time.Duration;
+            sett.ease = Data.Curve.CurveType == EffectSettingsCurveModule.CurveTypes.Ease ? Data.Curve.Ease : Ease.Custom;
+            if (Data.Curve.CurveType != EffectSettingsCurveModule.CurveTypes.Ease) sett.customEase = Data.Curve.Curve;
+            sett.cycleMode = Data.Loop.LoopMode;
+            sett.cycles = Data.Loop.LoopType == EffectSettingsLoopModule.LoopTypes.None ? 0 : (Data.Loop.LoopType == EffectSettingsLoopModule.LoopTypes.Loop ? -1 : Data.Loop.LoopCount);
+            CompiledSettings = sett;
         }
         #endregion
         #endregion

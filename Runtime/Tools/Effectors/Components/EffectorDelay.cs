@@ -68,28 +68,28 @@ namespace EC.Effects
         #region Smooth Player
         public override void PlaySmooth()
         {
-            PlaySmoothCustom(CompiledSettings.duration);
+            PlaySmoothCustom(_data.Time);
         }
-        public override void PlaySmoothCustom(float value, float duration)
+        public override void PlaySmoothCustom(float duration)
         {
-            SmoothFloatPart(value, duration);
+            SmoothFloatPart(duration);
         }
 
         public override async UniTask PlaySmoothAsync()
         {
             await PlaySmoothCustomAsync(CompiledSettings.duration);
         }
-        public override async UniTask PlaySmoothCustomAsync(float value, float duration)
+        public override async UniTask PlaySmoothCustomAsync(float duration)
         {
-            SmoothFloatPart(value, duration);
+            SmoothFloatPart(duration);
             await EffectTween;
         }
 
-        private void SmoothFloatPart(float value, float duration)
+        private void SmoothFloatPart(float duration)
         {
             StartPlaySmooth();
             float defaultDuration = CompiledSettings.duration;
-            CompiledSettings.duration = value;
+            CompiledSettings.duration = duration;
             EffectTween = Tween.Custom(0f, 1f, CompiledSettings, data => { });
             CompiledSettings.duration = defaultDuration;
             EndPlaySmooth();
