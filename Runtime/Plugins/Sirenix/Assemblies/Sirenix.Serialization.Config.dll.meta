@@ -12,7 +12,7 @@ PluginImporter:
   validateReferences: 1
   platformData:
     Android:
-      enabled: 0
+      enabled: 1
       settings:
         AndroidLibraryDependee: UnityLibrary
         AndroidSharedLibraryType: Executable
@@ -20,51 +20,51 @@ PluginImporter:
     Any:
       enabled: 1
       settings:
-        Exclude Android: 1
-        Exclude Editor: 1
+        Exclude Android: 0
+        Exclude Editor: 0
         Exclude Linux: 1
-        Exclude Linux64: 1
+        Exclude Linux64: 0
         Exclude LinuxUniversal: 1
         Exclude N3DS: 1
         Exclude OSXIntel: 1
         Exclude OSXIntel64: 1
-        Exclude OSXUniversal: 1
+        Exclude OSXUniversal: 0
         Exclude PS4: 1
         Exclude PSM: 1
         Exclude PSP2: 1
         Exclude SamsungTV: 1
         Exclude Tizen: 1
-        Exclude WebGL: 1
+        Exclude WebGL: 0
         Exclude WiiU: 1
-        Exclude Win: 1
-        Exclude Win64: 1
+        Exclude Win: 0
+        Exclude Win64: 0
         Exclude WindowsStoreApps: 1
         Exclude XboxOne: 1
         Exclude iOS: 1
         Exclude tvOS: 1
     Editor:
-      enabled: 0
+      enabled: 1
       settings:
         CPU: AnyCPU
         DefaultValueInitialized: true
         OS: AnyOS
     Linux64:
-      enabled: 0
+      enabled: 1
       settings:
         CPU: None
     OSXUniversal:
-      enabled: 0
+      enabled: 1
       settings:
         CPU: None
     WebGL:
-      enabled: 0
+      enabled: 1
       settings: {}
     Win:
-      enabled: 0
+      enabled: 1
       settings:
         CPU: None
     Win64:
-      enabled: 0
+      enabled: 1
       settings:
         CPU: None
     WindowsStoreApps:
