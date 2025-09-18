@@ -87,8 +87,8 @@ namespace EC.Effects
         {
             if (!ThisFloat) return false;
             StartPlaySmooth();
-            float buffDuration = Data.Time.Duration;
-            if (duration != Data.Time.Duration) Data.Time.Duration = duration;
+            float buffDuration = CompiledSettings.duration;
+            if (duration != CompiledSettings.duration) CompiledSettings.duration = duration;
             bool used = true;
             switch (_data.Func)
             {
@@ -98,7 +98,7 @@ namespace EC.Effects
                     used = false; break;
             }
             EndPlaySmooth();
-            if (buffDuration != Data.Time.Duration) Data.Time.Duration = buffDuration;
+            if (buffDuration != CompiledSettings.duration) CompiledSettings.duration = buffDuration;
             return used;
         }
         #endregion

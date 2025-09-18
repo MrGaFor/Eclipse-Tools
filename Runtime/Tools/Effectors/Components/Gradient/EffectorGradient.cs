@@ -87,13 +87,12 @@ namespace EC.Effects
         {
             if (!ThisGradient) return false;
             StartPlaySmooth();
-            float buffDuration = Data.Time.Duration;
-            if (duration != Data.Time.Duration) Data.Time.Duration = duration;
+            float buffDuration = CompiledSettings.duration;
+            if (duration != CompiledSettings.duration) CompiledSettings.duration = duration;
             Gradient gradientLast = _gradientLast;
             EffectTween = Tween.Custom(0f, 1f, CompiledSettings, time => { UpdateGradient(LerpGradient(gradientLast, value, time)); });
-            if (buffDuration != Data.Time.Duration) Data.Time.Duration = buffDuration;
+            if (buffDuration != CompiledSettings.duration) CompiledSettings.duration = buffDuration;
             EndPlaySmooth();
-            if (buffDuration != Data.Time.Duration) Data.Time.Duration = buffDuration;
             return true;
         }
         #endregion
