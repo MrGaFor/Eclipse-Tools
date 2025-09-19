@@ -19,6 +19,11 @@ namespace EC.Localization
                 Language = language;
                 Value = default;
             }
+            public LanguagePair(string language, T value)
+            {
+                Language = language;
+                Value = value;
+            }
 
             private string[] Languages => LanguageConfig.Languages;
         }
@@ -67,7 +72,7 @@ namespace EC.Localization
                 {
                     LanguagePair[] newMass = new LanguagePair[langs.Length];
                     for (int i = 0; i < langs.Length; i++)
-                        newMass[i] = new LanguagePair(langs[i]);
+                        newMass[i] = new LanguagePair(langs[i], default);
                     for (int i = 0; i < _massValues.Length; i++)
                         if (langs.Contains(_massValues[i].Language))
                             foreach (var pair in newMass)
