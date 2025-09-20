@@ -20,6 +20,12 @@ namespace EC.Effects
             foreach (var component in _components)
                 component.PlayMoment();
         }
+        public override void PlayMomentCustom(int value)
+        {
+            Stop();
+            foreach (var component in _components)
+                component.PlayMomentCustom(value);
+        }
         public override void PlayMomentCustom(float value)
         {
             Stop();
@@ -27,6 +33,12 @@ namespace EC.Effects
                 component.PlayMomentCustom(value);
         }
         public override void PlayMomentCustom(string value)
+        {
+            Stop();
+            foreach (var component in _components)
+                component.PlayMomentCustom(value);
+        }
+        public override void PlayMomentCustom(Color value)
         {
             Stop();
             foreach (var component in _components)
@@ -44,7 +56,7 @@ namespace EC.Effects
             foreach (var component in _components)
                 component.PlayMomentCustom(value);
         }
-        public override void PlayMomentCustom(Color value)
+        public override void PlayMomentCustom(Vector4 value)
         {
             Stop();
             foreach (var component in _components)
@@ -67,6 +79,12 @@ namespace EC.Effects
             foreach (var component in _components)
                 component.PlaySmooth();
         }
+        public override void PlaySmoothCustom(int value)
+        {
+            Stop();
+            foreach (var component in _components)
+                component.PlaySmoothCustom(value);
+        }
         public override void PlaySmoothCustom(float value)
         {
             Stop();
@@ -74,18 +92,6 @@ namespace EC.Effects
                 component.PlaySmoothCustom(value);
         }
         public override void PlaySmoothCustom(string value)
-        {
-            Stop();
-            foreach (var component in _components)
-                component.PlaySmoothCustom(value);
-        }
-        public override void PlaySmoothCustom(Gradient value)
-        {
-            Stop();
-            foreach (var component in _components)
-                component.PlaySmoothCustom(value);
-        }
-        public override void PlaySmoothCustom(Vector3 value)
         {
             Stop();
             foreach (var component in _components)
@@ -103,12 +109,37 @@ namespace EC.Effects
             foreach (var component in _components)
                 component.PlaySmoothCustom(value);
         }
+        public override void PlaySmoothCustom(Vector3 value)
+        {
+            Stop();
+            foreach (var component in _components)
+                component.PlaySmoothCustom(value);
+        }
+        public override void PlaySmoothCustom(Vector4 value)
+        {
+            Stop();
+            foreach (var component in _components)
+                component.PlaySmoothCustom(value);
+        }
+        public override void PlaySmoothCustom(Gradient value)
+        {
+            Stop();
+            foreach (var component in _components)
+                component.PlaySmoothCustom(value);
+        }
 
         public override async UniTask PlaySmoothAsync()
         {
             Stop();
             foreach (var component in _components)
                 component.PlaySmoothAsync().Forget();
+            await UniTask.Delay(DurationInTicks);
+        }
+        public override async UniTask PlaySmoothCustomAsync(int value)
+        {
+            Stop();
+            foreach (var component in _components)
+                component.PlaySmoothCustomAsync(value).Forget();
             await UniTask.Delay(DurationInTicks);
         }
         public override async UniTask PlaySmoothCustomAsync(float value)
@@ -125,7 +156,14 @@ namespace EC.Effects
                 component.PlaySmoothCustomAsync(value).Forget();
             await UniTask.Delay(DurationInTicks);
         }
-        public override async UniTask PlaySmoothCustomAsync(Gradient value)
+        public override async UniTask PlaySmoothCustomAsync(Color value)
+        {
+            Stop();
+            foreach (var component in _components)
+                component.PlaySmoothCustomAsync(value).Forget();
+            await UniTask.Delay(DurationInTicks);
+        }
+        public override async UniTask PlaySmoothCustomAsync(Vector2 value)
         {
             Stop();
             foreach (var component in _components)
@@ -139,14 +177,14 @@ namespace EC.Effects
                 component.PlaySmoothCustomAsync(value).Forget();
             await UniTask.Delay(DurationInTicks);
         }
-        public override async UniTask PlaySmoothCustomAsync(Color value)
+        public override async UniTask PlaySmoothCustomAsync(Vector4 value)
         {
             Stop();
             foreach (var component in _components)
                 component.PlaySmoothCustomAsync(value).Forget();
             await UniTask.Delay(DurationInTicks);
         }
-        public override async UniTask PlaySmoothCustomAsync(Vector2 value)
+        public override async UniTask PlaySmoothCustomAsync(Gradient value)
         {
             Stop();
             foreach (var component in _components)
