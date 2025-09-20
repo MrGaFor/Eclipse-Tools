@@ -10,14 +10,19 @@ namespace EC.Effects
     public class EffectorMaterial: IEffectorComponent
     {
         #region Data
-        private enum FuncList { Int, Float, Color, Vector4 }
+        private enum FuncList { Int, Float, Range, Color, Vector4 }
         private bool IsFunc(FuncList type) => _dataInt.Func == type;
         public override bool ThisInt => IsFunc(FuncList.Int);
         public override bool ThisFloat => IsFunc(FuncList.Float);
+        public bool ThisRange => IsFunc(FuncList.Range);
+        public bool ThisFloatOrRange => ThisFloat || ThisRange;
         public override bool ThisColor => IsFunc(FuncList.Color);
         public override bool ThisVector4 => IsFunc(FuncList.Vector4);
 
 #if UNITY_EDITOR
+        [SerializeField, HideInInspector] private float RangeMin;
+        [SerializeField, HideInInspector] private float RangeMax;
+
         private string[] GetKeysForActiveData()
         {
             if (_data == null || _data.Component == null)
@@ -34,6 +39,7 @@ namespace EC.Effects
                 {
                     FuncList.Int => UnityEditor.ShaderUtil.ShaderPropertyType.Int,
                     FuncList.Float => UnityEditor.ShaderUtil.ShaderPropertyType.Float,
+                    FuncList.Range => UnityEditor.ShaderUtil.ShaderPropertyType.Range,
                     FuncList.Color => UnityEditor.ShaderUtil.ShaderPropertyType.Color,
                     FuncList.Vector4 => UnityEditor.ShaderUtil.ShaderPropertyType.Vector,
                     _ => throw new ArgumentOutOfRangeException()
@@ -46,7 +52,7 @@ namespace EC.Effects
 #endif
         [SerializeField, BoxGroup("Data", false), HorizontalGroup("Data/value")] private string _key;
         [SerializeField, HideLabel, OnValueChanged("IntUpdate", IncludeChildren = true), ShowIf("ThisInt")] private EffectorComponentFuncData<Material, FuncList, int> _dataInt; public virtual void IntUpdate() { UpdateFuncExclude(_dataInt); base.MarkDirty(); }
-        [SerializeField, HideLabel, OnValueChanged("FloatUpdate", IncludeChildren = true), ShowIf("ThisFloat")] private EffectorComponentFuncData<Material, FuncList, float> _dataFloat; public virtual void FloatUpdate() { UpdateFuncExclude(_dataFloat); base.MarkDirty(); }
+        [SerializeField, HideLabel, OnValueChanged("FloatUpdate", IncludeChildren = true), ShowIf("ThisFloatOrRange")] private EffectorComponentFuncData<Material, FuncList, float> _dataFloat; public virtual void FloatUpdate() { UpdateFuncExclude(_dataFloat); base.MarkDirty(); }
         [SerializeField, HideLabel, OnValueChanged("ColorUpdate", IncludeChildren = true), ShowIf("ThisColor")] private EffectorComponentFuncData<Material, FuncList, Color> _dataColor; public virtual void ColorUpdate() { UpdateFuncExclude(_dataColor); base.MarkDirty(); }
         [SerializeField, HideLabel, OnValueChanged("Vector4Update", IncludeChildren = true), ShowIf("ThisVector4")] private EffectorComponentFuncData<Material, FuncList, Vector4> _dataVector4; public virtual void Vector4Update() { UpdateFuncExclude(_dataVector4); base.MarkDirty(); }
 
@@ -62,6 +68,7 @@ namespace EC.Effects
         {
             FuncList.Int => _dataInt,
             FuncList.Float => _dataFloat,
+            FuncList.Range => _dataFloat,
             FuncList.Color => _dataColor,
             FuncList.Vector4 => _dataVector4,
             _ => throw new ArgumentOutOfRangeException()
@@ -118,7 +125,7 @@ namespace EC.Effects
         }
         public override void PlayMomentCustom(float value)
         {
-            if (!ThisFloat) return;
+            if (!ThisFloat && !ThisRange) return;
             StartPlayMoment();
             switch (_data.Func)
             {
@@ -220,14 +227,14 @@ namespace EC.Effects
         }
         private bool SmoothFloatPart(float value, float duration)
         {
-            if (!ThisFloat) return false;
+            if (!ThisFloat && !ThisRange) return false;
             StartPlaySmooth();
             float buffDuration = CompiledSettings.duration;
             if (duration != CompiledSettings.duration) CompiledSettings.duration = duration;
             bool used = true;
             switch (_data.Func)
             {
-                case FuncList.Float:
+                case FuncList.Float or FuncList.Range:
                     EffectTween = Tween.Custom(_data.Component.GetFloat(_key), value, CompiledSettings, value => { _data.Component.SetFloat(_key, value); }); break;
                 default:
                     used = false; break;
