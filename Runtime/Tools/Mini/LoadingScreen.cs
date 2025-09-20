@@ -14,27 +14,33 @@ namespace EC.Mini
         public void OnEnable()
         {
             Bus.BusSystem.Subscribe(_key, () => Loading(_defaultTime));
+            Bus.BusSystem.Subscribe<bool>(_key, isActive => Loading(isActive).Forget());
             Bus.BusSystem.Subscribe<float>(_key, (time) => Loading(time));
             Bus.BusSystem.Subscribe<UniTask>(_key, (task) => Loading(task));
         }
         public void OnDisable()
         {
             Bus.BusSystem.Unsubscribe(_key, () => Loading(_defaultTime));
+            Bus.BusSystem.Unsubscribe<bool>(_key, isActive => Loading(isActive).Forget());
             Bus.BusSystem.Unsubscribe<float>(_key, (time) => Loading(time));
             Bus.BusSystem.Unsubscribe<UniTask>(_key, (task) => Loading(task));
         }
 
+        private async UniTask Loading(bool isActive)
+        {
+            await _effectorStates.PlaySmoothAsync(isActive ? "Show" : "Hide");
+        }
         private async void Loading(float time)
         {
-            await _effectorStates.PlaySmoothAsync("Show");
+            await Loading(true);
             await UniTask.Delay((int)(time * 1000));
-            await _effectorStates.PlaySmoothAsync("Hide");
+            await Loading(false);
         }
         private async void Loading(UniTask task)
         {
-            await _effectorStates.PlaySmoothAsync("Show");
+            await Loading(true);
             await task;
-            await _effectorStates.PlaySmoothAsync("Hide");
+            await Loading(false);
         }
 
     }
