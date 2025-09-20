@@ -24,12 +24,14 @@ namespace EC.Effects
         private EffectorComponentFunc<RectTransform, FuncList> _data => ThisFloat ? _dataFloat : ThisVector3 ? _dataVector3 : ThisColor ? _dataColor : null;
         */
         public virtual EffectorEmpty Data { get; set; }
+        public virtual bool ThisInt => false;
         public virtual bool ThisFloat => false;
         public virtual bool ThisString => false;
         public virtual bool ThisColor => false;
         public virtual bool ThisGradient => false;
         public virtual bool ThisVector2 => false;
         public virtual bool ThisVector3 => false;
+        public virtual bool ThisVector4 => false;
 
         public virtual EffectSettingsTimeModule GetTime() => Data.Time;
 
@@ -60,14 +62,18 @@ namespace EC.Effects
         #endregion
 
         public virtual void PlayMoment() { }
+        public virtual void PlayMomentCustom(int value) { }
         public virtual void PlayMomentCustom(float value) { }
         public virtual void PlayMomentCustom(string value) { }
         public virtual void PlayMomentCustom(Color value) { }
         public virtual void PlayMomentCustom(Gradient value) { }
         public virtual void PlayMomentCustom(Vector2 value) { }
         public virtual void PlayMomentCustom(Vector3 value) { }
+        public virtual void PlayMomentCustom(Vector4 value) { }
 
         public virtual void PlaySmooth() { }
+        public virtual void PlaySmoothCustom(int value) { PlaySmoothCustom(value, Data.Time.Duration); }
+        public virtual void PlaySmoothCustom(int value, float duration) { }
         public virtual void PlaySmoothCustom(float value) { PlaySmoothCustom(value, Data.Time.Duration); }
         public virtual void PlaySmoothCustom(float value, float duration) { }
         public virtual void PlaySmoothCustom(string value) { PlaySmoothCustom(value, Data.Time.Duration); }
@@ -80,9 +86,13 @@ namespace EC.Effects
         public virtual void PlaySmoothCustom(Vector2 value, float duration) { }
         public virtual void PlaySmoothCustom(Vector3 value) { PlaySmoothCustom(value, Data.Time.Duration); }
         public virtual void PlaySmoothCustom(Vector3 value, float duration) { }
+        public virtual void PlaySmoothCustom(Vector4 value) { PlaySmoothCustom(value, Data.Time.Duration); }
+        public virtual void PlaySmoothCustom(Vector4 value, float duration) { }
 
 #pragma warning disable CS1998
         public virtual async UniTask PlaySmoothAsync() { }
+        public virtual async UniTask PlaySmoothCustomAsync(int value) { await PlaySmoothCustomAsync(value, Data.Time.Duration); }
+        public virtual async UniTask PlaySmoothCustomAsync(int value, float duration) { }
         public virtual async UniTask PlaySmoothCustomAsync(float value) { await PlaySmoothCustomAsync(value, Data.Time.Duration); }
         public virtual async UniTask PlaySmoothCustomAsync(float value, float duration) { }
         public virtual async UniTask PlaySmoothCustomAsync(string value) { await PlaySmoothCustomAsync(value, Data.Time.Duration); }
@@ -95,6 +105,8 @@ namespace EC.Effects
         public virtual async UniTask PlaySmoothCustomAsync(Vector2 value, float duration) { }
         public virtual async UniTask PlaySmoothCustomAsync(Vector3 value) { await PlaySmoothCustomAsync(value, Data.Time.Duration); }
         public virtual async UniTask PlaySmoothCustomAsync(Vector3 value, float duration) { }
+        public virtual async UniTask PlaySmoothCustomAsync(Vector4 value) { await PlaySmoothCustomAsync(value, Data.Time.Duration); }
+        public virtual async UniTask PlaySmoothCustomAsync(Vector4 value, float duration) { }
 #pragma warning restore CS1998
 
         public virtual void Stop() { }
