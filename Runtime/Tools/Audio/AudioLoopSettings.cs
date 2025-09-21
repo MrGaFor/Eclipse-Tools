@@ -33,10 +33,10 @@ namespace EC.Audio
         }
         public void Stop(AudioSource source, AudioFadeSettings fade)
         {
+            fade.Stop(source);
             if (_disableTimers.ContainsKey(source))
             {
                 Coroutine.Coroutines.I.StopCoroutine(_disableTimers[source]);
-                fade.Stop(source);
                 _disableTimers.Remove(source);
             }
         }
