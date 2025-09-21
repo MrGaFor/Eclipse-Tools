@@ -13,8 +13,9 @@ namespace EC.Audio
     {
         [SerializeField, BoxGroup("Source", false), HideLabel] private AudioSourceSettings _sourceSettings;
         [SerializeField, BoxGroup("Volume", false), HideLabel] private AudioVolumeSettings _volumeSettings;
-        [SerializeField, BoxGroup("Loop", false), HideLabel] private AudioLoopSettings _loopSettings;
+        [SerializeField, BoxGroup("Fade", false), HideLabel] private AudioFadeSettings _fadeSettings;
         [SerializeField, BoxGroup("Pitch", false), HideLabel] private AudioPitchSettings _pitchSettings;
+        [SerializeField, BoxGroup("Loop", false), HideLabel] private AudioLoopSettings _loopSettings;
         [SerializeField, BoxGroup("3D", false), HideLabel] private Audio3DSettings _3dSettings;
 
         private Pool.ComponentPool<AudioSource> _pool;
@@ -57,7 +58,8 @@ namespace EC.Audio
             await _sourceSettings.Apply(source);
             _volumeSettings.Apply(source);
             _pitchSettings.Apply(source);
-            _loopSettings.Apply(source);
+            _fadeSettings.Apply(source);
+            _loopSettings.Apply(source, _fadeSettings);
             source.time = 0f;
             source.Play();
         }
@@ -70,7 +72,9 @@ namespace EC.Audio
         {
             if (_pool == null) return;
             foreach (AudioSource source in _pool.GetAll())
-                _loopSettings.Stop(source);
+            {
+                _loopSettings.Stop(source, _fadeSettings);
+            }
         }
 
         #region EDITOR

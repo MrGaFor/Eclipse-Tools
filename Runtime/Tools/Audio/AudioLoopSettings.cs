@@ -1,4 +1,5 @@
 using Sirenix.OdinInspector;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -16,34 +17,34 @@ namespace EC.Audio
 
         private Dictionary<AudioSource, UnityEngine.Coroutine> _disableTimers = new();
 
-        public void Apply(AudioSource source)
+        public void Apply(AudioSource source, AudioFadeSettings fade)
         {
             if (_loop)
             {
                 source.loop = true;
                 if (_loopType == LoopType.Limited)
-                    _disableTimers.Add(source, Coroutine.Coroutines.I.StartCoroutine(EndTimerDisable(source, _loopCount)));
+                    _disableTimers.Add(source, Coroutine.Coroutines.I.StartCoroutine(EndTimerDisable(source, fade, _loopCount)));
             }
             else
             {
                 source.loop = false;
-                _disableTimers.Add(source, Coroutine.Coroutines.I.StartCoroutine(EndTimerDisable(source)));
+                _disableTimers.Add(source, Coroutine.Coroutines.I.StartCoroutine(EndTimerDisable(source, fade)));
             }
         }
-        public void Stop(AudioSource source)
+        public void Stop(AudioSource source, AudioFadeSettings fade)
         {
             if (_disableTimers.ContainsKey(source))
             {
                 Coroutine.Coroutines.I.StopCoroutine(_disableTimers[source]);
+                fade.Stop(source);
                 _disableTimers.Remove(source);
             }
-            source.gameObject.SetActive(false);
         }
-        private IEnumerator EndTimerDisable(AudioSource source, int repeating = 1)
+        private IEnumerator EndTimerDisable(AudioSource source, AudioFadeSettings fade, int repeating = 1)
         {
-            yield return new WaitForSecondsRealtime((source.clip.length * repeating) / Mathf.Abs(source.pitch));
+            yield return new WaitForSecondsRealtime((source.clip.length * repeating) / Mathf.Abs(source.pitch) - fade.OutDuration);
+            fade.Stop(source);
             _disableTimers.Remove(source);
-            source.gameObject.SetActive(false);
         }
 
     }
