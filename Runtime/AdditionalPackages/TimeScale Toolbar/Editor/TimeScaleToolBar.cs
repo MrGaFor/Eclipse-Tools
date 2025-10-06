@@ -16,7 +16,7 @@ namespace bl4st.TimeScaleToolbar
         static readonly string key_toolbarOffset = "TimeScaleToolbar_Offset";
         static readonly string[] toolbarPositions = { "Left", "Right" };
 
-        static float _maxScale = 2f;
+        static float _maxScale = 5f;
         static float maxScale
         {
             get => _maxScale;
