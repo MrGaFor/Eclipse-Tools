@@ -1,4 +1,4 @@
-using Sirenix.OdinInspector;
+﻿using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -7,8 +7,11 @@ namespace EC.Bus
     [HideMonoScript]
     public class OutputComponent : MonoBehaviour
     {
-        [SerializeField, HorizontalGroup("input"), LabelWidth(40)] protected string _key;
+        [SerializeField, LabelText("Old Key"), HorizontalGroup(), ShowIf("HasOldKey")] protected string _key; private bool HasOldKey => !string.IsNullOrEmpty(_key);
+        [SerializeField, HorizontalGroup(25), Button("➰"), ShowIf("HasOldKey"), Tooltip("Transfer to new Key")] private void BtnTransferKey() { _busKey.TransferKey(_key); _key = ""; }
+        [SerializeField, HorizontalGroup("input"), HideLabel] protected BusKey _busKey;
         [SerializeField, HorizontalGroup("input", 90), HideLabel] protected AutoCall _autoCallType = AutoCall.None;
+
         [SerializeField] protected UnityEvent _event;
 
         private void Awake() { if (_autoCallType == AutoCall.Awake) OnInvoke(); }
@@ -21,8 +24,11 @@ namespace EC.Bus
     [HideMonoScript]
     public class OutputComponent<T> : MonoBehaviour
     {
-        [SerializeField, HorizontalGroup("input"), LabelWidth(40)] protected string _key;
+        [SerializeField, LabelText("Old Key"), HorizontalGroup(), ShowIf("HasOldKey")] protected string _key; private bool HasOldKey => !string.IsNullOrEmpty(_key);
+        [SerializeField, HorizontalGroup(25), Button("➰"), ShowIf("HasOldKey"), Tooltip("Transfer to new Key")] private void BtnTransferKey() { _busKey.TransferKey(_key); _key = ""; }
+        [SerializeField, HorizontalGroup("input"), HideLabel] protected BusKey _busKey;
         [SerializeField, HorizontalGroup("input", 90), HideLabel] protected AutoCall _autoCallType = AutoCall.None;
+
         [SerializeField] protected UnityEvent<T> _event;
 
         private void Awake() { if (_autoCallType == AutoCall.Awake && BusSystem.HasKey(_key)) OnInvoke(BusSystem.Get<T>(_key)); }

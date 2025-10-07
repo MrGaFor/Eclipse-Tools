@@ -44,6 +44,7 @@ namespace EC.Bus
         public static void Set<T>(string key, T arg)
         {
             Variables[key] = arg;
+            BusKeysData.RegisterKeyType(key, typeof(T));
             Invoke(key, arg);
         }
         #endregion
@@ -51,14 +52,15 @@ namespace EC.Bus
         #region --- INVOKE ---
         public static void Invoke(string key)
         {
+            BusKeysData.RegisterKeyType(key, "Simple");
             if (Subscribers.ContainsKey(key))
                 if (Subscribers[key].Count > 0)
                     for (int i = Subscribers[key].Count - 1; i >= 0; i--)
                         (Subscribers[key][i] as Action)?.Invoke();
         }
-
         public static void Invoke<T>(string key, T arg)
         {
+            BusKeysData.RegisterKeyType(key, typeof(T));
             if (Subscribers.ContainsKey(key))
                 if (Subscribers[key].Count > 0)
                     for (int i = Subscribers[key].Count - 1; i >= 0; i--)
