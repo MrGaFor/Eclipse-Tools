@@ -81,6 +81,7 @@ namespace EC.Bus
         public void Unselect()
         {
             if (_isEditing) BtnCancel();
+            if (_isRemoving) BtnNoRemoving();
         }
 
     }
