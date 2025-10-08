@@ -27,8 +27,7 @@ namespace LogicUI.FancyTextRendering
         public static void RenderToTextMesh(string markdownSource, TMP_Text textMesh, MarkdownRenderingSettings settings, params ICustomTextPreProcessor[] customTextPreProcessors)
         {
             string richText = MarkdownToRichText(markdownSource, settings, customTextPreProcessors);
-
-            textMesh.text = richText;
+            textMesh.SetText(richText);
             UpdateTextMesh(textMesh);
         }
 
@@ -38,7 +37,6 @@ namespace LogicUI.FancyTextRendering
 
             textMesh.ForceMeshUpdate();
             textMesh.GetComponent<TextLinkHelper>()?.LinkDataUpdated();
-
 
             void ResetLinkInfo()
             {

@@ -7,43 +7,22 @@ namespace LogicUI.FancyTextRendering
     [RequireComponent(typeof(TMP_Text))]
     public class MarkdownRenderer : MonoBehaviour
     {
-        [SerializeField]
-        [TextArea(minLines: 10, maxLines: 50)]
-        string _Source;
+        [SerializeField] private TMP_Text _textMesh;
+        [SerializeField, TextArea(minLines: 3, maxLines: 10)] private string _source;
+        [SerializeField, HideLabel] private MarkdownRenderingSettings _renderSettings = MarkdownRenderingSettings.Default;
 
-        public string Source
+        public void SetText(string text)
         {
-            get => _Source;
-            set
-            {
-                _Source = value;
-                RenderText();
-            }
+            _source = text;
+            Markdown.RenderToTextMesh(_source, _textMesh, _renderSettings);
         }
 
-        TMP_Text _TextMesh;
-        public TMP_Text TextMesh
-        {
-            get
-            {
-                if (_TextMesh == null)
-                    _TextMesh = GetComponent<TMP_Text>();
-
-                return _TextMesh;
-            }
-        }
-
+#if UNITY_EDITOR
         private void OnValidate()
         {
-            RenderText();
+            if (Application.isPlaying) return;
+            Markdown.RenderToTextMesh(_source, _textMesh, _renderSettings);
         }
-
-
-        [HideLabel] public MarkdownRenderingSettings RenderSettings = MarkdownRenderingSettings.Default;
-
-        private void RenderText()
-        {
-            Markdown.RenderToTextMesh(Source, TextMesh, RenderSettings);
-        }
+#endif
     }
 }

@@ -97,8 +97,8 @@ namespace LogicUI.FancyTextRendering
         [Serializable]
         public class LinkSettings
         {
-            public bool RenderLinks = true;
-            public bool RenderAutoLinks = true;
+            public bool RenderLinks = false;
+            public bool RenderAutoLinks = false;
 
             [ShowIf("@RenderLinks || RenderAutoLinks")]
             [ColorUsage(showAlpha: false)]
