@@ -15,7 +15,14 @@ namespace EC.Animator
         {
             private enum KeyType { Trigger, Float, Bool }
             [SerializeField, HorizontalGroup(Width = 80f), HideLabel, DisableInPlayMode] private KeyType _type;
-            [SerializeField, HorizontalGroup(), LabelWidth(60f)] private string _key;
+            [SerializeField, HorizontalGroup(), LabelWidth(40f), LabelText("Bus:"), OnValueChanged("OnChangeBusKey", InvokeOnInitialize = true)] private string _busKey;
+            private void OnChangeBusKey()
+            {
+                if (_dublicate)
+                    _animKey = _busKey;
+            }
+            [SerializeField, HorizontalGroup(), LabelWidth(40f), LabelText("Key:"), DisableIf("_dublicate")] private string _animKey;
+            [SerializeField, HorizontalGroup(Width = 22f), HideLabel, OnValueChanged("OnChangeBusKey", InvokeOnInitialize = true)] private bool _dublicate = true;
 
             private UnityAnimator _animator;
 
@@ -27,24 +34,24 @@ namespace EC.Animator
             {
                 switch (_type)
                 {
-                    case KeyType.Trigger: Bus.BusSystem.Subscribe(_key, OnTriggerSet); break;
-                    case KeyType.Float: Bus.BusSystem.Subscribe<float>(_key, OnFloatSet); break;
-                    case KeyType.Bool: Bus.BusSystem.Subscribe<bool>(_key, OnBoolSet); break;
+                    case KeyType.Trigger: Bus.BusSystem.Subscribe(_busKey, OnTriggerSet); break;
+                    case KeyType.Float: Bus.BusSystem.Subscribe<float>(_busKey, OnFloatSet); break;
+                    case KeyType.Bool: Bus.BusSystem.Subscribe<bool>(_busKey, OnBoolSet); break;
                 }
             }
             public void OnDisable()
             {
                 switch (_type)
                 {
-                    case KeyType.Trigger: Bus.BusSystem.Unsubscribe(_key, OnTriggerSet); break;
-                    case KeyType.Float: Bus.BusSystem.Unsubscribe<float>(_key, OnFloatSet); break;
-                    case KeyType.Bool: Bus.BusSystem.Unsubscribe<bool>(_key, OnBoolSet); break;
+                    case KeyType.Trigger: Bus.BusSystem.Unsubscribe(_busKey, OnTriggerSet); break;
+                    case KeyType.Float: Bus.BusSystem.Unsubscribe<float>(_busKey, OnFloatSet); break;
+                    case KeyType.Bool: Bus.BusSystem.Unsubscribe<bool>(_busKey, OnBoolSet); break;
                 }
             }
 
-            private void OnTriggerSet() => _animator.SetTrigger(_key);
-            private void OnFloatSet(float value) => _animator.SetFloat(_key, value);
-            private void OnBoolSet(bool value) => _animator.SetBool(_key, value);
+            private void OnTriggerSet() => _animator.SetTrigger(_animKey);
+            private void OnFloatSet(float value) => _animator.SetFloat(_animKey, value);
+            private void OnBoolSet(bool value) => _animator.SetBool(_animKey, value);
         }
 
         public void Awake()
