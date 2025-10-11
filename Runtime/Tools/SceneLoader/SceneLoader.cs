@@ -10,6 +10,10 @@ namespace EC.Scenes
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
         private static async UniTask Init()
         {
+            EC.Bus.BusSystem.Subscribe<int>("LoadSceneIndex", async (index) => await LoadScene(index));
+            EC.Bus.BusSystem.Subscribe<string>("LoadSceneName", async (name) => await LoadScene(name));
+            EC.Bus.BusSystem.Subscribe<string>("LoadSceneAddressablesName", async (name) => await LoadSceneAddressables(name));
+
             _ui = Resources.Load<SceneLoaderUI>("[SceneLoaderUI]");
             if (_ui)
             {
@@ -24,9 +28,6 @@ namespace EC.Scenes
                 return;
             }
             
-            EC.Bus.BusSystem.Subscribe<int>("LoadSceneIndex", async (index) => await LoadScene(index));
-            EC.Bus.BusSystem.Subscribe<string>("LoadSceneName", async (name) => await LoadScene(name));
-            EC.Bus.BusSystem.Subscribe<string>("LoadSceneAddressablesName", async (name) => await LoadSceneAddressables(name));
         }
         private static async UniTask SetUI(bool isShowing)
         {
