@@ -8,6 +8,14 @@ namespace EC.Bus
         private static Dictionary<string, object> Variables = new Dictionary<string, object>();
         private static Dictionary<string, List<object>> Subscribers = new Dictionary<string, List<object>>();
 
+        #region --- BUS-INIT ---
+        [UnityEngine.RuntimeInitializeOnLoadMethod(UnityEngine.RuntimeInitializeLoadType.BeforeSceneLoad)]
+        private static void Init()
+        {
+            Subscribe("ClearAllVariables", ClearAllVariables);
+        }
+        #endregion
+
         #region --- SUBSCRIBE ---
         public static void Subscribe(string key, Action action) { AddSubscriber(key, action); }
         public static void Subscribe<T>(string key, Action<T> action) { AddSubscriber(key, action); }
@@ -102,6 +110,10 @@ namespace EC.Bus
         {
             if (Variables.ContainsKey(key))
                 Variables.Remove(key);
+        }
+        public static void ClearAllVariables()
+        {
+            Variables.Clear();
         }
         #endregion
 
