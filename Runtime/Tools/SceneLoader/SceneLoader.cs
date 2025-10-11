@@ -11,16 +11,19 @@ namespace EC.Scenes
         private static async UniTask Init()
         {
             _ui = Resources.Load<SceneLoaderUI>("[SceneLoaderUI]");
-            if (_ui == null)
+            if (_ui)
+            {
+                _ui = GameObject.Instantiate(_ui);
+                GameObject.DontDestroyOnLoad(_ui.gameObject);
+                _ui.PlayMoment(true);
+                _ui.PlaySmooth(false).Forget();
+            }
+            else
             {
                 Debug.LogWarning("[SceneLoaderUI] prefab not found in Resources folder. Please create a <<[SceneLoaderUI]>> prefab and place it in the Resources folder.");
                 return;
             }
-            _ui = GameObject.Instantiate(_ui);
-            GameObject.DontDestroyOnLoad(_ui.gameObject);
-            _ui.PlayMoment(true);
-            await _ui.PlaySmooth(false);
-
+            
             EC.Bus.BusSystem.Subscribe<int>("LoadSceneIndex", async (index) => await LoadScene(index));
             EC.Bus.BusSystem.Subscribe<string>("LoadSceneName", async (name) => await LoadScene(name));
             EC.Bus.BusSystem.Subscribe<string>("LoadSceneAddressablesName", async (name) => await LoadSceneAddressables(name));
