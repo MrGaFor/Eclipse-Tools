@@ -9,9 +9,9 @@ namespace EC.Localization
     public class LocalizationElement<T>
     {
         [System.Serializable]
-        private class LanguagePair
+        public class LanguagePair
         {
-            [HorizontalGroup(), ValueDropdown("Languages"), ] public string Language;
+            [HorizontalGroup(), ValueDropdown("Languages"),] public string Language;
             [HorizontalGroup()] public T Value;
 
             public LanguagePair(string language)
@@ -30,6 +30,18 @@ namespace EC.Localization
 
         [SerializeField] private LanguagePair[] _massValues;
         [SerializeField, DictionaryDrawerSettings(DisplayMode = DictionaryDisplayOptions.ExpandedFoldout, KeyLabel = "Lang", ValueLabel = "Val")] private Dictionary<string, T> _dictValues;
+
+        public const LocalizationElement<T> Empty = null;
+        public LocalizationElement()
+        {
+            _massValues = new LanguagePair[0];
+            _dictValues = new Dictionary<string, T>();
+        }
+        public LocalizationElement(LanguagePair[] massValues)
+        {
+            _massValues = massValues;
+            _dictValues = new Dictionary<string, T>();
+        }
 
         public void SetValue(T value)
         {
