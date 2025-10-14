@@ -16,8 +16,8 @@ namespace EC.Bus
 
         private void Awake() { if (_autoCallType == AutoCall.Awake) OnInvoke(); }
         private void Start() { if (_autoCallType == AutoCall.Start) OnInvoke(); }
-        private void OnEnable() { BusSystem.Subscribe(_key, OnInvoke); if (_autoCallType == AutoCall.OnEnable) OnInvoke(); }
-        private void OnDisable() { BusSystem.Unsubscribe(_key, OnInvoke); if (_autoCallType == AutoCall.OnDisable) OnInvoke(); }
+        private void OnEnable() { BusSystem.Subscribe(_busKey.Key, OnInvoke); if (_autoCallType == AutoCall.OnEnable) OnInvoke(); }
+        private void OnDisable() { BusSystem.Unsubscribe(_busKey.Key, OnInvoke); if (_autoCallType == AutoCall.OnDisable) OnInvoke(); }
         private void OnDestroy() { if (_autoCallType == AutoCall.OnDestroy) OnInvoke(); }
         public void OnInvoke() => _event?.Invoke();
     }
@@ -33,10 +33,10 @@ namespace EC.Bus
 
         private void Awake() { if (_autoCallType == AutoCall.Awake) OnInvoke(); }
         private void Start() { if (_autoCallType == AutoCall.Start) OnInvoke(); }
-        private void OnEnable() { BusSystem.Subscribe<T>(_key, OnInvoke); if (_autoCallType == AutoCall.OnEnable) OnInvoke(); }
-        private void OnDisable() { BusSystem.Unsubscribe<T>(_key, OnInvoke); if (_autoCallType == AutoCall.OnDisable) OnInvoke(); }
+        private void OnEnable() { BusSystem.Subscribe<T>(_busKey.Key, OnInvoke); if (_autoCallType == AutoCall.OnEnable) OnInvoke(); }
+        private void OnDisable() { BusSystem.Unsubscribe<T>(_busKey.Key, OnInvoke); if (_autoCallType == AutoCall.OnDisable) OnInvoke(); }
         private void OnDestroy() { if (_autoCallType == AutoCall.OnDestroy) OnInvoke(); }
         public void OnInvoke(T value) => _event?.Invoke(value);
-        public void OnInvoke() { if (BusSystem.HasKey(_key)) OnInvoke(BusSystem.Get<T>(_key)); }
+        public void OnInvoke() { if (BusSystem.HasKey(_busKey.Key)) OnInvoke(BusSystem.Get<T>(_busKey.Key)); }
     }
 }
