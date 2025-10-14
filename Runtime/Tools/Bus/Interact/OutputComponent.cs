@@ -14,10 +14,12 @@ namespace EC.Bus
 
         [SerializeField] protected UnityEvent _event;
 
+        private string Key => (_key != "") ? _key : _busKey.Key;
+
         private void Awake() { if (_autoCallType == AutoCall.Awake) OnInvoke(); }
         private void Start() { if (_autoCallType == AutoCall.Start) OnInvoke(); }
-        private void OnEnable() { BusSystem.Subscribe(_busKey.Key, OnInvoke); if (_autoCallType == AutoCall.OnEnable) OnInvoke(); }
-        private void OnDisable() { BusSystem.Unsubscribe(_busKey.Key, OnInvoke); if (_autoCallType == AutoCall.OnDisable) OnInvoke(); }
+        private void OnEnable() { BusSystem.Subscribe(Key, OnInvoke); if (_autoCallType == AutoCall.OnEnable) OnInvoke(); }
+        private void OnDisable() { BusSystem.Unsubscribe(Key, OnInvoke); if (_autoCallType == AutoCall.OnDisable) OnInvoke(); }
         private void OnDestroy() { if (_autoCallType == AutoCall.OnDestroy) OnInvoke(); }
         public void OnInvoke() => _event?.Invoke();
     }
@@ -31,12 +33,14 @@ namespace EC.Bus
 
         [SerializeField] protected UnityEvent<T> _event;
 
+        private string Key => (_key != "") ? _key : _busKey.Key;
+
         private void Awake() { if (_autoCallType == AutoCall.Awake) OnInvoke(); }
         private void Start() { if (_autoCallType == AutoCall.Start) OnInvoke(); }
-        private void OnEnable() { BusSystem.Subscribe<T>(_busKey.Key, OnInvoke); if (_autoCallType == AutoCall.OnEnable) OnInvoke(); }
-        private void OnDisable() { BusSystem.Unsubscribe<T>(_busKey.Key, OnInvoke); if (_autoCallType == AutoCall.OnDisable) OnInvoke(); }
+        private void OnEnable() { BusSystem.Subscribe<T>(Key, OnInvoke); if (_autoCallType == AutoCall.OnEnable) OnInvoke(); }
+        private void OnDisable() { BusSystem.Unsubscribe<T>(Key, OnInvoke); if (_autoCallType == AutoCall.OnDisable) OnInvoke(); }
         private void OnDestroy() { if (_autoCallType == AutoCall.OnDestroy) OnInvoke(); }
         public void OnInvoke(T value) => _event?.Invoke(value);
-        public void OnInvoke() { if (BusSystem.HasKey(_busKey.Key)) OnInvoke(BusSystem.Get<T>(_busKey.Key)); }
+        public void OnInvoke() { if (BusSystem.HasKey(Key)) OnInvoke(BusSystem.Get<T>(Key)); }
     }
 }
