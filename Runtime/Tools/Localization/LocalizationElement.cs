@@ -55,6 +55,8 @@ namespace EC.Localization
                     pair.Value = value;
             if (_dictValues.ContainsKey(language))
                 _dictValues[language] = value;
+            else
+                _dictValues.Add(language, value);
         }
 
         public T GetValue()
@@ -69,7 +71,6 @@ namespace EC.Localization
 
         private void CheckValidData()
         {
-#if UNITY_EDITOR
             CheckValidMass();
             void CheckValidMass()
             {
@@ -93,7 +94,6 @@ namespace EC.Localization
                     _massValues = newMass;
                 }
             }
-#endif
 
             CheckValidDict();
             void CheckValidDict()

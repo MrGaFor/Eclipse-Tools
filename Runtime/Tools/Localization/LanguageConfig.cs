@@ -20,7 +20,12 @@ namespace EC.Localization
                 {
                     _instance = Resources.Load<LanguageConfig>("LanguageConfig");
                     if (Application.isPlaying)
-                        Debug.Log("Localization Loaded languages: " + _instance.languages.ToArray().ToString());
+                    {
+                        string langList = "";
+                        foreach (var lang in _instance.languages)
+                            langList += lang + "; ";
+                        Debug.Log("Localization Loaded languages: " + langList);
+                    }
 #if UNITY_EDITOR
                     if (_instance == null)
                 {
