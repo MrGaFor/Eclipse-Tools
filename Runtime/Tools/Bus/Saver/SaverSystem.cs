@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using static System.Globalization.CultureInfo;
 
 namespace EC.Saver
 {
@@ -24,6 +23,22 @@ namespace EC.Saver
             ActiveVariables.Remove(key);
             PlayerPrefs.DeleteKey(key);
             PlayerPrefs.Save();
+        }
+        public static void ClearAllVariables()
+        {
+            foreach (var key in ActiveVariables)
+                Bus.BusSystem.Unsubscribe<T>(key, (value) => OnChangeVariable(key, value));
+            ActiveVariables.Clear();
+        }
+        public static void ClearAndDeleteAllVariables()
+        {
+            foreach (var key in ActiveVariables)
+            {
+                Bus.BusSystem.Unsubscribe<T>(key, (value) => OnChangeVariable(key, value));
+                PlayerPrefs.DeleteKey(key);
+            }
+            PlayerPrefs.Save();
+            ActiveVariables.Clear();
         }
         private static void OnChangeVariable<T>(string key, T value)
         {
