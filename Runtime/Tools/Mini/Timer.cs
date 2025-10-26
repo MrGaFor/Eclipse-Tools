@@ -19,6 +19,7 @@ namespace EC
         private void OnDestroy() { if (_auto == AutoCall.OnDestroy) StartTimer(_timer).Forget(); }
 
         public void StartTimer() => StartTimer(_timer).Forget();
+        public void StopTimer() => StopTimer(_timer);
         public async UniTask StartTimerAsync() => await StartTimer(_timer);
 
         public static async UniTask StartTimer(TimerCustom timer)
@@ -28,6 +29,10 @@ namespace EC
         public static async UniTask StartTimer(float duration, UnityEvent onComplete = null)
         {
             await StartTimer(new TimerCustom(duration, onComplete));
+        }
+        public static void StopTimer(TimerCustom timer)
+        {
+            timer.Stop();
         }
 
     }
