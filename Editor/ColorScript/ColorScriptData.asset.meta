@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 94c10bceb5a4f4d72a92b311a7ce0121
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 11400000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 165772
+  packageName: Color Script
+  packageVersion: 1.04
+  assetPath: Assets/ColorScript/ColorScriptData.asset
+  uploadId: 395366

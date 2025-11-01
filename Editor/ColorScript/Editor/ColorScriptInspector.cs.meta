@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: f21e5f12ea4794dec8ae5deeaa24b784
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 165772
+  packageName: Color Script
+  packageVersion: 1.04
+  assetPath: Assets/ColorScript/Editor/ColorScriptInspector.cs
+  uploadId: 395366

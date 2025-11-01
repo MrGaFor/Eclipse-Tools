@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: 5f524d08c87d68048a9210387135a047
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 313611
+  packageName: C# Extensions
+  packageVersion: 2.8
+  assetPath: Assets/SABI/C# Extensions/C# Extension Core/MonoBehaviourExtensions.cs
+  uploadId: 759533
