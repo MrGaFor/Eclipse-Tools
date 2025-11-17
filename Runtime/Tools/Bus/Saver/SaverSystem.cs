@@ -64,7 +64,7 @@ namespace EC.Saver
             Quaternion q => $"{q.x.ToString(CultureInfo.InvariantCulture)},{q.y.ToString(CultureInfo.InvariantCulture)},{q.z.ToString(CultureInfo.InvariantCulture)},{q.w.ToString(CultureInfo.InvariantCulture)}",
             Color c => $"{c.r.ToString(CultureInfo.InvariantCulture)},{c.g.ToString(CultureInfo.InvariantCulture)},{c.b.ToString(CultureInfo.InvariantCulture)},{c.a.ToString(CultureInfo.InvariantCulture)}",
             Gradient g => JsonUtility.ToJson(g),
-            _ => throw new NotSupportedException($"Unsupported type: {typeof(T)}")
+            _ => typeof(T).IsSerializable ? JsonUtility.ToJson(value) : throw new NotSupportedException($"Unsupported type: {typeof(T)}")
         };
         private static T FromString<T>(string str)
         {
@@ -81,6 +81,7 @@ namespace EC.Saver
                 Type _ when t == typeof(Color) => ParseColor(str),
                 Type _ when t == typeof(Gradient) => JsonUtility.FromJson<Gradient>(str),
                 Type _ when t.IsEnum => Enum.Parse(t, str),
+                Type _ when t.IsSerializable => JsonUtility.FromJson<T>(str),
                 _ => throw new NotSupportedException($"Unsupported type: {t}")
             }) is T result ? result : default;
         }
