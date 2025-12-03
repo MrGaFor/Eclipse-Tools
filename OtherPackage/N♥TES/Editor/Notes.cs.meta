@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: 0454d609cd4635740bb3787ad7d9f615
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 216374
+  packageName: "N\u2665TES"
+  packageVersion: 1.1
+  assetPath: "Assets/N\u2665TES/Editor/Notes.cs"
+  uploadId: 489434
