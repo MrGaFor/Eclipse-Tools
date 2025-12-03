@@ -9,13 +9,6 @@ using Object = UnityEngine.Object;
 
 namespace Notes
 {
-    [CustomEditor(typeof(Note), true)]
-    public class NoteNote : Note<Note> 
-    {
-        protected override bool AlwaysShowNote => true;
-        protected override bool RespectBaseInspector => false;
-    }
-
     /// <summary>
     /// The base class for adding notes to Objects.
     /// </summary>
