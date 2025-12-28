@@ -171,10 +171,26 @@ namespace EC.Popup
                 _gameContainers.Remove(_containerId);
         }
 
-        public bool TryGet(Type type, out PopupBase popup) =>
-            _byType.TryGetValue(type, out popup);
+        public bool TryGet<T>(Type type, out T popup) where T : PopupBase
+        {
+            if (_byType.TryGetValue(type, out var pop))
+            {
+                popup = (T)pop;
+                return true;
+            }
+            popup = default(T);
+            return false;
+        }
 
-        public bool TryGet(string id, out PopupBase popup) =>
-            _byId.TryGetValue(id, out popup);
+        public bool TryGet<T>(string id, out T popup) where T : PopupBase
+        {
+            if (_byId.TryGetValue(id, out var pop))
+            {
+                popup = (T)pop;
+                return true;
+            }
+            popup = default(T);
+            return false;
+        }
     }
 }

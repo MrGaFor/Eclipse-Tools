@@ -32,7 +32,7 @@ namespace EC.Popup
         public static bool TryGet<T>(out T popup) where T : PopupBase
         {
             for (int i = _containers.Count - 1; i >= 0; i--)
-                if (_containers[i].TryGet(typeof(T), out var p))
+                if (_containers[i].TryGet<T>(typeof(T), out var p))
                 {
                     popup = (T)p;
                     return true;
@@ -41,10 +41,10 @@ namespace EC.Popup
             return false;
         }
 
-        public static bool TryGet(string id, out PopupBase popup)
+        public static bool TryGet<T>(string id, out T popup) where T : PopupBase
         {
             for (int i = _containers.Count - 1; i >= 0; i--)
-                if (_containers[i].TryGet(id, out popup))
+                if (_containers[i].TryGet<T>(id, out popup))
                     return true;
             popup = null;
             return false;
@@ -52,13 +52,13 @@ namespace EC.Popup
 
         public static T Get<T>() where T : PopupBase
         {
-            TryGet(out T popup);
+            TryGet<T>(out T popup);
             return popup;
         }
 
-        public static PopupBase Get(string id)
+        public static T Get<T>(string id) where T : PopupBase
         {
-            TryGet(id, out var popup);
+            TryGet<T>(id, out var popup);
             return popup;
         }
     }
