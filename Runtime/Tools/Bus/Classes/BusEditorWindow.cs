@@ -26,7 +26,7 @@ namespace EC.Bus
                 return;
             }
 
-            Dictionary<string, object> vars = BusSystem.GetAllVariables();
+            IReadOnlyDictionary<string, object> vars = BusSystem.GetAllVariables();
             _scroll = EditorGUILayout.BeginScrollView(_scroll);
 
             foreach (var pair in vars)
