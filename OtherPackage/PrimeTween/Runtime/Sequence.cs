@@ -344,7 +344,7 @@ namespace PrimeTween {
         internal void emergencyStop() {
             Assert.IsTrue(isAlive);
             Assert.IsTrue(root.tween.isMainSequenceRoot());
-            releaseTweens(t => t.warnOnCompleteIgnored(false));
+            releaseTweens(t => { } /*t.warnOnCompleteIgnored(false)*/);
         }
 
         internal void releaseTweens([CanBeNull] Action<ReusableTween> beforeKill = null) {

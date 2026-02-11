@@ -406,7 +406,7 @@ namespace PrimeTween {
                 Assert.IsNotNull(callback);
                 var _onCompleteTarget = tween.onCompleteTarget as T;
                 if (isDestroyedUnityObject(_onCompleteTarget)) {
-                    tween.warnOnCompleteIgnored(true);
+                    //tween.warnOnCompleteIgnored(true);
                     return;
                 }
                 try {
@@ -700,7 +700,7 @@ namespace PrimeTween {
             Assert.IsFalse(sequence.IsCreated);
             kill(); // protects from recursive call
             if (isUnityTargetDestroyed()) {
-                warnOnCompleteIgnored(true);
+                //warnOnCompleteIgnored(true);
                 return;
             }
             var cyclesTotal = settings.cycles;
@@ -752,7 +752,7 @@ namespace PrimeTween {
                 kill();
             }
             stoppedEmergently = true;
-            warnOnCompleteIgnored(isTargetDestroyed);
+            //warnOnCompleteIgnored(isTargetDestroyed);
             Assert.IsFalse(_isAlive);
             Assert.IsFalse(sequence.isAlive);
         }
