@@ -48,6 +48,7 @@ namespace EC.Effects
         protected virtual void CompileSettings()
         {
             IsCompiled = true;
+            EffectTween = new Tween();
             TweenSettings sett = new TweenSettings();
             sett.startDelay = Data.Time.StartDelay;
             sett.endDelay = Data.Time.EndDelay;
