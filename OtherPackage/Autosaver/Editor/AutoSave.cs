@@ -21,7 +21,7 @@ public class AutoSave
 	{
         _saveNow = false;
 
-		if (stw1 == null)
+		if (stw1 != null)
             stw1.Stop();
         stw1 = new Stopwatch();
         stw1.Start();
