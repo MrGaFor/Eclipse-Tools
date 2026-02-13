@@ -4,8 +4,8 @@ namespace EC
 {
     public class EclipseStarter
     {
-        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterAssembliesLoaded)]
-        private static void InitAfterAssemblies()
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
+        private static void InitAfterScene()
         {
             Application.runInBackground = true;
             Application.targetFrameRate = 60;
@@ -13,11 +13,7 @@ namespace EC
             PrimeTween.PrimeTweenConfig.warnZeroDuration = false;
             PrimeTween.PrimeTweenConfig.warnTweenOnDisabledTarget = false;
             PrimeTween.PrimeTweenConfig.warnStructBoxingAllocationInCoroutine = false;
-        }
 
-        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
-        private static void InitAfterScene()
-        {
             Updater.UpdaterCore.Init();
             Coroutine.Coroutines.Init();
             GPU.GPUInstance.Init();

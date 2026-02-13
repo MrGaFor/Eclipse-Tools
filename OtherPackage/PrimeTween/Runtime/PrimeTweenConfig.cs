@@ -7,9 +7,6 @@ namespace PrimeTween {
     public static partial class PrimeTweenConfig {
         internal static PrimeTweenManager Instance {
             get {
-                #if UNITY_EDITOR
-                Assert.IsFalse(Constants.noInstance, Constants.editModeWarning);
-                #endif
                 return PrimeTweenManager.Instance;
             }
         }

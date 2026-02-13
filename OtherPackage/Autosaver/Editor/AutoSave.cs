@@ -1,17 +1,10 @@
 ﻿#if UNITY_EDITOR
+#pragma warning disable IDE1006 // Стили именования
 using UnityEngine;
-using System.Collections;
 using UnityEditor;
 using System.Timers;
-using System.Collections.Generic;
 using System;
-using System.Runtime.InteropServices;
 using System.Diagnostics;
-using LOG = UnityEngine.Debug;
-#if UNITY_5_3
-using UnityEngine.SceneManagement;
-using UnityEditor.SceneManagement;
-#endif
 
 [InitializeOnLoad]
 public class AutoSave : EditorWindow
@@ -26,7 +19,10 @@ public class AutoSave : EditorWindow
 	protected static bool saveAfterPlay = false;
 	protected static Stopwatch stw1 = null;
 
-	[MenuItem("Window/Autosave Settings")]
+	private const int saveInterval = 300000; // 5 minutes
+	private const int hierarchyChangeCountTrigger = 10;
+
+    [MenuItem("Window/Autosave Settings")]
 	public static void ShowWindow ()
 	{
 		var window = EditorWindow.GetWindow<AutoSave> ();
@@ -37,24 +33,16 @@ public class AutoSave : EditorWindow
     [Obsolete]
     public static void LoadPreferences ()
 	{
-		if (AutoSavePreferences.autosaveEnabled) {
 			if (timer == null) {
 				timer = new System.Timers.Timer ();
-				timer.Interval = AutoSavePreferences.saveInterval;
-				timer.Elapsed += new  ElapsedEventHandler (timerFired);
+				timer.Interval = saveInterval; // 5 minutes
+            timer.Elapsed += new  ElapsedEventHandler (timerFired);
 				timer.Start ();
 			} else {
-				if (timer.Interval != AutoSavePreferences.saveInterval) {
-					timer.Interval = AutoSavePreferences.saveInterval;
+				if (timer.Interval != saveInterval) {
+					timer.Interval = saveInterval;
 				}
 			}
-		} else {
-			if (timer != null) {
-				timer.Stop ();
-				timer.Dispose ();
-				timer = null;
-			}
-		}
 		EditorApplication.hierarchyWindowChanged -= HierarchyChanged;
 		EditorApplication.playmodeStateChanged -= playModeChanged;
 		EditorApplication.hierarchyWindowChanged += HierarchyChanged;
@@ -69,7 +57,7 @@ public class AutoSave : EditorWindow
     [Obsolete]
     public static void playModeChanged ()
 	{
-		if (AutoSavePreferences.saveBeforeRun && EditorApplication.isPlayingOrWillChangePlaymode && !savedBeforePlay) {
+		if (EditorApplication.isPlayingOrWillChangePlaymode && !savedBeforePlay) {
 			savedBeforePlay = true;
 			executeSave ();
 		} else if (!EditorApplication.isPaused && !EditorApplication.isPlaying) {
@@ -82,9 +70,9 @@ public class AutoSave : EditorWindow
     [Obsolete]
     public static void HierarchyChanged ()
 	{
-		if (AutoSavePreferences.saveOnHierarchyChanges && !EditorApplication.isPlaying) {
+		if (!EditorApplication.isPlaying) {
 			hierarchyChangeCount++;
-			if (hierarchyChangeCount >= AutoSavePreferences.hierarchyChangeCountTrigger) {
+			if (hierarchyChangeCount >= hierarchyChangeCountTrigger) {
 				hierarchyChangeCount = 0;
 				executeSave ();
 			}
@@ -99,8 +87,8 @@ public class AutoSave : EditorWindow
 	}
     
 	[Obsolete]
-	public static void executeSave ()
-	{
+    public static void executeSave ()
+    {
 		stw1.Stop ();
 		stw1.Reset ();
 
@@ -116,29 +104,18 @@ public class AutoSave : EditorWindow
 		}
 		saveAfterPlay = false;
 
-		// save untitled scene?
-#if UNITY_5_3
-		string sceneName = SceneManager.GetActiveScene ().name;
-#else
 			string sceneName = EditorApplication.currentScene;
-#endif
-		if ((sceneName == "" || sceneName.StartsWith ("Untitled")) && !AutoSavePreferences.saveUnnamedNewScene) {
+		if ((sceneName == "" || sceneName.StartsWith ("Untitled"))) {
 			stw1.Start ();
 			return;
 		}
 
-
-		if (AutoSavePreferences.logSaveEvent) {
-			LOG.Log ("Autosave");
-		}
 #if UNITY_5_3
 		EditorSceneManager.SaveOpenScenes ();
 #else
 		EditorApplication.SaveScene ();
 #endif
-		if (AutoSavePreferences.saveAssets) {
 			AssetDatabase.SaveAssets ();
-		}
 		if (instance != null) {
 			instance.Repaint ();
 		}
@@ -153,7 +130,6 @@ public class AutoSave : EditorWindow
 		stw1.Start ();
 		logo = (Texture2D)AssetDatabase.LoadAssetAtPath (logoPath, typeof(Texture2D));
 		EditorApplication.update += EditorUpdate;
-		AutoSavePreferences.LoadPreferences ();
 		LoadPreferences ();
 	}
     [Obsolete]
@@ -172,26 +148,6 @@ public class AutoSave : EditorWindow
 	{
 		instance = this;
 	}
-
-    [Obsolete]
-    void OnGUI ()
-	{
-		EditorGUILayout.BeginHorizontal ();
-		if (logo != null) {
-			GUILayout.Label (logo, GUILayout.Width (50));
-		}
-		EditorGUILayout.BeginVertical ();
-		bool autosaveEnabled = GUILayout.Toggle (AutoSavePreferences.autosaveEnabled, "Autosave", GUILayout.ExpandWidth (true));
-
-		EditorGUILayout.LabelField ("Last saved: " + Math.Floor (stw1.Elapsed.TotalMinutes) + " minutes ago");
-		EditorGUILayout.EndVertical ();
-		EditorGUILayout.EndHorizontal ();
-
-		if (GUI.changed) {
-			AutoSavePreferences.autosaveEnabled = autosaveEnabled;
-			AutoSavePreferences.SavePreferences ();
-
-		}
-	}	
 }
+#pragma warning restore IDE1006 // Стили именования
 #endif

@@ -501,10 +501,6 @@ namespace PrimeTween {
                 if (!ShakeData.TryTakeStartValueFromOtherShake(this)) {
                     startValue = getter(this);
                 }
-                if (startValue.Vector4Val == endValue.Vector4Val && warnEndValueEqualsCurrent && !shakeData.isAlive) {
-                    Assert.LogWarning($"Tween's 'endValue' equals to the current animated value: {startValue.Vector4Val}, tween: {GetDescription()}.\n" +
-                                      $"{Constants.buildWarningCanBeDisabledMessage(nameof(PrimeTweenConfig.warnEndValueEqualsCurrent))}\n", id);
-                }
                 cacheDiff();
             }
             easedInterpolationFactor = _easedInterpolationFactor;
