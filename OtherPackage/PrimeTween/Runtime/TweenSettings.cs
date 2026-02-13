@@ -145,8 +145,7 @@ namespace PrimeTween {
             if (instance == null || instance.validateCustomCurves) {
                 var error = getError();
                 if (error != null) {
-                    Debug.LogWarning($"Custom animation curve is not configured correctly which may have unexpected results: {error}. " +
-                                     Constants.buildWarningCanBeDisabledMessage(nameof(PrimeTweenConfig.validateCustomCurves)));
+                    Debug.LogWarning($"Custom animation curve is not configured correctly which may have unexpected results: {error}.");
                 }
                 string getError() {
                     var start = curve[0];

@@ -168,13 +168,13 @@ namespace PrimeTween {
 
         [EditorBrowsable(EditorBrowsableState.Never)] [Obsolete(localScaleRenamed)]
         public static Tween ShakeLocalScale([NotNull] Transform target, Vector3 strength, float duration, float frequency = ShakeSettings.defaultFrequency, bool enableFalloff = true, Ease easeBetweenShakes = Ease.Default, float asymmetryFactor = 0f, int cycles = 1,
-            float startDelay = 0, float endDelay = 0, bool useUnscaledTime = PrimeTweenConfig.defaultUseUnscaledTimeForShakes)
+            float startDelay = 0, float endDelay = 0, bool useUnscaledTime = false)
             => ShakeScale(target, new ShakeSettings(strength, duration, frequency, enableFalloff, easeBetweenShakes, asymmetryFactor, cycles, startDelay, endDelay, useUnscaledTime));
         [EditorBrowsable(EditorBrowsableState.Never)] [Obsolete(localScaleRenamed)]
         public static Tween ShakeLocalScale([NotNull] Transform target, ShakeSettings settings) => ShakeScale(target, settings);
         [EditorBrowsable(EditorBrowsableState.Never)] [Obsolete(localScaleRenamed)]
         public static Tween PunchLocalScale([NotNull] Transform target, Vector3 strength, float duration, float frequency = ShakeSettings.defaultFrequency, bool enableFalloff = true, Ease easeBetweenShakes = Ease.Default, float asymmetryFactor = 0f, int cycles = 1,
-            float startDelay = 0, float endDelay = 0, bool useUnscaledTime = PrimeTweenConfig.defaultUseUnscaledTimeForShakes)
+            float startDelay = 0, float endDelay = 0, bool useUnscaledTime = false)
             => PunchScale(target, new ShakeSettings(strength, duration, frequency, enableFalloff, easeBetweenShakes, asymmetryFactor, cycles, startDelay, endDelay, useUnscaledTime));
         [EditorBrowsable(EditorBrowsableState.Never)] [Obsolete(localScaleRenamed)]
         public static Tween PunchLocalScale([NotNull] Transform target, ShakeSettings settings) => ShakeScale(target, settings.WithPunch());

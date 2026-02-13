@@ -313,20 +313,10 @@ namespace PrimeTween {
         Tween addTween_internal([NotNull] ReusableTween tween) {
             Assert.IsNotNull(tween);
             Assert.IsTrue(tween.id > 0);
-            if (tween.target == null || tween.isUnityTargetDestroyed()) {
-                Debug.LogError($"Tween's target is null: {tween.GetDescription()}. This error can mean that:\n" +
-                               "- The target reference is null.\n" +
-                               "- UnityEngine.Object target reference is not populated in the Inspector.\n" +
-                               "- UnityEngine.Object target has been destroyed.\n" +
-                               "Please ensure you're using a valid target.\n");
+            if (tween.target == null || tween.isUnityTargetDestroyed() || (tween.target is Component comp && !comp.gameObject.activeInHierarchy)) {
                 tween.kill();
                 releaseTweenToPool(tween);
                 return default;
-            }
-            if (warnTweenOnDisabledTarget) {
-                if (tween.target is Component comp && !comp.gameObject.activeInHierarchy) {
-                    Debug.LogWarning($"Tween is started on GameObject that is not active in hierarchy: {comp.name}. {Constants.buildWarningCanBeDisabledMessage(nameof(warnTweenOnDisabledTarget))}", comp);
-                }
             }
             #if SAFETY_CHECKS
             // Debug.Log($"[{Time.frameCount}] created: {tween.GetDescription()}", tween.unityTarget);
@@ -347,7 +337,6 @@ namespace PrimeTween {
                 if (Application.isEditor) {
                     msg += "Please also run the tests in real builds, not in the Editor, to measure the performance correctly.\n";
                 }
-                msg += $"{Constants.buildWarningCanBeDisabledMessage(nameof(PrimeTweenConfig.warnBenchmarkWithAsserts))}\n";
                 Debug.LogError(msg);
             }
             #endif
@@ -451,8 +440,6 @@ namespace PrimeTween {
                 return;
             }
             warnStructBoxingAllocationInCoroutine = false;
-            Assert.LogWarning("Please use Tween/Sequence." + nameof(Tween.ToYieldInstruction) + "() when waiting for a Tween/Sequence in coroutines to prevent struct boxing.\n" +
-                              Constants.buildWarningCanBeDisabledMessage(nameof(PrimeTweenConfig.warnStructBoxingAllocationInCoroutine)) + "\n", id);
         }
     }
 }

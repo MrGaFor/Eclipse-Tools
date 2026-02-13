@@ -45,32 +45,5 @@ namespace PrimeTween {
                 Instance.defaultEase = value;
             }
         }
-        
-        public static bool warnTweenOnDisabledTarget {
-            set => Instance.warnTweenOnDisabledTarget = value;
-        }
-        
-        public static bool warnZeroDuration {
-            internal get => Instance.warnZeroDuration;
-            set => Instance.warnZeroDuration = value;
-        }
-
-        public static bool warnStructBoxingAllocationInCoroutine {
-            set => Instance.warnStructBoxingAllocationInCoroutine = value;
-        }
-
-        public static bool validateCustomCurves {
-            set => Instance.validateCustomCurves = value;
-        }
-
-        public static bool warnBenchmarkWithAsserts {
-            set => Instance.warnBenchmarkWithAsserts = value;
-        }
-
-        internal const bool defaultUseUnscaledTimeForShakes = false;
-
-        public static bool warnEndValueEqualsCurrent {
-            set => Instance.warnEndValueEqualsCurrent = value;
-        }
     }
 }

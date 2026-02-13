@@ -24,7 +24,7 @@ namespace EC.Scenes
             }
             else
             {
-                Debug.LogWarning("[SceneLoaderUI] prefab not found in Resources folder. Please create a <<[SceneLoaderUI]>> prefab and place it in the Resources folder.");
+                //Debug.LogWarning("[SceneLoaderUI] prefab not found in Resources folder. Please create a <<[SceneLoaderUI]>> prefab and place it in the Resources folder.");
                 return;
             }
             await UniTask.Yield();
