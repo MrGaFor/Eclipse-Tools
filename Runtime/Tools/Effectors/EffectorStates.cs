@@ -85,14 +85,14 @@ namespace EC.Effects
             {
                 CallOnPlay();
                 foreach (var effect in _effects)
-                    effect.PlaySmoothAsync();
+                    effect.PlaySmooth();
                 _completeDelay = Tween.Delay(_effects.Max(v => v.Data.Time.AllDuration), () => CallOnComplete());
             }
             public async Task PlaySmoothAsync()
             {
                 CallOnPlay();
                 foreach (var effect in _effects)
-                    effect.PlaySmoothAsync().Forget();
+                    effect.PlaySmooth();
                 await UniTask.Delay(Mathf.RoundToInt(_effects.Max(v => v.Data.Time.AllDuration) * 1000f));
                 CallOnComplete();
             }

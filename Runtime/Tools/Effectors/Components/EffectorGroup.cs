@@ -131,65 +131,119 @@ namespace EC.Effects
         public override async UniTask PlaySmoothAsync()
         {
             Stop();
-            foreach (var component in _components)
-                component.PlaySmoothAsync().Forget();
-            await UniTask.Delay(DurationInTicks);
+            if (!gameObject.activeSelf)
+                foreach (var component in _components)
+                    component.PlayMoment();
+            else
+            {
+                foreach (var component in _components)
+                    component.PlaySmooth();
+                await UniTask.Delay(DurationInTicks);
+            }
         }
         public override async UniTask PlaySmoothCustomAsync(int value)
         {
             Stop();
-            foreach (var component in _components)
-                component.PlaySmoothCustomAsync(value).Forget();
-            await UniTask.Delay(DurationInTicks);
+            if (!gameObject.activeSelf)
+                foreach (var component in _components)
+                    component.PlayMomentCustom(value);
+            else
+            {
+                foreach (var component in _components)
+                    component.PlaySmoothCustom(value);
+                await UniTask.Delay(DurationInTicks);
+            }
         }
         public override async UniTask PlaySmoothCustomAsync(float value)
         {
             Stop();
-            foreach (var component in _components)
-                component.PlaySmoothCustomAsync(value).Forget();
-            await UniTask.Delay(DurationInTicks);
+            if (!gameObject.activeSelf)
+                foreach (var component in _components)
+                    component.PlayMomentCustom(value);
+            else
+            {
+                foreach (var component in _components)
+                    component.PlaySmoothCustom(value);
+                await UniTask.Delay(DurationInTicks);
+            }
         }
         public override async UniTask PlaySmoothCustomAsync(string value)
         {
             Stop();
-            foreach (var component in _components)
-                component.PlaySmoothCustomAsync(value).Forget();
-            await UniTask.Delay(DurationInTicks);
+            if (!gameObject.activeSelf)
+                foreach (var component in _components)
+                    component.PlayMomentCustom(value);
+            else
+            {
+                foreach (var component in _components)
+                    component.PlaySmoothCustom(value);
+                await UniTask.Delay(DurationInTicks);
+            }
         }
         public override async UniTask PlaySmoothCustomAsync(Color value)
         {
             Stop();
-            foreach (var component in _components)
-                component.PlaySmoothCustomAsync(value).Forget();
-            await UniTask.Delay(DurationInTicks);
+            if (!gameObject.activeSelf)
+                foreach (var component in _components)
+                    component.PlayMomentCustom(value);
+            else
+            {
+                foreach (var component in _components)
+                    component.PlaySmoothCustom(value);
+                await UniTask.Delay(DurationInTicks);
+            }
         }
         public override async UniTask PlaySmoothCustomAsync(Vector2 value)
         {
             Stop();
-            foreach (var component in _components)
-                component.PlaySmoothCustomAsync(value).Forget();
-            await UniTask.Delay(DurationInTicks);
+            if (!gameObject.activeSelf)
+                foreach (var component in _components)
+                    component.PlayMomentCustom(value);
+            else
+            {
+                foreach (var component in _components)
+                    component.PlaySmoothCustom(value);
+                await UniTask.Delay(DurationInTicks);
+            }
         }
         public override async UniTask PlaySmoothCustomAsync(Vector3 value)
         {
             Stop();
-            foreach (var component in _components)
-                component.PlaySmoothCustomAsync(value).Forget();
-            await UniTask.Delay(DurationInTicks);
+            if (!gameObject.activeSelf)
+                foreach (var component in _components)
+                    component.PlayMomentCustom(value);
+            else
+            {
+                foreach (var component in _components)
+                    component.PlaySmoothCustom(value);
+                await UniTask.Delay(DurationInTicks);
+            }
         }
         public override async UniTask PlaySmoothCustomAsync(Vector4 value)
         {
             Stop();
-            foreach (var component in _components)
-                component.PlaySmoothCustomAsync(value).Forget();
-            await UniTask.Delay(DurationInTicks);
+            if (!gameObject.activeSelf)
+                foreach (var component in _components)
+                    component.PlayMomentCustom(value);
+            else
+            {
+                foreach (var component in _components)
+                    component.PlaySmoothCustom(value);
+                await UniTask.Delay(DurationInTicks);
+            }
         }
         public override async UniTask PlaySmoothCustomAsync(Gradient value)
         {
             Stop();
-            foreach (var component in _components)
-                component.PlaySmoothCustomAsync(value).Forget();
-            await UniTask.Delay(DurationInTicks);
+            if (!gameObject.activeSelf)
+                foreach (var component in _components)
+                    component.PlayMomentCustom(value);
+            else
+            {
+                foreach (var component in _components)
+                    component.PlaySmoothCustom(value);
+                await UniTask.Delay(DurationInTicks);
+            }
         }
         #endregion
 

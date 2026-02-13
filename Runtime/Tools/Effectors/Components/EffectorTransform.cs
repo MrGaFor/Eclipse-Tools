@@ -86,7 +86,9 @@ namespace EC.Effects
         }
         public override async UniTask PlaySmoothCustomAsync(Vector3 value, float duration)
         {
-            if (SmoothVectorPart(value, duration))
+            if (!gameObject.activeSelf)
+                PlayMomentCustom(value);
+            else if (SmoothVectorPart(value, duration))
                 await EffectTween;
         }
 

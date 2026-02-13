@@ -9,11 +9,11 @@ namespace EC.Audio
     {
         [SerializeField, ListDrawerSettings(DraggableItems = false)] private AudioClip[] _localClip;
 
-        public async UniTask OnCreate()
+        public void OnCreate()
         {
 
         }
-        public async UniTask Apply(AudioSource source)
+        public void Apply(AudioSource source)
         {
             source.clip = _localClip[Random.Range(0, _localClip.Length)];
         }

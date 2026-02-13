@@ -192,19 +192,27 @@ namespace EC.Effects
         }
         public override async UniTask PlaySmoothCustomAsync(int value, float duration)
         {
-            if (SmoothIntPart(value, duration)) await EffectTween;
+            if (!gameObject.activeSelf)
+                PlayMomentCustom(value);
+            else if (SmoothIntPart(value, duration)) await EffectTween;
         }
         public override async UniTask PlaySmoothCustomAsync(float value, float duration)
         {
-            if (SmoothFloatPart(value, duration)) await EffectTween;
+            if (!gameObject.activeSelf)
+                PlayMomentCustom(value);
+            else if (SmoothFloatPart(value, duration)) await EffectTween;
         }
         public override async UniTask PlaySmoothCustomAsync(Color value, float duration)
         {
-            if (SmoothColorPart(value, duration)) await EffectTween;
+            if (!gameObject.activeSelf)
+                PlayMomentCustom(value);
+            else if (SmoothColorPart(value, duration)) await EffectTween;
         }
         public override async UniTask PlaySmoothCustomAsync(Vector4 value, float duration)
         {
-            if (SmoothVector4Part(value, duration)) await EffectTween;
+            if (!gameObject.activeSelf)
+                PlayMomentCustom(value);
+            else if (SmoothVector4Part(value, duration)) await EffectTween;
         }
 
         private bool SmoothIntPart(int value, float duration)

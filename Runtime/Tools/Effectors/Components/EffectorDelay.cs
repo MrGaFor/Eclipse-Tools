@@ -81,8 +81,13 @@ namespace EC.Effects
         }
         public override async UniTask PlaySmoothCustomAsync(float duration)
         {
-            SmoothFloatPart(duration);
-            await EffectTween;
+            if (!gameObject.activeSelf)
+                PlayMoment();
+            else
+            {
+                SmoothFloatPart(duration);
+                await EffectTween;
+            }
         }
 
         private void SmoothFloatPart(float duration)

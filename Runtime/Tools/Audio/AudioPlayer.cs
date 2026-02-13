@@ -28,7 +28,7 @@ namespace EC.Audio
             source.gameObject.SetActive(false);
             source.playOnAwake = false;
             _pool = new Pool.ComponentPool<AudioSource>(source, transform);
-            _sourceSettings.OnCreate().Forget();
+            _sourceSettings.OnCreate();
         }
 
         private void OnEnable()
@@ -53,9 +53,9 @@ namespace EC.Audio
             Stop();
         }
 
-        private async UniTask SetParametersAndPlay(AudioSource source)
+        private void SetParametersAndPlay(AudioSource source)
         {
-            await _sourceSettings.Apply(source);
+            _sourceSettings.Apply(source);
             _volumeSettings.Apply(source);
             _pitchSettings.Apply(source);
             _fadeSettings.Apply(source);
@@ -66,7 +66,7 @@ namespace EC.Audio
 
         public void Play()
         {
-            SetParametersAndPlay(_pool.GetOne()).Forget();
+            SetParametersAndPlay(_pool.GetOne());
         }
         public void Stop()
         {
