@@ -48,16 +48,16 @@ namespace EC.Effects
         protected virtual void CompileSettings()
         {
             IsCompiled = true;
-            EffectTween = new Tween();
-            TweenSettings sett = new TweenSettings();
-            sett.startDelay = Data.Time.StartDelay;
-            sett.endDelay = Data.Time.EndDelay;
-            sett.duration = Data.Time.Duration;
-            sett.ease = Data.Curve.CurveType == EffectSettingsCurveModule.CurveTypes.Ease ? Data.Curve.Ease : Ease.Custom;
-            if (Data.Curve.CurveType != EffectSettingsCurveModule.CurveTypes.Ease) sett.customEase = Data.Curve.Curve;
-            sett.cycleMode = Data.Loop.LoopMode;
-            sett.cycles = Data.Loop.LoopType == EffectSettingsLoopModule.LoopTypes.None ? 0 : (Data.Loop.LoopType == EffectSettingsLoopModule.LoopTypes.Loop ? -1 : Data.Loop.LoopCount);
-            CompiledSettings = sett;
+            CompiledSettings = new()
+            {
+                startDelay = Data.Time.StartDelay,
+                endDelay = Data.Time.EndDelay,
+                duration = Data.Time.Duration,
+                ease = Data.Curve.CurveType == EffectSettingsCurveModule.CurveTypes.Ease ? Data.Curve.Ease : Ease.Custom,
+                cycleMode = Data.Loop.LoopMode,
+                cycles = Data.Loop.LoopType == EffectSettingsLoopModule.LoopTypes.None ? 0 : (Data.Loop.LoopType == EffectSettingsLoopModule.LoopTypes.Loop ? -1 : Data.Loop.LoopCount)
+            };
+            if (Data.Curve.CurveType != EffectSettingsCurveModule.CurveTypes.Ease) CompiledSettings.customEase = Data.Curve.Curve;
         }
         #endregion
         #endregion

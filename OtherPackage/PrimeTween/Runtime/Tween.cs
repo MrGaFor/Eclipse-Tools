@@ -305,9 +305,9 @@ namespace PrimeTween {
 
         bool validateIsAlive() {
             if (!IsCreated) {
-                Debug.LogError(Constants.defaultCtorError);
+                //Debug.LogError(Constants.defaultCtorError);
             } else if (!isAlive) {
-                Assert.LogError(Constants.isDeadMessage, id);
+                //Assert.LogError(Constants.isDeadMessage, id);
             }
             return isAlive;
         }
