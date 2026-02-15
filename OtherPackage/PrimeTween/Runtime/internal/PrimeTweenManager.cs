@@ -42,12 +42,12 @@ namespace PrimeTween {
         internal long lastId = 1;
         internal Ease defaultEase = Ease.OutQuad;
         internal const Ease defaultShakeEase = Ease.OutQuad;
-        internal bool warnTweenOnDisabledTarget = true;
-        internal bool warnZeroDuration = true;
-        internal bool warnStructBoxingAllocationInCoroutine = true;
-        internal bool warnBenchmarkWithAsserts = true;
+        internal bool warnTweenOnDisabledTarget = false;
+        internal bool warnZeroDuration = false;
+        internal bool warnStructBoxingAllocationInCoroutine = false;
+        internal bool warnBenchmarkWithAsserts = false;
         internal bool validateCustomCurves = true;
-        internal bool warnEndValueEqualsCurrent = true;
+        internal bool warnEndValueEqualsCurrent = false;
         int processedCount;
         internal int updateDepth;
         internal static readonly object dummyTarget = new object();
@@ -296,9 +296,6 @@ namespace PrimeTween {
                 return;
             }
             #endif
-            if (Instance.warnZeroDuration && duration <= 0) {
-                Debug.LogWarning($"Tween duration ({duration}) <= 0. {Constants.buildWarningCanBeDisabledMessage(nameof(warnZeroDuration))}", target as UnityEngine.Object);
-            }
         }
 
         internal static Tween addTween([NotNull] ReusableTween tween) {
