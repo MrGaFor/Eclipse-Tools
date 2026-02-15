@@ -1,6 +1,6 @@
 {
   "name": "com.eclipse.tools",
-  "version": "1.6.4",
+  "version": "1.6.5",
   "displayName": "Eclipse Tools",
   "description": "Tools for Unity",
   "unity": "2021.3",

@@ -1,29 +1,20 @@
-using Cysharp.Threading.Tasks;
-
 namespace EC.Services
 {
-    public abstract class GameService<T> where T : class, new()
+    public abstract class GameService
     {
-        public static T Instance { get; private set; }
-
-        protected GameService()
+        /// <summary>
+        /// Override this method to perform initialization logic when the service is registered. This method is called by the GameLocator when the service is registered, and it is guaranteed to be called on the main thread. You can use this method to set up any necessary resources or state for your service.
+        /// </summary>
+        public virtual void OnCreate()
         {
-            Instance = this as T;
-            GameLocator.Register<T>(Instance);
+
         }
-
-        public static bool TryGet(out T service)
+        /// <summary>
+        /// Override this method to perform cleanup logic when the service is unregistered. This method is called by the GameLocator when the service is unregistered, and it is guaranteed to be called on the main thread. You can use this method to release any resources or state that your service holds.
+        /// </summary>
+        public virtual void OnDispose()
         {
-            service = Instance ?? (GameLocator.TryGet<T>(out var s) ? s : null);
-            return service != null;
-        }
-
-        public static UniTask<(bool success, T service)> TryGetAsync(float timeoutSeconds)
-        {
-            if (Instance != null)
-                return UniTask.FromResult((true, Instance));
-
-            return GameLocator.TryGetAsync<T>(timeoutSeconds);
+            
         }
     }
 }

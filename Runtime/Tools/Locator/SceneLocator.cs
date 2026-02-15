@@ -23,37 +23,71 @@ namespace EC.Services
                 return _instance;
             }
         }
-
-        public static void Register<T>(T service)
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSplashScreen)]
+        private static void PreInit()
         {
-            var inst = Instance;
-            var type = typeof(T);
-            inst._services[type] = service;
-
-            if (inst._waiters.TryGetValue(type, out var list))
-            {
-                foreach (var a in list) a(service);
-                inst._waiters.Remove(type);
-            }
+            _instance = null;
         }
-        public static void ForceRegister<T>(T service)
+
+        /// <summary>
+        /// Registers a service of type T. If there are any waiters for this type, they will be invoked with the service instance.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="service"></param>
+        public static void Register<T>(T service) where T : SceneService
         {
-            var inst = Instance;
-            inst._services[typeof(T)] = service;
-            if (inst._waiters.TryGetValue(typeof(T), out var list))
+            if (Instance._services.ContainsKey(typeof(T))) return;
+            ForceRegister(service);
+        }
+
+        /// <summary>
+        /// Forcefully registers a service of type T, replacing any existing service of the same type. If there are any waiters for this type, they will be invoked with the new service instance.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="service"></param>
+        public static void ForceRegister<T>(T service) where T : SceneService
+        {
+            Instance._services[typeof(T)] = service;
+            service.OnCreate();
+            if (Instance._waiters.TryGetValue(typeof(T), out var list))
             {
                 foreach (var cb in list) cb(service);
-                inst._waiters.Remove(typeof(T));
+                Instance._waiters.Remove(typeof(T));
             }
         }
-        public static bool Has<T>()
+
+        /// <summary>
+        /// Unregisters the service of type T, if it exists. This will call OnDispose on the service before removing it.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        public static void Unregister<T>() where T : SceneService
+        {
+            if (Instance._services.TryGetValue(typeof(T), out var service))
+            {
+                ((T)service).OnDispose();
+                Instance._services.Remove(typeof(T));
+            }
+        }
+
+        /// <summary>
+        /// Checks if a service of type T is registered in the locator.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public static bool Has<T>() where T : SceneService
         {
             return Instance._services.ContainsKey(typeof(T));
         }
-        public static bool TryGet<T>(out T service)
+
+        /// <summary>
+        /// Tries to get a service of type T from the locator. Returns true if the service is found, false otherwise. The out parameter 'service' will contain the service instance if found, or default(T) if not found.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="service"></param>
+        /// <returns></returns>
+        public static bool TryGet<T>(out T service) where T : SceneService
         {
-            var inst = Instance;
-            if (inst._services.TryGetValue(typeof(T), out var s))
+            if (Instance._services.TryGetValue(typeof(T), out var s))
             {
                 service = (T)s;
                 return true;
@@ -62,43 +96,35 @@ namespace EC.Services
             return false;
         }
 
-        public static async UniTask<(bool success, T service)> TryGetAsync<T>(float timeoutSeconds)
+        /// <summary>
+        /// Asynchronously tries to get a service of type T from the locator. If the service is already registered, it returns immediately with success=true and the service instance. If the service is not registered, it waits until either the service is registered (in which case it returns with success=true and the service instance) or the specified timeout elapses (in which case it returns with success=false and default(T)). The timeout is specified in seconds.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="timeoutSeconds"></param>
+        /// <returns></returns>
+        public static async UniTask<(bool success, T service)> TryGetAsync<T>(float timeoutSeconds) where T : SceneService
         {
-            var inst = Instance;
-            if (inst._services.TryGetValue(typeof(T), out var existing))
+            if (Instance._services.TryGetValue(typeof(T), out var existing))
                 return (true, (T)existing);
-
             var tcs = new UniTaskCompletionSource<(bool, T)>();
             void callback(object s) => tcs.TrySetResult((true, (T)s));
-
-            var type = typeof(T);
-            if (!inst._waiters.TryGetValue(type, out var list))
-                inst._waiters[type] = list = new List<Action<object>>();
-
+            if (!Instance._waiters.TryGetValue(typeof(T), out var list))
+                Instance._waiters[typeof(T)] = list = new List<Action<object>>();
             list.Add(callback);
-
             var delayTask = UniTask.Delay(TimeSpan.FromSeconds(timeoutSeconds));
             var (firstCompleted, result) = await UniTask.WhenAny(tcs.Task, delayTask);
-
             if (firstCompleted)
                 return result;
-
             list.Remove(callback);
             return (false, default);
         }
-        private void Awake()
-        {
-            if (_instance != null)
-            {
-                Destroy(gameObject);
-                return;
-            }
-            _instance = this;
-        }
+
         private void OnDestroy()
         {
-            if (_instance == this)
-                _instance = null;
+            if (Instance == this)
+                foreach (var service in Instance._services)
+                    if (service.Value is SceneService ss)
+                        ss.OnDispose();
         }
     }
 }
