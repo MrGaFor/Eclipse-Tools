@@ -41,7 +41,7 @@ namespace EC.Services
         }
 
         #region Registration
-        public static async void Register<T>(T service) where T : SceneService => await ForceRegisterAsync(service);
+        public static async void Register<T>(T service) where T : SceneService => await RegisterAsync(service);
         public static async UniTask RegisterAsync<T>(T service) where T : SceneService
         {
             if (Instance._services.ContainsKey(typeof(T))) return;
