@@ -19,26 +19,20 @@ namespace EC.Services
             _instance = null;
         }
 
-        /// <summary>
-        /// Registers a service of type T. If a service of that type is already registered, this method does nothing.
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="service"></param>
-        public static void Register<T>(T service) where T : GameService
+        #region Registration
+        public static async void Register<T>(T service) where T : GameService => await ForceRegisterAsync(service);
+        public static async UniTask RegisterAsync<T>(T service) where T : GameService
         {
             if (Instance._services.ContainsKey(typeof(T))) return;
-            ForceRegister(service);
+            await ForceRegisterAsync(service);
         }
 
-        /// <summary>
-        /// Registers a service of type T, replacing any existing service of that type. Use with caution, as this will call OnCreate on the new service and OnDispose on the old one if it exists.
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="service"></param>
-        public static void ForceRegister<T>(T service) where T : GameService
+        public static async void ForceRegister<T>(T service) where T : GameService => await ForceRegisterAsync(service);
+        public static async UniTask ForceRegisterAsync<T>(T service) where T : GameService
         {
             Instance._services[typeof(T)] = service;
             service.OnCreate();
+            await service.OnCreateAsync();
             if (Instance._waiters.TryGetValue(typeof(T), out var list))
             {
                 foreach (var cb in list) cb(service);
@@ -46,35 +40,24 @@ namespace EC.Services
             }
         }
 
-        /// <summary>
-        /// Unregisters the service of type T, if it exists. This will call OnDispose on the service before removing it.
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        public static void Unregister<T>() where T : GameService
+        public static async void Unregister<T>() where T : GameService => await UnregisterAsync<T>();
+        public static async UniTask UnregisterAsync<T>() where T : GameService
         {
             if (Instance._services.TryGetValue(typeof(T), out var service))
             {
                 ((T)service).OnDispose();
+                await ((T)service).OnDisposeAsync();
                 Instance._services.Remove(typeof(T));
             }
         }
+        #endregion
 
-        /// <summary>
-        /// Checks if a service of type T is registered.
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <returns></returns>
+        #region Getting
         public static bool Has<T>() where T : GameService
         {
             return Instance._services.ContainsKey(typeof(T));
         }
 
-        /// <summary>
-        /// Tries to get the service of type T. Returns true if the service exists, false otherwise. The out parameter will be set to the service if it exists, or default if it does not.
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="service"></param>
-        /// <returns></returns>
         public static bool TryGet<T>(out T service) where T : GameService
         {
             if (Instance._services.TryGetValue(typeof(T), out var s))
@@ -86,12 +69,6 @@ namespace EC.Services
             return false;
         }
 
-        /// <summary>
-        /// Tries to get the service of type T, waiting up to timeoutSeconds if it does not exist. Returns a tuple where the first item is true if the service was obtained, false if the timeout was reached, and the second item is the service if it was obtained or default if it was not.
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="timeoutSeconds"></param>
-        /// <returns></returns>
         public static async UniTask<(bool success, T service)> TryGetAsync<T>(float timeoutSeconds) where T : GameService
         {
             if (Instance._services.TryGetValue(typeof(T), out var existing))
@@ -108,5 +85,6 @@ namespace EC.Services
             list.Remove(callback);
             return (false, default);
         }
+        #endregion
     }
 }

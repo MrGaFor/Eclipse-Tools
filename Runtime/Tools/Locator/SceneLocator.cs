@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using Cysharp.Threading.Tasks;
+using System.Threading.Tasks;
 
 namespace EC.Services
 {
@@ -28,27 +29,31 @@ namespace EC.Services
         {
             _instance = null;
         }
-
-        /// <summary>
-        /// Registers a service of type T. If there are any waiters for this type, they will be invoked with the service instance.
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="service"></param>
-        public static void Register<T>(T service) where T : SceneService
+        private void OnDestroy()
         {
-            if (Instance._services.ContainsKey(typeof(T))) return;
-            ForceRegister(service);
+            if (Instance == this)
+                foreach (var service in Instance._services)
+                    if (service.Value is SceneService ss)
+                    {
+                        ss.OnDispose();
+                        ss.OnDisposeAsync().Forget();
+                    }
         }
 
-        /// <summary>
-        /// Forcefully registers a service of type T, replacing any existing service of the same type. If there are any waiters for this type, they will be invoked with the new service instance.
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="service"></param>
-        public static void ForceRegister<T>(T service) where T : SceneService
+        #region Registration
+        public static async void Register<T>(T service) where T : SceneService => await ForceRegisterAsync(service);
+        public static async UniTask RegisterAsync<T>(T service) where T : SceneService
+        {
+            if (Instance._services.ContainsKey(typeof(T))) return;
+            await ForceRegisterAsync(service);
+        }
+
+        public static async void ForceRegister<T>(T service) where T : SceneService => await ForceRegisterAsync(service);
+        public static async UniTask ForceRegisterAsync<T>(T service) where T : SceneService
         {
             Instance._services[typeof(T)] = service;
             service.OnCreate();
+            await service.OnCreateAsync();
             if (Instance._waiters.TryGetValue(typeof(T), out var list))
             {
                 foreach (var cb in list) cb(service);
@@ -56,35 +61,24 @@ namespace EC.Services
             }
         }
 
-        /// <summary>
-        /// Unregisters the service of type T, if it exists. This will call OnDispose on the service before removing it.
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        public static void Unregister<T>() where T : SceneService
+        public static async void Unregister<T>() where T : SceneService => await UnregisterAsync<T>();
+        public static async UniTask UnregisterAsync<T>() where T : SceneService
         {
             if (Instance._services.TryGetValue(typeof(T), out var service))
             {
                 ((T)service).OnDispose();
+                await ((T)service).OnDisposeAsync();
                 Instance._services.Remove(typeof(T));
             }
         }
+        #endregion
 
-        /// <summary>
-        /// Checks if a service of type T is registered in the locator.
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <returns></returns>
+        #region Getting
         public static bool Has<T>() where T : SceneService
         {
             return Instance._services.ContainsKey(typeof(T));
         }
 
-        /// <summary>
-        /// Tries to get a service of type T from the locator. Returns true if the service is found, false otherwise. The out parameter 'service' will contain the service instance if found, or default(T) if not found.
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="service"></param>
-        /// <returns></returns>
         public static bool TryGet<T>(out T service) where T : SceneService
         {
             if (Instance._services.TryGetValue(typeof(T), out var s))
@@ -96,12 +90,6 @@ namespace EC.Services
             return false;
         }
 
-        /// <summary>
-        /// Asynchronously tries to get a service of type T from the locator. If the service is already registered, it returns immediately with success=true and the service instance. If the service is not registered, it waits until either the service is registered (in which case it returns with success=true and the service instance) or the specified timeout elapses (in which case it returns with success=false and default(T)). The timeout is specified in seconds.
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="timeoutSeconds"></param>
-        /// <returns></returns>
         public static async UniTask<(bool success, T service)> TryGetAsync<T>(float timeoutSeconds) where T : SceneService
         {
             if (Instance._services.TryGetValue(typeof(T), out var existing))
@@ -118,13 +106,6 @@ namespace EC.Services
             list.Remove(callback);
             return (false, default);
         }
-
-        private void OnDestroy()
-        {
-            if (Instance == this)
-                foreach (var service in Instance._services)
-                    if (service.Value is SceneService ss)
-                        ss.OnDispose();
-        }
+        #endregion
     }
 }
