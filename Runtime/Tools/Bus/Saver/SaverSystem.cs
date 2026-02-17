@@ -11,6 +11,15 @@ namespace EC.Saver
     {
         private static Dictionary<string, object> ActiveVariables = new();
 
+        #region --- INIT ---
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
+        private static void Init()
+        {
+            ActiveVariables.Clear();
+        }
+        #endregion
+
+        #region --- API ---
         public static void AddVariable<T>(string key, T defaultValue = default)
         {
             if (ActiveVariables.ContainsKey(key)) return;
@@ -31,10 +40,6 @@ namespace EC.Saver
                 UnsubscribeByKey(key);
             ActiveVariables.Clear();
         }
-        private static void UnsubscribeByKey<T>(KeyValuePair<string, T> key)
-        {
-            Bus.BusSystem.Unsubscribe(key.Key, (Action<T>)((value) => OnChangeVariable(key.Key, value)));
-        }
         public static void ClearAndDeleteAllVariables()
         {
             foreach (var key in ActiveVariables)
@@ -45,11 +50,19 @@ namespace EC.Saver
             PlayerPrefs.Save();
             ActiveVariables.Clear();
         }
+        #endregion
+
+        #region --- INTERNAL ---
+        private static void UnsubscribeByKey<T>(KeyValuePair<string, T> key)
+        {
+            Bus.BusSystem.Unsubscribe(key.Key, (Action<T>)((value) => OnChangeVariable(key.Key, value)));
+        }
         private static void OnChangeVariable<T>(string key, T value)
         {
             PlayerPrefs.SetString(key, ToString(value));
             PlayerPrefs.Save();
         }
+        #endregion
 
         #region PARSE & TOSTRING
         private static string ToString<T>(T value) => value switch
