@@ -77,42 +77,62 @@ namespace EC.Effects
             public void PlayMoment()
             {
                 CallOnPlay();
-                foreach (var effect in _effects)
-                    effect.PlayMoment();
+                if (_effects.Length > 0)
+                {
+                    foreach (var effect in _effects)
+                        effect.PlayMoment();
+                }
                 CallOnComplete();
             }
             public void PlaySmooth()
             {
                 CallOnPlay();
-                foreach (var effect in _effects)
-                    effect.PlaySmooth();
-                _completeDelay = Tween.Delay(_effects.Max(v => v.Data.Time.AllDuration), () => CallOnComplete());
+                if (_effects.Length > 0)
+                {
+                    foreach (var effect in _effects)
+                        effect.PlaySmooth();
+                    _completeDelay = Tween.Delay(_effects.Max(v => v.Data.Time.AllDuration), () => CallOnComplete());
+                }
+                else
+                    CallOnComplete();
             }
             public async Task PlaySmoothAsync()
             {
                 CallOnPlay();
-                foreach (var effect in _effects)
-                    effect.PlaySmooth();
-                await UniTask.Delay(Mathf.RoundToInt(_effects.Max(v => v.Data.Time.AllDuration) * 1000f));
+                if (_effects.Length > 0)
+                {
+                    foreach (var effect in _effects)
+                        effect.PlaySmooth();
+                    await UniTask.Delay(Mathf.RoundToInt(_effects.Max(v => v.Data.Time.AllDuration) * 1000f));
+                }
                 CallOnComplete();
             }
             public void Stop()
             {
-                foreach (var effect in _effects)
-                    effect.Stop();
-                if (_completeDelay.isAlive) _completeDelay.Stop();
+                if (_effects.Length > 0)
+                {
+                    foreach (var effect in _effects)
+                        effect.Stop();
+                    if (_completeDelay.isAlive) _completeDelay.Stop();
+                }
             }
             public void Pause()
             {
-                foreach (var effect in _effects)
-                    effect.Pause();
-                if (_completeDelay.isAlive) _completeDelay.isPaused = true;
+                if (_effects.Length > 0)
+                {
+                    foreach (var effect in _effects)
+                        effect.Pause();
+                    if (_completeDelay.isAlive) _completeDelay.isPaused = true;
+                }
             }
             public void Resume()
             {
-                foreach (var effect in _effects)
-                    effect.Resume();
-                if (_completeDelay.isAlive) _completeDelay.isPaused = false;
+                if (_effects.Length > 0)
+                {
+                    foreach (var effect in _effects)
+                        effect.Resume();
+                    if (_completeDelay.isAlive) _completeDelay.isPaused = false;
+                }
             }
             #endregion
         }
