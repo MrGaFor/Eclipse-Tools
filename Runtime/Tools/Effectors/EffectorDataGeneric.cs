@@ -4,6 +4,47 @@ using UnityEngine.Events;
 
 namespace EC.Effects
 {
+    public interface IEffectorData
+    {
+        public bool TryGetModule<T>(out T data)
+        {
+            if (this is T tdata)
+            {
+                data = tdata;
+                return true;
+            }
+            data = default;
+            return false;
+        }
+    }
+
+    public interface IEffectorCurveModuleData
+    {
+        public EffectSettingsCurveModule Module => CurveModule;
+        public EffectSettingsCurveModule CurveModule { get; }
+    }
+    public interface IEffectorTimeModuleData
+    {
+        public EffectSettingsTimeModule Module => TimeModule;
+        public EffectSettingsTimeModule TimeModule { get; }
+        public float AllDuration => Module.AllDuration;
+    }
+    public interface IEffectorLoopModuleData
+    {
+        public EffectSettingsLoopModule Module => LoopModule;
+        public EffectSettingsLoopModule LoopModule { get; }
+    }
+    public interface IEffectorStopModuleData
+    {
+        public EffectSettingsStopModule Module => StopModule;
+        public EffectSettingsStopModule StopModule { get; }
+    }
+    public interface IEffectorEventsModuleData
+    {
+        public EffectLifeEventModule Module => EventsModule;
+        public EffectLifeEventModule EventsModule { get; }
+    }
+
     [System.Serializable]
     public class EffectorComponentFuncData<TComponent, TFunc, TData> : EffectorComponentFunc<TComponent, TFunc>
         where TComponent : Object where TFunc : System.Enum
@@ -29,8 +70,14 @@ namespace EC.Effects
         [BoxGroup("Data", ShowLabel = false), HorizontalGroup("Data/value", 250), LabelWidth(70), PropertyOrder(-1)] public TComponent Component;
     }
     [System.Serializable]
-    public class EffectorEmpty
+    public class EffectorEmpty : IEffectorData, IEffectorCurveModuleData, IEffectorTimeModuleData, IEffectorLoopModuleData, IEffectorStopModuleData, IEffectorEventsModuleData
     {
+        public virtual EffectSettingsCurveModule CurveModule => Curve;
+        public virtual EffectSettingsTimeModule TimeModule => Time;
+        public virtual EffectSettingsLoopModule LoopModule => Loop;
+        public virtual EffectSettingsStopModule StopModule => Stop;
+        public virtual EffectLifeEventModule EventsModule => Events;
+
         [FoldoutGroup("Data/Settings"), HideLabel] public EffectSettingsCurveModule Curve;
         [FoldoutGroup("Data/Settings"), HideLabel] public EffectSettingsTimeModule Time;
         [FoldoutGroup("Data/Settings"), HideLabel] public EffectSettingsLoopModule Loop;

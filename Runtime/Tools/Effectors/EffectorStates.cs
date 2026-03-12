@@ -91,7 +91,7 @@ namespace EC.Effects
                 {
                     foreach (var effect in _effects)
                         effect.PlaySmooth();
-                    _completeDelay = Tween.Delay(_effects.Max(v => v.Data.Time.AllDuration), () => CallOnComplete());
+                    _completeDelay = Tween.Delay(_effects.Max(v => v.Data.TryGetModule<IEffectorTimeModuleData>(out var time) ? time.AllDuration : 0f), () => CallOnComplete());
                 }
                 else
                     CallOnComplete();
@@ -103,7 +103,7 @@ namespace EC.Effects
                 {
                     foreach (var effect in _effects)
                         effect.PlaySmooth();
-                    await UniTask.Delay(Mathf.RoundToInt(_effects.Max(v => v.Data.Time.AllDuration) * 1000f));
+                    await UniTask.Delay(Mathf.RoundToInt(_effects.Max(v => v.Data.TryGetModule<IEffectorTimeModuleData>(out var time) ? time.AllDuration : 0f) * 1000f));
                 }
                 CallOnComplete();
             }

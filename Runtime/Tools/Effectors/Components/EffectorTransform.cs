@@ -13,7 +13,7 @@ namespace EC.Effects
         public override bool ThisVector3 => true;
 
         [SerializeField, HideLabel, OnValueChanged("Vector3Update", IncludeChildren = true), ShowIf("ThisVector3")] private EffectorComponentFuncData<Transform, FuncList, Vector3> _dataVector3; public virtual void Vector3Update() { base.MarkDirty(); }
-        public override EffectorEmpty Data => _data; private EffectorComponentFunc<Transform, FuncList> _data => ThisVector3 ? _dataVector3 : null;
+        public override IEffectorData Data => _data; private EffectorComponentFunc<Transform, FuncList> _data => ThisVector3 ? _dataVector3 : null;
         public Transform Component => _data?.Component;
         #endregion
 
@@ -97,7 +97,7 @@ namespace EC.Effects
             if (!ThisVector3) return false;
             StartPlaySmooth();
             float buffDuration = CompiledSettings.duration;
-            if (duration != CompiledSettings.duration) CompiledSettings.duration = duration;
+            if (duration - _data.Time.StartDelay - _data.Time.EndDelay != CompiledSettings.duration) CompiledSettings.duration = duration-_data.Time.StartDelay - _data.Time.EndDelay;
             bool used = true;
             switch (_data.Func)
             {

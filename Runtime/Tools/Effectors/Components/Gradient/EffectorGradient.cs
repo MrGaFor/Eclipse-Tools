@@ -13,7 +13,7 @@ namespace EC.Effects
 
         [SerializeField, HideLabel, OnValueChanged("ColorUpdate", IncludeChildren = true), ShowIf("ThisColor")] private EffectorComponentValue<Material, Gradient> _dataColor; public virtual void ColorUpdate() { base.MarkDirty(); }
 
-        public override EffectorEmpty Data => _data; private EffectorComponentValue<Material, Gradient> _data => ThisColor ? _dataColor : null;
+        public override IEffectorData Data => _data; private EffectorComponentValue<Material, Gradient> _data => ThisColor ? _dataColor : null;
         public Material Component => _data?.Component;
 
         private void Awake()
@@ -88,7 +88,7 @@ namespace EC.Effects
             if (!ThisGradient) return false;
             StartPlaySmooth();
             float buffDuration = CompiledSettings.duration;
-            if (duration != CompiledSettings.duration) CompiledSettings.duration = duration;
+            if (duration - _data.Time.StartDelay - _data.Time.EndDelay != CompiledSettings.duration) CompiledSettings.duration = duration - _data.Time.StartDelay - _data.Time.EndDelay;
             Gradient gradientLast = _gradientLast;
             EffectTween = Tween.Custom(0f, 1f, CompiledSettings, time => { UpdateGradient(LerpGradient(gradientLast, value, time)); });
             if (buffDuration != CompiledSettings.duration) CompiledSettings.duration = buffDuration;

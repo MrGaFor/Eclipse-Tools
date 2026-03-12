@@ -64,7 +64,7 @@ namespace EC.Effects
             if (excl != _dataVector4) _dataVector4.Func = excl.Func;
         }
 
-        public override EffectorEmpty Data => _data; private EffectorComponentFunc<Material, FuncList> _data => _dataInt.Func switch
+        public override IEffectorData Data => _data; private EffectorComponentFunc<Material, FuncList> _data => _dataInt.Func switch
         {
             FuncList.Int => _dataInt,
             FuncList.Float => _dataFloat,
@@ -220,7 +220,7 @@ namespace EC.Effects
             if (!ThisInt) return false;
             StartPlaySmooth();
             float buffDuration = CompiledSettings.duration;
-            if (duration != CompiledSettings.duration) CompiledSettings.duration = duration;
+            if (duration - _data.Time.StartDelay - _data.Time.EndDelay != CompiledSettings.duration) CompiledSettings.duration = duration-_data.Time.StartDelay - _data.Time.EndDelay;
             bool used = true;
             switch (_data.Func)
             {
@@ -238,7 +238,7 @@ namespace EC.Effects
             if (!ThisFloat && !ThisRange) return false;
             StartPlaySmooth();
             float buffDuration = CompiledSettings.duration;
-            if (duration != CompiledSettings.duration) CompiledSettings.duration = duration;
+            if (duration - _data.Time.StartDelay - _data.Time.EndDelay != CompiledSettings.duration) CompiledSettings.duration = duration-_data.Time.StartDelay - _data.Time.EndDelay;
             bool used = true;
             switch (_data.Func)
             {
@@ -256,7 +256,7 @@ namespace EC.Effects
             if (!ThisColor) return false;
             StartPlaySmooth();
             float buffDuration = CompiledSettings.duration;
-            if (duration != CompiledSettings.duration) CompiledSettings.duration = duration;
+            if (duration - _data.Time.StartDelay - _data.Time.EndDelay != CompiledSettings.duration) CompiledSettings.duration = duration-_data.Time.StartDelay - _data.Time.EndDelay;
             bool used = true;
             switch (_data.Func)
             {
@@ -274,7 +274,7 @@ namespace EC.Effects
             if (!ThisVector4) return false;
             StartPlaySmooth();
             float buffDuration = CompiledSettings.duration;
-            if (duration != CompiledSettings.duration) CompiledSettings.duration = duration;
+            if (duration - _data.Time.StartDelay - _data.Time.EndDelay != CompiledSettings.duration) CompiledSettings.duration = duration-_data.Time.StartDelay - _data.Time.EndDelay;
             bool used = true;
             switch (_data.Func)
             {

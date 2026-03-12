@@ -3,6 +3,7 @@ using PrimeTween;
 using Sirenix.OdinInspector;
 using System;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace EC.Effects
 {
@@ -10,12 +11,17 @@ namespace EC.Effects
     public class EffectorDelay : IEffectorComponent
     {
         #region Data
-        [SerializeField, BoxGroup("Data", ShowLabel = false), FoldoutGroup("Data/Settings"), HideLabel] private EffectorDelayData _data;
-        private new EffectorDelayData Data => _data;
+        [SerializeField, BoxGroup("Data", ShowLabel = false), /*FoldoutGroup("Data/Settings"), */HideLabel] private EffectorDelayData _data;
+        public override IEffectorData Data => _data;
 
         [System.Serializable]
-        private class EffectorDelayData
+        public class EffectorDelayData : IEffectorData, IEffectorTimeModuleData, IEffectorStopModuleData, IEffectorEventsModuleData
         {
+            public EffectSettingsTimeModule TimeModule => null;
+            public float AllDuration => Time;
+            public EffectSettingsStopModule StopModule => Stop;
+            public EffectLifeEventModule EventsModule => Events;
+
             [HideLabel, LabelWidth(70), MinValue(0)] public float Time;
             [HideLabel] public EffectSettingsStopModule Stop;
             [HideLabel] public EffectLifeEventModule Events;
@@ -24,10 +30,12 @@ namespace EC.Effects
         protected override void CompileSettings()
         {
             IsCompiled = true;
-            CompiledSettings = new TweenSettings();
-            CompiledSettings.duration = Data.Time;
-            CompiledSettings.ease = Ease.Linear;
-         }
+            CompiledSettings = new TweenSettings
+            {
+                duration = _data.AllDuration,
+                ease = Ease.Linear
+            };
+        }
         #endregion
 
         #region Start|End Player
@@ -68,7 +76,7 @@ namespace EC.Effects
         #region Smooth Player
         public override void PlaySmooth()
         {
-            PlaySmoothCustom(_data.Time);
+            PlaySmoothCustom(_data.AllDuration);
         }
         public override void PlaySmoothCustom(float duration)
         {

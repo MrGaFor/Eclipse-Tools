@@ -15,7 +15,7 @@ namespace EC.Effects
 
         [SerializeField, HideLabel, ShowIf("ThisFloat")] private EffectorComponentFuncData<UnityEngine.UI.LayoutElement, FuncList, float> _dataFloat;
         
-        public override EffectorEmpty Data => _data; private EffectorComponentFunc<UnityEngine.UI.LayoutElement, FuncList> _data => _dataFloat;
+        public override IEffectorData Data => _data; private EffectorComponentFunc<UnityEngine.UI.LayoutElement, FuncList> _data => _dataFloat;
         public UnityEngine.UI.LayoutElement Component => _data?.Component;
         #endregion
 
@@ -101,7 +101,7 @@ namespace EC.Effects
             if (!ThisFloat) return false;
             StartPlaySmooth();
             float buffDuration = CompiledSettings.duration;
-            if (duration != CompiledSettings.duration) CompiledSettings.duration = duration;
+            if (duration - _data.Time.StartDelay - _data.Time.EndDelay != CompiledSettings.duration) CompiledSettings.duration = duration-_data.Time.StartDelay - _data.Time.EndDelay;
             bool used = true;
             switch (_data.Func)
             {

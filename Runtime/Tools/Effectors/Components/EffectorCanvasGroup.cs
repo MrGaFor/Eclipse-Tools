@@ -14,7 +14,7 @@ namespace EC.Effects
 
         [SerializeField, HideLabel, OnValueChanged("FloatUpdate", IncludeChildren = true), ShowIf("ThisFloat")] private EffectorComponentFuncData<CanvasGroup, FuncList, float> _dataFloat; public virtual void FloatUpdate() { base.MarkDirty(); }
         
-        public override EffectorEmpty Data => _data; private EffectorComponentFunc<CanvasGroup, FuncList> _data => ThisFloat ? _dataFloat : null;
+        public override IEffectorData Data => _data; private EffectorComponentFunc<CanvasGroup, FuncList> _data => ThisFloat ? _dataFloat : null;
         public CanvasGroup Component => _data?.Component;
         #endregion
 
@@ -89,7 +89,9 @@ namespace EC.Effects
             if (!ThisFloat) return false;
             StartPlaySmooth();
             float buffDuration = CompiledSettings.duration;
-            if (duration != CompiledSettings.duration) CompiledSettings.duration = duration;
+            
+            if (duration - _data.Time.StartDelay - _data.Time.EndDelay != CompiledSettings.duration) CompiledSettings.duration = duration-_data.Time.StartDelay - _data.Time.EndDelay;
+            if (duration - _data.Time.StartDelay - _data.Time.EndDelay != CompiledSettings.duration) CompiledSettings.duration = duration-_data.Time.StartDelay - _data.Time.EndDelay;
             bool used = true;
             switch (_data.Func)
             {

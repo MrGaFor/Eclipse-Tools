@@ -17,7 +17,7 @@ namespace EC.Effects
         [SerializeField, HideLabel, OnValueChanged("FloatUpdate", IncludeChildren = true), ShowIf("ThisFloat")] private EffectorComponentFuncData<Light, FuncList, float> _dataFloat; public virtual void FloatUpdate() { _dataColor.Func = _dataFloat.Func; base.MarkDirty(); }
         [SerializeField, HideLabel, OnValueChanged("ColorUpdate", IncludeChildren = true), ShowIf("ThisColor")] private EffectorComponentFuncData<Light, FuncList, Color> _dataColor; public virtual void ColorUpdate() { _dataFloat.Func = _dataColor.Func; base.MarkDirty(); }
 
-        public override EffectorEmpty Data => _data; private EffectorComponentFunc<Light, FuncList> _data => ThisFloat ? _dataFloat : ThisColor ? _dataColor : null;
+        public override IEffectorData Data => _data; private EffectorComponentFunc<Light, FuncList> _data => ThisFloat ? _dataFloat : ThisColor ? _dataColor : null;
         public Light Component => _data?.Component;
         #endregion
 
@@ -118,7 +118,7 @@ namespace EC.Effects
             if (!ThisFloat) return false;
             StartPlaySmooth();
             float buffDuration = CompiledSettings.duration;
-            if (duration != CompiledSettings.duration) CompiledSettings.duration = duration;
+            if (duration - _data.Time.StartDelay - _data.Time.EndDelay != CompiledSettings.duration) CompiledSettings.duration = duration-_data.Time.StartDelay - _data.Time.EndDelay;
             bool used = true;
             switch (_data.Func)
             {
@@ -138,7 +138,7 @@ namespace EC.Effects
             if (!ThisColor) return false;
             StartPlaySmooth();
             float buffDuration = CompiledSettings.duration;
-            if (duration != CompiledSettings.duration) CompiledSettings.duration = duration;
+            if (duration - _data.Time.StartDelay - _data.Time.EndDelay != CompiledSettings.duration) CompiledSettings.duration = duration-_data.Time.StartDelay - _data.Time.EndDelay;
             bool used = true;
             switch (_data.Func)
             {

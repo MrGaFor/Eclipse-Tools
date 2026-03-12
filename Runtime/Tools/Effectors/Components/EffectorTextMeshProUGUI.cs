@@ -19,7 +19,7 @@ namespace EC.Effects
         [SerializeField, HideLabel, OnValueChanged("StringUpdate", IncludeChildren = true), ShowIf("ThisString")] private EffectorComponentFuncData<TMPro.TextMeshProUGUI, FuncList, string> _dataString; public virtual void StringUpdate() { _dataColor.Func = _dataString.Func; _dataFloat.Func = _dataString.Func; base.MarkDirty(); }
         [SerializeField, HideLabel, OnValueChanged("ColorUpdate", IncludeChildren = true), ShowIf("ThisColor")] private EffectorComponentFuncData<TMPro.TextMeshProUGUI, FuncList, Color> _dataColor; public virtual void ColorUpdate() { _dataFloat.Func = _dataColor.Func; _dataString.Func = _dataColor.Func; base.MarkDirty(); }
 
-        public override EffectorEmpty Data => _data; private EffectorComponentFunc<TMPro.TextMeshProUGUI, FuncList> _data => ThisFloat ? _dataFloat : ThisColor ? _dataColor : ThisString ? _dataString : null;
+        public override IEffectorData Data => _data; private EffectorComponentFunc<TMPro.TextMeshProUGUI, FuncList> _data => ThisFloat ? _dataFloat : ThisColor ? _dataColor : ThisString ? _dataString : null;
         public TMPro.TextMeshProUGUI Component => _data?.Component;
         #endregion
 
@@ -146,7 +146,7 @@ namespace EC.Effects
             if (!ThisFloat) return false;
             StartPlaySmooth();
             float buffDuration = CompiledSettings.duration;
-            if (duration != CompiledSettings.duration) CompiledSettings.duration = duration;
+            if (duration - _data.Time.StartDelay - _data.Time.EndDelay != CompiledSettings.duration) CompiledSettings.duration = duration-_data.Time.StartDelay - _data.Time.EndDelay;
             bool used = true;
             switch (_data.Func)
             {
@@ -168,7 +168,7 @@ namespace EC.Effects
             if (!ThisString) return false;
             StartPlaySmooth();
             float buffDuration = CompiledSettings.duration;
-            if (duration != CompiledSettings.duration) CompiledSettings.duration = duration;
+            if (duration - _data.Time.StartDelay - _data.Time.EndDelay != CompiledSettings.duration) CompiledSettings.duration = duration-_data.Time.StartDelay - _data.Time.EndDelay;
             bool used = true;
             switch (_data.Func)
             {
@@ -186,7 +186,7 @@ namespace EC.Effects
             if (!ThisColor) return false;
             StartPlaySmooth();
             float buffDuration = CompiledSettings.duration;
-            if (duration != CompiledSettings.duration) CompiledSettings.duration = duration;
+            if (duration - _data.Time.StartDelay - _data.Time.EndDelay != CompiledSettings.duration) CompiledSettings.duration = duration-_data.Time.StartDelay - _data.Time.EndDelay;
             bool used = true;
             switch (_data.Func)
             {
