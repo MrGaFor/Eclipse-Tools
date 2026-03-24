@@ -21,7 +21,6 @@ namespace EC.Themes
 
         public override void OnCreate()
         {
-            base.OnCreate();
             _themesGenerated = new Dictionary<string, Dictionary<string, Color>>();
             foreach (var theme in ThemeSettingsProvider.Settings.Themes)
             {
@@ -32,6 +31,9 @@ namespace EC.Themes
             }
             Bus.BusSystem.Subscribe<string>(SaveKey, OnChangedTheme);
             Saver.SaverSystem.AddVariable<string>(SaveKey, ThemeSettingsProvider.Settings.DefaultTheme);
+            if (string.IsNullOrWhiteSpace(_activeTheme))
+                ChangeTheme(ThemeSettingsProvider.Settings.DefaultTheme);
+            base.OnCreate();
         }
 
         public void ChangeTheme(string themeId)
@@ -66,12 +68,14 @@ namespace EC.Themes
 #if UNITY_EDITOR
         public static Color GetColorEditor(string colorId)
         {
+            if (Application.isPlaying)
+                if (Services.GameLocator.TryGet<ThemeManager>(out var mng))
+                    return mng.GetColor(colorId);
             foreach (var theme in ThemeSettingsProvider.Settings.Themes)
                 if (theme.ThemeId == ThemeSettingsProvider.Settings.DefaultTheme)
                     foreach (var color in theme.Colors)
                         if (color.ColorId == colorId)
                             return color.Color;
-            Debug.LogError($"Themes: ColorId <{colorId}> dont include in themes <{ThemeSettingsProvider.Settings.DefaultTheme}>");
             return Color.red;
         }
 #endif

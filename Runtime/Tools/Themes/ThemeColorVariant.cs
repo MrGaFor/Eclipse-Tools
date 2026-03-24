@@ -7,8 +7,8 @@ namespace EC.Themes
     [System.Serializable]
     public class ThemeColorVariant
     {
-        public string ColorId { get; set; }
-        [LabelText("@ColorId")] public Color Color;
+        [SerializeField, HideInInspector] public string ColorId;
+        [SerializeField, LabelText("@ColorId")] public Color Color;
     }
 }
 #endif

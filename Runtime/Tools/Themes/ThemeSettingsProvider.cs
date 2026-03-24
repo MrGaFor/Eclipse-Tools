@@ -13,7 +13,7 @@ namespace EC.Themes
         private const string AssetName = "ECThemes";
         private const string FolderPath = "Assets/Resources";
 
-        private static ThemeSettings _settings;
+        private static ThemeSettings _settings = null;
 
         public static ThemeSettings Settings
         {

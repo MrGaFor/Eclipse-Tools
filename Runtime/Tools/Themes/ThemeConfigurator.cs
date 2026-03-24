@@ -10,10 +10,15 @@ namespace EC.Themes
 {
     public class ThemeConfigurator : OdinEditorWindow
     {
-        [MenuItem("Tools/EC/Modules/Themes")]
+        [MenuItem("EC/Modules/Themes")]
         private static void OpenWindow()
         {
-            GetWindow<ThemeConfigurator>().Show();
+            ThemeConfigurator window = EditorWindow.GetWindow<ThemeConfigurator>(false, "Themes");
+            window.minSize = new Vector2(270.0f, 300.0f);
+            window.name = "Themes";
+
+            window.titleContent = new GUIContent("Themes", Sirenix.Utilities.Editor.EditorIcons.ImageCollection.Active);
+            window.Show();
         }
         protected override void OnEnable()
         {

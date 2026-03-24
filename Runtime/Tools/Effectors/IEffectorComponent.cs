@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace EC.Effects
 {
-    [AddComponentMenu("")]
+    [AddComponentMenu(""), ComponentIcon("Animation Icon")]
     public abstract class IEffectorComponent : MonoBehaviour
     {
         #region Data

@@ -1,26 +1,29 @@
 #if EC_THEMES
 using Sirenix.OdinInspector;
 using UnityEngine;
-using UnityEngine.Events;
-using UnityEngine.UI;
+using System.Linq;
+
+
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 namespace EC.Themes
 {
     public class ThemeOutput : MonoBehaviour
     {
-        private enum SourceType { Image, SpriteRenderer, Material, Event, Effector }
-
-        [SerializeField, ValueDropdown("ColorIds")] private string _colorId;
-        [SerializeField] private SourceType _source;
-        [SerializeField, ShowIf("_source", SourceType.Image)] private Image _image;
-        [SerializeField, ShowIf("_source", SourceType.SpriteRenderer)] private SpriteRenderer _spriteRenderer;
-        [SerializeField, ShowIf("_source", SourceType.Material)] private string _materialColorKey;
-        [SerializeField, ShowIf("_source", SourceType.Material)] private Material _material;
-        [SerializeField, ShowIf("_source", SourceType.Event)] private UnityEvent<Color> _event;
-        [SerializeField, ShowIf("_source", SourceType.Effector)] private Effects.IEffectorComponent _effector;
-
         private string[] ColorIds => ThemeSettingsProvider.Settings.ColorIds;
         private ThemeManager Manager => Services.GameLocator.TryGet<ThemeManager>(out var manager) ? manager : null;
+        
+        [SerializeField, LabelWidth(70), ValueDropdown(nameof(ColorIds)), BoxGroup("color", false), HorizontalGroup("color/c")] private string _colorId;
+        private enum CountVariant { One, Many }
+#if UNITY_EDITOR
+        [OnValueChanged(nameof(OnChangeCount))]
+#endif
+        [SerializeField, LabelWidth(70), HorizontalGroup("target/one", MinWidth = 140, Width = 0.3f)] private CountVariant _count = CountVariant.One;
+
+        [SerializeField, LabelWidth(70), ShowIf("@_count", CountVariant.One), HorizontalGroup("target/one")] private Appliers.ApplierFilter<Color> _target;
+        [SerializeField, LabelWidth(70), ShowIf("@_count", CountVariant.Many), BoxGroup("target", false), ListDrawerSettings(DraggableItems = false, ShowFoldout = false, DefaultExpandedState = true)] private Appliers.ApplierFilter<Color>[] _targets;
 
         private void OnEnable()
         {
@@ -38,31 +41,30 @@ namespace EC.Themes
         }
         private void SetColor(Color color)
         {
-            switch (_source)
+            if (_count == CountVariant.One)
             {
-                case SourceType.Image:
-                    if (Application.isPlaying || _image)
-                        _image.color = color;
-                    break;
-                case SourceType.SpriteRenderer:
-                    if (Application.isPlaying || _spriteRenderer)
-                        _spriteRenderer.color = color; 
-                    break;
-                case SourceType.Material:
-                    if (Application.isPlaying || _material)
-                        _material.SetColor(_materialColorKey, color); 
-                    break;
-                case SourceType.Event:
-                    _event?.Invoke(color); 
-                    break;
-                case SourceType.Effector:
-                    if (Application.isPlaying || _effector)
-                        _effector.PlaySmoothCustom(color); 
-                    break;
+                if (_target == null) return;
+                if (_target.HasSetter)
+                    _target.SetValue(color);
+            }
+            else
+            {
+                if (_targets == null) return;
+                foreach (var target in _targets)
+                    if (target.HasSetter)
+                        target.SetValue(color);
             }
         }
 
+        #region Editor
 #if UNITY_EDITOR
+        private void OnChangeCount()
+        {
+            if (_count == CountVariant.One && _targets != null)
+                _targets = null;
+            else if (_count == CountVariant.Many && _target != null)
+                _target = null;
+        }
         public void OnValidate()
         {
             if (Application.isPlaying)
@@ -74,8 +76,21 @@ namespace EC.Themes
                 SetColor(ThemeManager.GetColorEditor(_colorId));
             }
         }
+        private bool HasSetter => _count == CountVariant.One ? (_target != null && _target.HasSetter)
+            : (_targets != null && _targets.Any(t => t.HasSetter));
+        [ShowInInspector, Button("Apply"), BoxGroup("color"), HorizontalGroup("color/c", 60), PropertySpace(1.9f), ShowIf(nameof(HasSetter)), PropertyOrder(1)]
+        private void ApplySet()
+        {
+            if (Application.isPlaying)
+                OnChangedTheme();
+            else
+            {
+                SetColor(ThemeManager.GetColorEditor(_colorId));
+                AssetDatabase.SaveAssets();
+            }
+        }
 #endif
-
+        #endregion
     }
 }
 #endif
