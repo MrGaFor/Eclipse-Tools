@@ -33,6 +33,7 @@ namespace EC.Bus.EditorTools
 
             foreach (var mb in go.GetComponents<MonoBehaviour>())
             {
+                if (mb == null) continue;
                 var fields = mb.GetType().GetFields(BindingFlags.Default | BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
                 bool dirty = false;
                 foreach (var f in fields)
