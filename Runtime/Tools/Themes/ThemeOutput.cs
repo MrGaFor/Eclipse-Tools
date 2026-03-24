@@ -14,8 +14,9 @@ namespace EC.Themes
     {
         private string[] ColorIds => ThemeSettingsProvider.Settings.ColorIds;
         private ThemeManager Manager => Services.GameLocator.TryGet<ThemeManager>(out var manager) ? manager : null;
-        
+
         [SerializeField, LabelWidth(70), ValueDropdown(nameof(ColorIds)), BoxGroup("color", false), HorizontalGroup("color/c")] private string _colorId;
+        [SerializeField, LabelWidth(70), BoxGroup("color"), HorizontalGroup("color/c", 85)] private bool _useAlpha = true;
         private enum CountVariant { One, Many }
 #if UNITY_EDITOR
         [OnValueChanged(nameof(OnChangeCount))]
@@ -44,15 +45,24 @@ namespace EC.Themes
             if (_count == CountVariant.One)
             {
                 if (_target == null) return;
+                if (!_useAlpha && _target.HasGetter)
+                    color.a = ((Color)_target.GetValue()).a;
                 if (_target.HasSetter)
                     _target.SetValue(color);
             }
             else
             {
                 if (_targets == null) return;
+                float a = color.a;
                 foreach (var target in _targets)
+                {
+                    if (!_useAlpha && target.HasGetter)
+                        color.a = ((Color)target.GetValue()).a;
+                    else if (!_useAlpha)
+                        color.a = a;
                     if (target.HasSetter)
                         target.SetValue(color);
+                }
             }
         }
 
