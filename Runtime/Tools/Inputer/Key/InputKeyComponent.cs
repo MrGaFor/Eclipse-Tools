@@ -13,6 +13,8 @@ namespace EC.Inputer
         [SerializeField, HorizontalGroup("sett", 80), HideLabel, ShowIf("_callCount", CallCount.Limit), Min(1)] private int _limitCount = 1;
         [SerializeField, FoldoutGroup("Events"), HorizontalGroup("Events/evs")] private UnityEvent _onDown;
         [SerializeField, FoldoutGroup("Events"), HorizontalGroup("Events/evs")] private UnityEvent _onUp;
+        public UnityEvent EventDown => _onDown;
+        public UnityEvent EventUp => _onUp;
 
         private int _leftCount;
 

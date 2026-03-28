@@ -6,6 +6,7 @@ namespace EC.Inputer
     public class InputClick : InputTouchComponent
     {
         [SerializeField] private UnityEvent _event;
+        public UnityEvent Event => _event;
 
         public override EventVariant EventVariant => EventVariant.Click;
         public override void InvokeEvent(EventVariant eventType)

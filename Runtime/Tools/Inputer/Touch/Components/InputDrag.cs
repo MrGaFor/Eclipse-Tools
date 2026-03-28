@@ -6,6 +6,7 @@ namespace EC.Inputer
     public class InputDrag : InputTouchComponent
     {
         [SerializeField] private UnityEvent<Vector2> _event;
+        public UnityEvent<Vector2> Event => _event;
 
         public override EventVariant EventVariant => EventVariant.Drag;
         public override void InvokeEvent(EventVariant eventType, Vector2 vectorValue)

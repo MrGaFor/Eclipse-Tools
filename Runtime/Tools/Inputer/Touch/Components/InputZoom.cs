@@ -6,6 +6,7 @@ namespace EC.Inputer
     public class InputZoom : InputTouchComponent
     {
         [SerializeField] private UnityEvent<float> _event;
+        public UnityEvent<float> Event => _event;
 
         public override EventVariant EventVariant => EventVariant.Zoom;
         public override void InvokeEvent(EventVariant eventType, float floatValue)

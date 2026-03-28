@@ -6,6 +6,7 @@ namespace EC.Inputer
     public class InputEndDrag : InputTouchComponent
     {
         [SerializeField] private UnityEvent _event;
+        public UnityEvent Event => _event;
 
         public override EventVariant EventVariant => EventVariant.EndDrag;
         public override void InvokeEvent(EventVariant eventType)
