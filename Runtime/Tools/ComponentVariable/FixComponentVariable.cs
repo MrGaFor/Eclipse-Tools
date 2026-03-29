@@ -1,9 +1,11 @@
 ﻿using Sirenix.OdinInspector;
 using System;
+using UnityEngine;
+#if UNITY_EDITOR
 using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
-using UnityEngine;
+#endif
 
 namespace EC.ComponentVariable
 {
@@ -25,6 +27,13 @@ namespace EC.ComponentVariable
         }
 
         #region Editor
+        public void OnBeforeSerialize() { }
+        public void OnAfterDeserialize()
+        {
+#if UNITY_EDITOR
+            SyncTypes();
+#endif
+        }
 #if UNITY_EDITOR
         [ShowInInspector, ValueDropdown(nameof(GetVariableTypes)), OnValueChanged(nameof(OnVariableTypeChanged)), HideLabel, PropertyOrder(-1)] private Type selectedVariable;
         [ShowInInspector, ValueDropdown(nameof(GetTargetTypes)), OnValueChanged(nameof(OnTargetTypeChanged)), HideLabel, PropertyOrder(-1)] private Type selectedTarget;
@@ -33,11 +42,6 @@ namespace EC.ComponentVariable
         private bool HasSetter => target is IVariableTarget t && t.HasSetter;
         private bool HasGetter => target is IVariableTarget t && t.HasGetter;
 
-        public void OnBeforeSerialize() { }
-        public void OnAfterDeserialize()
-        {
-            SyncTypes();
-        }
         private void SyncTypes()
         {
             if (variable != null)
