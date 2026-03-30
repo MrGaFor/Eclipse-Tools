@@ -1,6 +1,7 @@
 using Cysharp.Threading.Tasks;
 using PrimeTween;
 using Sirenix.OdinInspector;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using UnityEngine;
@@ -96,14 +97,15 @@ namespace EC.Effects
                 else
                     CallOnComplete();
             }
-            public async Task PlaySmoothAsync()
+            public async UniTask PlaySmoothAsync()
             {
                 CallOnPlay();
                 if (_effects.Length > 0)
                 {
                     foreach (var effect in _effects)
                         effect.PlaySmooth();
-                    await UniTask.Delay(Mathf.RoundToInt(_effects.Max(v => v.Data.TryGetModule<IEffectorTimeModuleData>(out var time) ? time.AllDuration : 0f) * 1000f));
+                    _completeDelay = Tween.Delay(_effects.Max(v => v.Data.TryGetModule<IEffectorTimeModuleData>(out var time) ? time.AllDuration : 0f));
+                    await _completeDelay.ToUniTask();
                 }
                 CallOnComplete();
             }
