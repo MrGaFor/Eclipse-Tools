@@ -90,5 +90,10 @@ namespace SABI
             vector.y = (sin * tx) + (cos * ty);
             return vector;
         }
+
+        public static float RandomRange(this Vector2 vector)
+        {
+            return Random.Range(vector.x, vector.y);
+        }
     }
 }

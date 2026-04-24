@@ -5,6 +5,9 @@ namespace SABI
 {
     public static class IntExtensions
     {
+        /// Extension method for int that converts the number to an abbreviated string (k, m, g).
+        /// Returns string abbreviated string for display.
+        /// Arguments: uint digits: Number of decimal digits to show.
         public static string ToAbbreviatedString(this int n, uint digits = 0)
         {
             string s;
@@ -21,6 +24,9 @@ namespace SABI
             return s;
         }
 
+        /// Extension method for int that rounds the value down to the nearest multiple of binSize.
+        /// Returns int rounded value.
+        /// Arguments: int binSize: The multiple to round to.
         public static int RoundToMultipleOf(this int n, int binSize)
         {
             var result = (n / binSize) * binSize;
@@ -31,9 +37,15 @@ namespace SABI
             return result;
         }
 
+        /// Extension method for int that checks if the value is within a specified range.
+        /// Returns bool true if in range, false otherwise.
+        /// Arguments: int minValue, int maxValue: Range limits.
         public static bool IsInRange(this int value, int minValue, int maxValue) =>
             value >= minValue && value <= maxValue;
 
+        /// Extension method for int that finds the closest value within a specified range.
+        /// Returns int closest value in range.
+        /// Arguments: int minValue, int maxValue: Range limits.
         public static int ClosestInRange(this int value, int minValue, int maxValue)
         {
             if (value.IsInRange(minValue, maxValue))
@@ -45,22 +57,40 @@ namespace SABI
             return (int)MathF.Min(diffrenceToMinValue, diffrenceToMaxValue);
         }
 
+        /// Extension method for int that returns the smaller of value and max.
+        /// Returns int the smaller value.
+        /// Arguments: int max: Maximum allowed value.
         public static int Max(this int value, int max) => value <= max ? value : max;
 
+        /// Extension method for int that returns the larger of value and min.
+        /// Returns int the larger value.
+        /// Arguments: int min: Minimum allowed value.
         public static int Min(this int value, int min) => value <= min ? min : value;
 
+        /// Extension method for int that clamps the value between min and max.
+        /// Returns int clamped value.
+        /// Arguments: int min, int max: Clamp limits.
         public static int Clamp(this int value, int min, int max) =>
             Math.Max(min, Math.Min(max, value));
 
+        /// Extension method for int that linearly interpolates towards target by t.
+        /// Returns int interpolated value.
+        /// Arguments: int target: Target value. float t: Interpolation factor.
         public static int Lerp(this int current, int target, float t)
         {
             t = Mathf.Clamp01(t);
             return Mathf.RoundToInt(Mathf.Lerp(current, target, t));
         }
 
+        /// Extension method for int that linearly interpolates towards target by t (unclamped).
+        /// Returns int interpolated value.
+        /// Arguments: int target: Target value. float t: Interpolation factor.
         public static int LerpUnclamped(this int current, int target, float t) =>
             Mathf.RoundToInt(Mathf.LerpUnclamped(current, target, t));
 
+        /// Extension method for int that moves towards target by maxDelta.
+        /// Returns int moved value.
+        /// Arguments: int target: Target value. int maxDelta: Maximum change per call.
         public static int MoveTowards(this int current, int target, int maxDelta)
         {
             if (Mathf.Abs(target - current) <= maxDelta)
@@ -69,9 +99,9 @@ namespace SABI
             return current + (int)Mathf.Sign(target - current) * maxDelta;
         }
 
-        /// <summary>
-        /// Remap a value from source range to targetRange.
-        /// </summary>
+        /// Extension method for int that remaps value from source range to target range.
+        /// Returns int remapped value.
+        /// Arguments: Vector2Int sourceRange, Vector2Int targetRange: Ranges for remapping.
         public static int Remap(this int value, Vector2Int sourceRange, Vector2Int targetRange)
         {
             if (sourceRange.x == sourceRange.y)
@@ -82,188 +112,96 @@ namespace SABI
 
         // ---------------------------------------------------------------------------------------------
 
-        // Summary:
-        //     Returns the sine of angle f.
-        //
-        // Parameters:
-        //   f:
-        //     The input angle, in radians.
-        //
-        // Returns:
-        //     The return value between -1 and +1.
+        /// Extension method for int that returns the sine of the value.
+        /// Returns float sine value.
+        /// Arguments: int f: Angle in radians.
         public static float Sin(this int f) => Mathf.Sin(f);
 
-        //
-        // Summary:
-        //     Returns the cosine of angle f.
-        //
-        // Parameters:
-        //   f:
-        //     The input angle, in radians.
-        //
-        // Returns:
-        //     The return value between -1 and 1.
+        /// Extension method for int that returns the cosine of the value.
+        /// Returns float cosine value.
+        /// Arguments: int f: Angle in radians.
         public static float Cos(this int f) => Mathf.Cos(f);
 
-        //
-        // Summary:
-        //     Returns the tangent of angle f in radians.
-        //
-        // Parameters:
-        //   f:
+        /// Extension method for int that returns the tangent of the value.
+        /// Returns float tangent value.
+        /// Arguments: int f: Angle in radians.
         public static float Tan(this int f) => Mathf.Tan(f);
 
-        //
-        // Summary:
-        //     Returns the arc-sine of f - the angle in radians whose sine is f.
-        //
-        // Parameters:
-        //   f:
+        /// Extension method for int that returns the arc-sine of the value.
+        /// Returns float arc-sine value.
+        /// Arguments: int f: Input value.
         public static float Asin(this int f) => Mathf.Asin(f);
 
-        //
-        // Summary:
-        //     Returns the arc-cosine of f - the angle in radians whose cosine is f.
-        //
-        // Parameters:
-        //   f:
+        /// Extension method for int that returns the arc-cosine of the value.
+        /// Returns float arc-cosine value.
+        /// Arguments: int f: Input value.
         public static float Acos(this int f) => Mathf.Acos(f);
 
-        //
-        // Summary:
-        //     Returns the arc-tangent of f - the angle in radians whose tangent is f.
-        //
-        // Parameters:
-        //   f:
+        /// Extension method for int that returns the arc-tangent of the value.
+        /// Returns float arc-tangent value.
+        /// Arguments: int f: Input value.
         public static float Atan(this int f) => Mathf.Atan(f);
 
-        //
-        // Summary:
-        //     Returns the angle in radians whose Tan is y/x.
-        //
-        // Parameters:
-        //   y:
-        //
-        //   x:
+        /// Extension method for int that returns the angle in radians whose tangent is y/x.
+        /// Returns float angle in radians.
+        /// Arguments: int y: Y value. int x: X value.
         public static float Atan2(this int y, int x) => Mathf.Atan2(y, x);
 
-        //
-        // Summary:
-        //     Returns square root of f.
-        //
-        // Parameters:
-        //   f:
+        /// Extension method for int that returns the square root of the value.
+        /// Returns float square root.
+        /// Arguments: int f: Input value.
         public static float Sqrt(this int f) => Mathf.Sqrt(f);
 
-        //
-        // Summary:
-        //     Returns the absolute value of f.
-        //
-        // Parameters:
-        //   f:
+        /// Extension method for int that returns the absolute value.
+        /// Returns float absolute value.
+        /// Arguments: int f: Input value.
         public static float Abs(this int f) => Mathf.Abs(f);
 
-        //
-        // Summary:
-        //     Returns f raised to power p.
-        //
-        // Parameters:
-        //   f:
-        //
-        //   p:
+        /// Extension method for int that raises the value to the given power.
+        /// Returns float result.
+        /// Arguments: float x: Power to raise to.
         public static float Pow(this int f, float x) => Mathf.Pow(f, x);
 
-        //
-        // Summary:
-        //     Returns e raised to the specified power.
-        //
-        // Parameters:
-        //   power:
+        /// Extension method for int that returns e raised to the value.
+        /// Returns float exponential value.
+        /// Arguments: int power: Power to raise e.
         public static float Exp(this int power) => Mathf.Exp(power);
 
-        //
-        // Summary:
-        //     Returns the natural (base e) logarithm of a specified number.
-        //
-        // Parameters:
-        //   f:
+        /// Extension method for int that returns the natural logarithm.
+        /// Returns float natural logarithm.
+        /// Arguments: int f: Input value.
         public static float Log(this int f) => Mathf.Log(f);
 
-        //
-        // Summary:
-        //     Returns the logarithm of a specified number in a specified base.
-        //
-        // Parameters:
-        //   f:
-        //
-        //   p:
+        /// Extension method for int that returns the logarithm in a specified base.
+        /// Returns float logarithm value.
+        /// Arguments: float p: Logarithm base.
         public static float Log(this int f, float p) => Mathf.Log(f, p);
 
-        //
-        // Summary:
-        //     Returns the base 10 logarithm of a specified number.
-        //
-        // Parameters:
-        //   f:
+        /// Extension method for int that returns the base 10 logarithm.
+        /// Returns float base 10 logarithm.
+        /// Arguments: int f: Input value.
         public static float Log10(this int f) => Mathf.Log10(f);
 
-        //
-        // Summary:
-        //     Same as Lerp but makes sure the values interpolate correctly when they wrap around
-        //     360 degrees.
-        //
-        // Parameters:
-        //   a:
-        //     The start angle. A float expressed in degrees.
-        //
-        //   b:
-        //     The end angle. A float expressed in degrees.
-        //
-        //   t:
-        //     The interpolation value between the start and end angles. This value is clamped
-        //     to the range [0, 1].
-        //
-        // Returns:
-        //     Returns the interpolated float result between angle a and angle b, based on the
-        //     interpolation value t.
+        /// Extension method for int that interpolates angles, wrapping around 360 degrees.
+        /// Returns float interpolated angle.
+        /// Arguments: float target: Target angle. float time: Interpolation factor.
         public static float LerpAngle(this int current, float target, float time) =>
             Mathf.LerpAngle(current, target, time);
 
-        //
-        // Summary:
-        //     Same as MoveTowards but makes sure the values interpolate correctly when they
-        //     wrap around 360 degrees.
-        //
-        // Parameters:
-        //   current:
-        //
-        //   target:
-        //
-        //   maxDelta:
+        /// Extension method for int that moves towards an angle, wrapping around 360 degrees.
+        /// Returns float moved angle.
+        /// Arguments: float target: Target angle. float time: Maximum change.
         public static float MoveTowardsAngle(this int current, float target, float time) =>
             Mathf.MoveTowardsAngle(current, target, time);
 
-        //
-        // Summary:
-        //     Loops the value t, so that it is never larger than length and never smaller than
-        //     0.
-        //
-        // Parameters:
-        //   t:
-        //
-        //   length:
+        /// Extension method for int that loops the value so it stays within length.
+        /// Returns float repeated value.
+        /// Arguments: float length: Loop length.
         public static float Repeat(this int t, float length) => Mathf.Repeat(t, length);
 
-        //
-        // Summary:
-        //     PingPong returns a value that increments and decrements between zero and the
-        //     length. It follows the triangle wave formula where the bottom is set to zero
-        //     and the peak is set to length.
-        //
-        // Parameters:
-        //   t:
-        //
-        //   length:        public static float PingPong(this float t, float length) => Mathf.PingPong(t, length);
+        /// Extension method for int that returns a ping-pong value between 0 and length.
+        /// Returns float ping-pong value.
+        /// Arguments: float length: Ping-pong range.
         public static float PingPong(this int t, float length) => Mathf.PingPong(t, length);
     }
 }

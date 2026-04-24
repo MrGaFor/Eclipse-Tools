@@ -54,5 +54,10 @@ namespace SABI
 
         public static Vector2Int Abs(this Vector2Int vector) =>
             new(Mathf.Abs(vector.x), Mathf.Abs(vector.y));
+
+        public static int RandomRange(this Vector2Int vector)
+        {
+            return Random.Range(vector.x, vector.y);
+        }
     }
 }

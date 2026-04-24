@@ -4,6 +4,9 @@ namespace SABI
 {
     public static class DecimalExtensions
     {
+        /// Extension method for decimal that truncates the number to a specific number of decimal places.
+        /// Returns decimal value truncated to the given digits.
+        /// uint digits: Number of decimal places to keep.
         public static decimal TruncateTo(this decimal n, uint digits)
         {
             var wholePart = decimal.Truncate(n);

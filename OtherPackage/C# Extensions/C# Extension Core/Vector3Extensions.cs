@@ -313,17 +313,41 @@ namespace SABI
 
             return v;
         }
+        #endregion
 
+        #region Distance
         public static float Distance(this Vector3 v, Vector3 target) => Vector3.Distance(v, target);
 
         public static float Distance(this Vector3 v, Transform target) =>
             Vector3.Distance(v, target.position);
+
+        public static float Distance(this Vector3 v, GameObject target) =>
+            Vector3.Distance(v, target.transform.position);
 
         public static float DistanceWithoutHeight(this Vector3 v, Vector3 target) =>
             Vector3.Distance(v.WithY(0), target.WithY(0));
 
         public static float DistanceOfHeight(this Vector3 v, Vector3 target) =>
             Vector3.Distance(v.WithX(0), target.WithY(0));
+
+        public static float SqrDistance(this Vector3 v, Vector3 target)
+        {
+            var distance = (target - v).sqrMagnitude;
+            return distance;
+        }
+
+        public static float SqrDistance(this Vector3 v, Transform target)
+        {
+            return v.SqrDistance(target.position);
+        }
+
+        public static float SqrDistance(this Vector3 v, GameObject target)
+        {
+            return v.SqrDistance(target.transform.position);
+        }
+
+        // TODO: SqrDistance for From Transform and gameobject (reverse)
+
         #endregion
 
         public static Vector3 Remap(

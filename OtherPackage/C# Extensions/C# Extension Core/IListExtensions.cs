@@ -5,14 +5,12 @@ namespace SABI
 {
     public static class IListExtensions
     {
-        /// <summary>
-        /// Checks if the list is null or contains no elements
-        /// </summary>
+        /// Extension method for IList that checks if the list is null or empty.
+        /// Returns bool indicating if the list is null or has no elements.
         public static bool IsNullOrEmpty<T>(this IList<T> list) => list == null || list.Count == 0;
 
-        /// <summary>
-        /// Returns a random item from the list
-        /// </summary>
+        /// Extension method for IList that gets a random item.
+        /// Returns T item randomly selected from the list.
         public static T GetRandomItem<T>(this IList<T> _array)
         {
             if (_array == null)
@@ -26,9 +24,9 @@ namespace SABI
             return _array[Random.Range(0, _array.Count)];
         }
 
-        /// <summary>
-        /// Returns a specified number of random items from the list without duplicates
-        /// </summary>
+        /// Extension method for IList that gets unique random items.
+        /// Returns List<T> of random items without duplicates.
+        /// Arguments: int count: Number of items to select.
         public static List<T> GetUniqeRandomItems<T>(this IList<T> list, int count)
         {
             if (count > list.Count)
@@ -45,9 +43,8 @@ namespace SABI
             return result;
         }
 
-        /// <summary>
-        /// Removes all null elements from the list
-        /// </summary>
+        /// Extension method for List that removes all null elements.
+        /// Return this IList<T> for method chaining.
         public static IList<T> RemoveNulls<T>(this List<T> list)
             where T : class
         {
@@ -55,9 +52,8 @@ namespace SABI
             return list;
         }
 
-        /// <summary>
-        /// Randomly reorders the elements in the list using the Fisher-Yates shuffle algorithm
-        /// </summary>
+        /// Extension method for IList that shuffles the elements randomly.
+        /// Return this IList<T> for method chaining.
         public static IList<T> Shuffle<T>(this IList<T> list)
         {
             int n = list.Count;
@@ -72,13 +68,9 @@ namespace SABI
             return list;
         }
 
-        /// <summary>
-        /// Gets a random item based on weights (useful for probability-based selections)
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="list"></param>
-        /// <param name="weights"></param>
-        /// <returns></returns>
+        /// Extension method for IList that gets a random item based on weights.
+        /// Returns T item selected using weights.
+        /// Arguments: IList<float> weights: List of weights for each item.
         public static T GetWeightedRandom<T>(this IList<T> list, IList<float> weights)
         {
             float totalWeight = 0;
@@ -98,6 +90,9 @@ namespace SABI
             return list[list.Count - 1];
         }
 
+        /// Extension method for IList that executes an action for each item with index.
+        /// Return this IList<T> for method chaining.
+        /// Arguments: Action<T, int> action: Action to perform on each item and index.
         public static IList<T> ForEach<T>(this IList<T> list, System.Action<T, int> action)
         {
             for (int i = 0; i < list.Count; i++)
@@ -105,6 +100,9 @@ namespace SABI
             return list;
         }
 
+        /// Extension method for IList that executes an action for each item.
+        /// Return this IList<T> for method chaining.
+        /// Arguments: Action<T> action: Action to perform on each item.
         public static IList<T> ForEach<T>(this IList<T> list, System.Action<T> action)
         {
             for (int i = 0; i < list.Count; i++)
@@ -112,13 +110,9 @@ namespace SABI
             return list;
         }
 
-        /// <summary>
-        /// Moves an item from one index to another
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="list"></param>
-        /// <param name="oldIndex"></param>
-        /// <param name="newIndex"></param>
+        /// Extension method for IList that moves an item from one index to another.
+        /// Return this IList<T> for method chaining.
+        /// Arguments: int oldIndex: Source index. int newIndex: Destination index.
         public static IList<T> Move<T>(this IList<T> list, int oldIndex, int newIndex)
         {
             if (oldIndex == newIndex)
@@ -130,13 +124,9 @@ namespace SABI
             return list;
         }
 
-        /// <summary>
-        /// Swaps two items in the list
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="list"></param>
-        /// <param name="index1"></param>
-        /// <param name="index2"></param>
+        /// Extension method for IList that swaps two items.
+        /// Return this IList<T> for method chaining.
+        /// Arguments: int index1: First index. int index2: Second index.
         public static IList<T> Swap<T>(this IList<T> list, int index1, int index2)
         {
             if (index1 == index2)
@@ -149,14 +139,9 @@ namespace SABI
             return list;
         }
 
-        /// <summary>
-        /// Replaces the first occurrence of an item with another
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="list"></param>
-        /// <param name="oldItem"></param>
-        /// <param name="newItem"></param>
-        /// <returns></returns>
+        /// Extension method for IList that replaces the first occurrence of an item.
+        /// Return this IList<T> for method chaining.
+        /// Arguments: T oldItem: Item to replace. T newItem: New item.
         public static IList<T> Replace<T>(this IList<T> list, T oldItem, T newItem)
         {
             int index = list.IndexOf(oldItem);
@@ -164,11 +149,8 @@ namespace SABI
             return list;
         }
 
-        /// <summary>
-        /// Removes duplicate items from the list while preserving order
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="list"></param>
+        /// Extension method for IList that removes duplicate items.
+        /// Return this IList<T> for method chaining.
         public static IList<T> RemoveDuplicates<T>(this IList<T> list)
         {
             HashSet<T> seen = new HashSet<T>();
@@ -180,9 +162,9 @@ namespace SABI
             return list;
         }
 
-        /// <summary>
-        /// Pops element by <paramref name="index"/>.
-        /// </summary>
+        /// Extension method for IList that pops an element by index.
+        /// Returns T element removed from the list.
+        /// Arguments: int? index: Index to pop, defaults to last.
         public static T Pop<T>(this IList<T> list, int? index = null)
         {
             if (index == null)
@@ -193,9 +175,9 @@ namespace SABI
             return element;
         }
 
-        /// <summary>
-        /// Pops elements by <paramref name="indexes"/>.
-        /// </summary>
+        /// Extension method for IList that pops elements by indexes.
+        /// Returns List<T> of elements removed from the list.
+        /// Arguments: int[] indexes: Indexes to pop.
         public static List<T> PopList<T>(this IList<T> list, params int[] indexes)
         {
             var popped = new List<T>();
@@ -206,27 +188,25 @@ namespace SABI
             return popped;
         }
 
-        /// <summary>
-        /// Pops random element from <paramref name="list"/>.
-        /// </summary>
+        /// Extension method for IList that pops a random element.
+        /// Returns T element removed randomly from the list.
         public static T PopRandom<T>(this IList<T> list)
         {
             var index = UnityEngine.Random.Range(0, list.Count);
             return list.Pop(index);
         }
 
-        /// <summary>
-        /// Pops random element from <paramref name="list"/>.
-        /// </summary>
+        /// Extension method for IList that pops a random element and returns its index.
+        /// Returns (T element, int index) tuple of removed element and its index.
         public static (T element, int index) PopRandomTuple<T>(this IList<T> list)
         {
             var index = UnityEngine.Random.Range(0, list.Count);
             return (list.Pop(index), index);
         }
 
-        /// <summary>
-        /// Pops random elements from list.
-        /// </summary>
+        /// Extension method for IList that pops multiple random elements.
+        /// Returns List<T> of elements removed randomly from the list.
+        /// Arguments: int count: Number of elements to pop.
         public static List<T> PopRandoms<T>(this IList<T> list, int count)
         {
             var popped = new List<T>();
@@ -237,9 +217,9 @@ namespace SABI
             return popped;
         }
 
-        /// <summary>
-        /// Pops random elements from list.
-        /// </summary>
+        /// Extension method for IList that pops multiple random elements and returns their indexes.
+        /// Returns List<(T element, int index)> of removed elements and their indexes.
+        /// Arguments: int count: Number of elements to pop.
         public static List<(T element, int index)> PopRandomsTupleList<T>(
             this IList<T> list,
             int count
@@ -253,6 +233,9 @@ namespace SABI
             return popped;
         }
 
+        /// Extension method for IList that removes elements from a starting index to the end.
+        /// Return this IList<T> for method chaining.
+        /// Arguments: int index: Starting index to remove from.
         public static IList<T> RemoveRange<T>(this IList<T> list, int index)
         {
             for (int i = list.Count - 1; i >= index; i++)
@@ -260,37 +243,33 @@ namespace SABI
             return list;
         }
 
-        /// <summary>
-        /// Add multiple items as params
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="items"></param>
-        /// <returns></returns>
+        /// Extension method for IList that adds multiple items.
+        /// Return this IList<T> for method chaining.
+        /// Arguments: T[] items: Items to add.
         public static IList<T> AddMultiple<T>(this IList<T> list, params T[] items)
         {
             items.ForEach(item => list.Add(item));
             return list;
         }
 
-        /// <summary>
-        /// Remove multiple items as params
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="list"></param>
-        /// <param name="items"></param>
-        /// <returns></returns>
+        public static IList<T> With<T>(this IList<T> list, params T[] items)
+        {
+            list.AddMultiple(items);
+            return list;
+        }
+
+        /// Extension method for IList that removes multiple items.
+        /// Return this IList<T> for method chaining.
+        /// Arguments: T[] items: Items to remove.
         public static IList<T> RemoveMultiple<T>(this IList<T> list, params T[] items)
         {
             items.ForEach(item => list.Remove(item));
             return list;
         }
 
-        /// <summary>
-        /// Clear the list and Add multiple items as params
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="items"></param>
-        /// <returns></returns>
+        /// Extension method for IList that clears and adds multiple items.
+        /// Return this IList<T> for method chaining.
+        /// Arguments: T[] items: Items to set.
         // public static IList<T> SetMultiple<T>(this IList<T> list, params T[] items)
         // {
         //     if (list is T[] array)
@@ -310,5 +289,12 @@ namespace SABI
         //     }
         //     return list;
         // }
+
+        public static IList<T> SetItems<T>(this IList<T> list, params T[] items)
+        {
+            list.Clear();
+            list.AddMultiple(items);
+            return list;
+        }
     }
 }

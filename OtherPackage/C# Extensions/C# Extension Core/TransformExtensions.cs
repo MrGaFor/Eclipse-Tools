@@ -699,7 +699,6 @@ namespace SABI
         #endregion
 
 
-
         public static Transform AddPositionX(this Transform transform, float x)
         {
             transform.position = transform.position.WithAddX(x);
@@ -1098,6 +1097,14 @@ namespace SABI
             return transform;
         }
 
+        public static Transform DestroyChildrenImmediately(this Transform transform)
+        {
+            foreach (Transform child in transform)
+                UnityEngine.Object.DestroyImmediate(child.gameObject);
+
+            return transform;
+        }
+
         public static Transform DetachChildren(this Transform transform)
         {
             foreach (Transform child in transform)
@@ -1115,11 +1122,17 @@ namespace SABI
         public static float Distance(this Transform transform, Transform target) =>
             Vector3.Distance(transform.position, target.position);
 
+        public static float Distance(this Transform transform, GameObject target) =>
+            Vector3.Distance(transform.position, target.transform.position);
+
         public static float Distance(this Transform transform, Vector3 target) =>
             Vector3.Distance(transform.position, target);
 
         public static float DistanceWithoutHeight(this Transform transform, Transform target) =>
             Vector3.Distance(transform.position.WithY(0), target.position.WithY(0));
+
+        public static float DistanceWithoutHeight(this Transform transform, GameObject target) =>
+            Vector3.Distance(transform.position.WithY(0), target.transform.position.WithY(0));
 
         public static float DistanceWithoutHeight(this Transform transform, Vector3 target) =>
             Vector3.Distance(transform.position.WithY(0), target.WithY(0));
@@ -1521,5 +1534,21 @@ namespace SABI
             return newObject;
         }
         #endregion
+
+        public static void ForEachChildren(this Transform transform, Action<Transform> action)
+        {
+            for (int i = 0; i < transform.childCount; i++)
+            {
+                action?.Invoke(transform.GetChild(i));
+            }
+        }
+
+        public static void ForEachChildren(this Transform transform, Action<Transform, int> action)
+        {
+            for (int i = 0; i < transform.childCount; i++)
+            {
+                action?.Invoke(transform.GetChild(i), i);
+            }
+        }
     }
 }

@@ -13,6 +13,6 @@ AssetOrigin:
   serializedVersion: 1
   productId: 313611
   packageName: C# Extensions
-  packageVersion: 2.8
-  assetPath: Assets/SABI/C# Extensions/C# Extension Core/Vector2Extensions.cs
-  uploadId: 759533
+  packageVersion: 5
+  assetPath: Assets/Eclipse-Tools/OtherPackage/C# Extensions/C# Extension Core/Vector2Extensions.cs
+  uploadId: 899272
