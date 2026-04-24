@@ -6,6 +6,13 @@ using UnityEngine;
 
 public class AutoSaveWindow : OdinEditorWindow
 {
+    private double _nextRepaintTime;
+
+    private static readonly float[] IntervalValues =
+    {
+        180f, 300f, 600f, 900f, 1200f, 1800f, 3600f
+    };
+
     [MenuItem("EC/Modules/AutoSave")]
     private static void Open()
     {
@@ -17,13 +24,24 @@ public class AutoSaveWindow : OdinEditorWindow
     protected override void OnEnable()
     {
         base.OnEnable();
-        EditorApplication.update += Repaint;
+
+        _nextRepaintTime = EditorApplication.timeSinceStartup;
+        EditorApplication.update += TickRepaint;
     }
 
     protected override void OnDisable()
     {
         base.OnDisable();
-        EditorApplication.update -= Repaint;
+        EditorApplication.update -= TickRepaint;
+    }
+
+    private void TickRepaint()
+    {
+        if (EditorApplication.timeSinceStartup < _nextRepaintTime)
+            return;
+
+        _nextRepaintTime = EditorApplication.timeSinceStartup + 0.2;
+        Repaint();
     }
 
     [ShowInInspector]
@@ -47,23 +65,11 @@ public class AutoSaveWindow : OdinEditorWindow
         set => AutoSave.IsLogging = value;
     }
 
-    [OnInspectorGUI]
-    private void DrawTimer()
-    {
-        if (!AutoSave.IsEnabled)
-            return;
-
-        GUILayout.Label($"Next Save In: {FormatTime()}");
-    }
-    private string FormatTime()
-    {
-        var t = AutoSave.TimeToNextSave;
-        if (t < 0) return "-";
-
-        int min = (int)t / 60;
-        int sec = (int)t % 60;
-        return $"{min:00}:{sec:00}";
-    }
+    [ShowInInspector, ReadOnly]
+    private string NextSave =>
+        AutoSave.IsEnabled
+            ? FormatTime(AutoSave.TimeToNextSave)
+            : "Disabled";
 
     [Button]
     private void SaveNow()
@@ -71,32 +77,40 @@ public class AutoSaveWindow : OdinEditorWindow
         AutoSave.ForceSave();
     }
 
-    public enum SaveInterval { m3, m5, m10, m15, m20, m30, m60 }
+    public enum SaveInterval
+    {
+        m3,
+        m5,
+        m10,
+        m15,
+        m20,
+        m30,
+        m60
+    }
 
     private SaveInterval SecondsToEnum(float seconds)
     {
-        if (seconds == 180) return SaveInterval.m3;
-        if (seconds == 300) return SaveInterval.m5;
-        if (seconds == 600) return SaveInterval.m10;
-        if (seconds == 900) return SaveInterval.m15;
-        if (seconds == 1200) return SaveInterval.m20;
-        if (seconds == 1800) return SaveInterval.m30;
-        return SaveInterval.m60;
+        for (int i = 0; i < IntervalValues.Length; i++)
+        {
+            if (Mathf.Approximately(IntervalValues[i], seconds))
+                return (SaveInterval)i;
+        }
+
+        return SaveInterval.m5;
     }
 
     private float EnumToSeconds(SaveInterval interval)
     {
-        switch (interval)
-        {
-            case SaveInterval.m3: return 180;
-            case SaveInterval.m5: return 300;
-            case SaveInterval.m10: return 600;
-            case SaveInterval.m15: return 900;
-            case SaveInterval.m20: return 1200;
-            case SaveInterval.m30: return 1800;
-            case SaveInterval.m60: return 3600;
-            default: return 300;
-        }
+        return IntervalValues[(int)interval];
+    }
+
+    private string FormatTime(double t)
+    {
+        if (t < 0)
+            return "-";
+
+        int total = (int)t;
+        return $"{total / 60:00}:{total % 60:00}";
     }
 }
 #endif

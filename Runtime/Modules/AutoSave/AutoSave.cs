@@ -6,7 +6,16 @@ using UnityEngine;
 [InitializeOnLoad]
 public static class AutoSave
 {
-	private static double _lastSaveTime;
+	static double _lastSaveTime;
+	static double _blockUntilTime;
+
+	static AutoSave()
+	{
+		_lastSaveTime = EditorApplication.timeSinceStartup;
+
+		EditorApplication.playModeStateChanged += OnPlayModeChanged;
+		EditorApplication.update += Update;
+	}
 
 	public static bool IsEnabled
 	{
@@ -26,72 +35,57 @@ public static class AutoSave
 		set => EditorPrefs.SetBool("EC_AutoSaveLogging", value);
 	}
 
-	public static double TimeToNextSave
-	{
-		get
-		{
-			if (!IsEnabled)
-				return -1;
+	public static double TimeToNextSave =>
+		IsEnabled ? Mathf.Max(0, SaveInterval - (float)(EditorApplication.timeSinceStartup - _lastSaveTime)) : -1;
 
-			var elapsed = EditorApplication.timeSinceStartup - _lastSaveTime;
-			return Mathf.Max(0, SaveInterval - (float)elapsed);
-		}
+	static void Update()
+	{
+		if (!CanSave())
+			return;
+
+		if (!HasDirtyScenes())
+			return;
+
+		Save();
 	}
 
-	static AutoSave()
-	{
-		_lastSaveTime = EditorApplication.timeSinceStartup;
-
-		EditorApplication.update -= EditorUpdate;
-		EditorApplication.update += EditorUpdate;
-	}
-
-	private static void EditorUpdate()
+	static bool CanSave()
 	{
 		if (!IsEnabled)
-			return;
+			return false;
 
-		if (EditorApplication.isCompiling || BuildPipeline.isBuildingPlayer)
-			return;
+		if (EditorApplication.isCompiling)
+			return false;
+
+		if (EditorApplication.isPlayingOrWillChangePlaymode)
+			return false;
 
 		if (EditorApplication.isPlaying || EditorApplication.isPaused)
-			return;
+			return false;
+
+		if (EditorApplication.timeSinceStartup < _blockUntilTime)
+			return false;
+
+		if (QuantumGuard.IsRunning)
+			return false;
 
 		if (EditorApplication.timeSinceStartup - _lastSaveTime < SaveInterval)
-			return;
+			return false;
 
-		if (!HasValidScene())
-			return;
+		return true;
+	}
 
-		if (!IsDirty())
+	static bool HasDirtyScenes()
+	{
+		for (int i = 0; i < EditorSceneManager.sceneCount; i++)
 		{
-			_lastSaveTime = EditorApplication.timeSinceStartup;
-			return;
+			if (EditorSceneManager.GetSceneAt(i).isDirty)
+				return true;
 		}
-
-		ExecuteSave();
+		return false;
 	}
 
-	private static bool HasValidScene()
-	{
-		var scene = EditorSceneManager.GetActiveScene();
-		return scene.IsValid() && !string.IsNullOrEmpty(scene.path);
-	}
-
-	private static bool IsDirty()
-	{
-		return EditorSceneManager.GetActiveScene().isDirty;
-	}
-
-	public static void ForceSave()
-	{
-		if (!HasValidScene())
-			return;
-
-		ExecuteSave();
-	}
-
-	private static void ExecuteSave()
+	static void Save()
 	{
 		EditorSceneManager.SaveOpenScenes();
 		AssetDatabase.SaveAssets();
@@ -100,6 +94,20 @@ public static class AutoSave
 
 		if (IsLogging)
 			Debug.Log("AutoSave: Saved");
+	}
+
+	static void OnPlayModeChanged(PlayModeStateChange state)
+	{
+		if (state == PlayModeStateChange.EnteredEditMode)
+			_blockUntilTime = EditorApplication.timeSinceStartup + 2.0;
+	}
+
+	public static void ForceSave()
+	{
+		if (!HasDirtyScenes())
+			return;
+
+		Save();
 	}
 }
 #endif
