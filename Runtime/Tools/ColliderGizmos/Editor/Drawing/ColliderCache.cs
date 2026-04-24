@@ -57,7 +57,7 @@ public static class ColliderCache
 
     private static void CacheAll<T>() where T : Collider
     {
-        _allCache[typeof(T)] = Object.FindObjectsByType<T>(FindObjectsSortMode.None);
+        _allCache[typeof(T)] = Object.FindObjectsByType<T>(FindObjectsInactive.Exclude);
     }
 
     private static void CacheSelected<T>() where T : Collider

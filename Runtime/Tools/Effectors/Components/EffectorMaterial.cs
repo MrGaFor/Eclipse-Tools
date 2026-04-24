@@ -23,6 +23,7 @@ namespace EC.Effects
         [SerializeField, HideInInspector] private float RangeMin;
         [SerializeField, HideInInspector] private float RangeMax;
 
+        [Obsolete]
         private string[] GetKeysForActiveData()
         {
             if (_data == null || _data.Component == null)

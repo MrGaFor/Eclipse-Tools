@@ -18,8 +18,8 @@ namespace EC.Effects
         [SerializeField, BoxGroup("Automatic", ShowLabel = false), HorizontalGroup("Automatic/enable", Width = 130), LabelText("Is Automatic"), LabelWidth(100)] private bool _isAutomatic;
         [SerializeField, BoxGroup("Automatic"), HorizontalGroup("Automatic/enable"), ShowIf("_isAutomatic"), LabelText("Call"), LabelWidth(50)] private EnableType _automaticCall;
         [SerializeField, BoxGroup("Automatic"), HorizontalGroup("Automatic/enable"), ShowIf("_isAutomatic"), LabelText("Method"), LabelWidth(50)] private EnableVariant _automaticMethod;
-        [SerializeField, BoxGroup("Automatic"), HorizontalGroup("Automatic/value"), ShowIf("_isAutomatic"), PropertyRange(0, "@Mathf.Max(0, _states.Length - 1)"), LabelWidth(70), LabelText("From")] private int _automaticFrom;
-        [SerializeField, BoxGroup("Automatic"), HorizontalGroup("Automatic/value"), ShowIf("_isAutomatic"), PropertyRange(0, "@Mathf.Max(0, _states.Length - 1)"), LabelWidth(70), LabelText("To")] private int _automaticTo;
+        [SerializeField, BoxGroup("Automatic"), HorizontalGroup("Automatic/value"), ShowIf("_isAutomatic"), PropertyRange(0, "GetMaxStateId"), LabelWidth(70), LabelText("From")] private int _automaticFrom;
+        [SerializeField, BoxGroup("Automatic"), HorizontalGroup("Automatic/value"), ShowIf("_isAutomatic"), PropertyRange(0, "GetMaxStateId"), LabelWidth(70), LabelText("To")] private int _automaticTo;
 
         private void Awake()
         {
@@ -49,8 +49,8 @@ namespace EC.Effects
         [SerializeField, BoxGroup("States", ShowLabel = false), HorizontalGroup("States/startSt"), HideInPlayMode, PropertyRange(0, "GetMaxStateId")] private int _startState;
         #region Editor
 #if UNITY_EDITOR
-        [SerializeField, BoxGroup("States"), HorizontalGroup("States/startSt", Width = 25), HideInPlayMode, Button("<")] private void EditorPrevState() { _startState = (int)Mathf.Repeat(_startState - 1, GetStatesCount()); OnValidate(); }
-        [SerializeField, BoxGroup("States"), HorizontalGroup("States/startSt", Width = 25), HideInPlayMode, Button(">")] private void EditorNextState() { _startState = (int)Mathf.Repeat(_startState + 1, GetStatesCount()); OnValidate(); }
+        [BoxGroup("States"), HorizontalGroup("States/startSt", Width = 25), HideInPlayMode, Button("<"), ShowIf("HasMinimumStates")] private void EditorPrevState() { _startState = (int)Mathf.Repeat(_startState - 1, GetStatesCount()); OnValidate(); }
+        [BoxGroup("States"), HorizontalGroup("States/startSt", Width = 25), HideInPlayMode, Button(">"), ShowIf("HasMinimumStates")] private void EditorNextState() { _startState = (int)Mathf.Repeat(_startState + 1, GetStatesCount()); OnValidate(); }
 #endif
         #endregion
         [SerializeField, BoxGroup("States"), HideInEditorMode, ReadOnly] private int _state;
@@ -139,7 +139,8 @@ namespace EC.Effects
             #endregion
         }
         private int GetStatesCount() => _states != null ? _states.Length : 0;
-        private int GetMaxStateId() => GetStatesCount() - 1;
+        private int GetMaxStateId() => Mathf.Max(0, GetStatesCount() - 1);
+        private bool HasMinimumStates() => GetStatesCount() >= 2;
 
         public int GetState() => _state;
         public string GetStateId() => _states[_state].ID;
@@ -271,8 +272,8 @@ namespace EC.Effects
 
         #region Editor
 #if UNITY_EDITOR
-        [SerializeField, HorizontalGroup("st"), HideInEditorMode, Button("<Prev"), PropertyOrder(-1)] private void PlayPrevState() { PlaySmooth((int)Mathf.Repeat(_state - 1, GetStatesCount())); }
-        [SerializeField, HorizontalGroup("st"), HideInEditorMode, Button("Next>"), PropertyOrder(-1)] private void PlayNextState() { PlaySmooth((int)Mathf.Repeat(_state + 1, GetStatesCount())); }
+        [HorizontalGroup("st"), HideInEditorMode, Button("<Prev"), PropertyOrder(-1)] private void PlayPrevState() { PlaySmooth((int)Mathf.Repeat(_state - 1, GetStatesCount())); }
+        [HorizontalGroup("st"), HideInEditorMode, Button("Next>"), PropertyOrder(-1)] private void PlayNextState() { PlaySmooth((int)Mathf.Repeat(_state + 1, GetStatesCount())); }
 
         private void OnValidate()
         {

@@ -126,6 +126,7 @@ namespace EC.ComponentVariable
         private string materialKey;
 
 #if UNITY_EDITOR
+        [Obsolete]
         private string[] GetColorPropertyNames()
         {
             if (material == null || material.shader == null)

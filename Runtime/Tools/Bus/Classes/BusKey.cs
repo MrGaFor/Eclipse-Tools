@@ -47,14 +47,14 @@ namespace EC.Bus
         private string _key;
 
 #if UNITY_EDITOR
-        [SerializeField, ShowIf("_isSelecting"), HorizontalGroup(25f), Button("➕"), Tooltip("Add new Key"), PropertySpace(2)]
+        [ShowIf("_isSelecting"), HorizontalGroup(25f), Button("➕"), Tooltip("Add new Key"), PropertySpace(2)]
         private void BtnCreate()
         {
             _inspectorState = InspectorState.Editing;
             _newKey = "";
         }
 
-        [SerializeField, ShowIf("_isSelecting"), HorizontalGroup(25f), Button("➖"), Tooltip("Remove Key"), PropertySpace(2)]
+        [ShowIf("_isSelecting"), HorizontalGroup(25f), Button("➖"), Tooltip("Remove Key"), PropertySpace(2)]
         private void BtnRemove()
         {
             _inspectorState = InspectorState.Removing;
@@ -64,7 +64,7 @@ namespace EC.Bus
         [SerializeField, ShowIf("_isEditing"), HorizontalGroup(), LabelText("New Key"), LabelWidth(70)]
         private string _newKey;
 
-        [SerializeField, ShowIf("_isEditing"), HorizontalGroup(25f), Button("✔️"), Tooltip("Confirm"), PropertySpace(2)]
+        [ShowIf("_isEditing"), HorizontalGroup(25f), Button("✔️"), Tooltip("Confirm"), PropertySpace(2)]
         private void BtnAdd()
         {
             _key = _newKey;
@@ -72,14 +72,14 @@ namespace EC.Bus
             _inspectorState = InspectorState.Selecting;
         }
 
-        [SerializeField, ShowIf("_isEditing"), HorizontalGroup(25f), Button("✖️"), Tooltip("Cancel"), PropertySpace(2)]
+        [ShowIf("_isEditing"), HorizontalGroup(25f), Button("✖️"), Tooltip("Cancel"), PropertySpace(2)]
         private void BtnCancel()
         {
             _inspectorState = InspectorState.Selecting;
         }
 
         // REMOVING
-        [SerializeField, ShowIf("_isRemoving"), HorizontalGroup(), Button("✔️ Confirm"), Tooltip("Confirm removing Key"), PropertySpace(2)]
+        [ShowIf("_isRemoving"), HorizontalGroup(), Button("✔️ Confirm"), Tooltip("Confirm removing Key"), PropertySpace(2)]
         private void BtnYesRemoving()
         {
             BusSettingsProvider.Settings.TryRemoveKey(_key);
@@ -87,7 +87,7 @@ namespace EC.Bus
             _inspectorState = InspectorState.Selecting;
         }
 
-        [SerializeField, ShowIf("_isRemoving"), HorizontalGroup(), Button("✖️ Cancel"), Tooltip("Cancel removing Key"), PropertySpace(2)]
+        [ShowIf("_isRemoving"), HorizontalGroup(), Button("✖️ Cancel"), Tooltip("Cancel removing Key"), PropertySpace(2)]
         private void BtnNoRemoving()
         {
             _inspectorState = InspectorState.Selecting;

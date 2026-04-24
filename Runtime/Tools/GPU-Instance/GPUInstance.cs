@@ -29,8 +29,7 @@ namespace EC.GPU
         public static void ReInstance()
         {
             MeshRenderer[] renderers = GameObject.FindObjectsByType<MeshRenderer>(
-                FindObjectsInactive.Exclude,
-                FindObjectsSortMode.None
+                FindObjectsInactive.Exclude
             );
 
             foreach (var renderer in renderers)

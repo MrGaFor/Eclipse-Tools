@@ -12,7 +12,7 @@ namespace EC.Mini
         [System.Serializable]
         private class ButtonSlot
         {
-            [SerializeField, Button("Invoke"), PropertyOrder(-1)] private void Invoke() => _action?.Invoke();
+            [Button("Invoke"), PropertyOrder(-1)] private void Invoke() => _action?.Invoke();
             [SerializeField, FoldoutGroup("Event")] private UnityEngine.Events.UnityEvent _action;
         }
 #endif

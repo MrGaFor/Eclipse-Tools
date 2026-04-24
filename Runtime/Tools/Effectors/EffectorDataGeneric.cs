@@ -125,9 +125,9 @@ namespace EC.Effects
         {
             #region Editor
 #if UNITY_EDITOR
-            [SerializeField, HorizontalGroup("evs"), Button("OnPlay"), GUIColor("@_isOnPlay == true ? new Color(0.5f, 1f, 0.5f, 1f) : Color.gray")] private void ChangeOnStart() { _isOnPlay = !_isOnPlay; _onPlay = new(); }
-            [SerializeField, HorizontalGroup("evs"), Button("OnUpdate"), GUIColor("@_isOnUpdate == true ? new Color(0.5f, 1f, 0.5f, 1f) : Color.gray")] private void ChangeOnUpdate() { _isOnUpdate = !_isOnUpdate; _onUpdate = new(); }
-            [SerializeField, HorizontalGroup("evs"), Button("OnComplete"), GUIColor("@_isOnComplete == true ? new Color(0.5f, 1f, 0.5f, 1f) : Color.gray")] private void ChangeOnComplete() { _isOnComplete = !_isOnComplete; _onComplete = new(); }
+            [HorizontalGroup("evs"), Button("OnPlay"), GUIColor("@_isOnPlay == true ? new Color(0.5f, 1f, 0.5f, 1f) : Color.gray")] private void ChangeOnStart() { _isOnPlay = !_isOnPlay; _onPlay = new(); }
+            [HorizontalGroup("evs"), Button("OnUpdate"), GUIColor("@_isOnUpdate == true ? new Color(0.5f, 1f, 0.5f, 1f) : Color.gray")] private void ChangeOnUpdate() { _isOnUpdate = !_isOnUpdate; _onUpdate = new(); }
+            [HorizontalGroup("evs"), Button("OnComplete"), GUIColor("@_isOnComplete == true ? new Color(0.5f, 1f, 0.5f, 1f) : Color.gray")] private void ChangeOnComplete() { _isOnComplete = !_isOnComplete; _onComplete = new(); }
 #endif
             #endregion
 

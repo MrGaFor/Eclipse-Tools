@@ -9,7 +9,7 @@ namespace EC.Bus
     {
         [SerializeField, LabelText("Old Key"), HorizontalGroup(), ShowIf("HasOldKey")] protected string _key; private bool HasOldKey => !string.IsNullOrEmpty(_key);
 #if UNITY_EDITOR
-        [SerializeField, HorizontalGroup(25), Button("➰"), ShowIf("HasOldKey"), Tooltip("Transfer to new Key")] private void BtnTransferKey() { _busKey.TransferKey(_key); _key = ""; }
+        [HorizontalGroup(25), Button("➰"), ShowIf("HasOldKey"), Tooltip("Transfer to new Key")] private void BtnTransferKey() { _busKey.TransferKey(_key); _key = ""; }
 #endif
         [SerializeField, HorizontalGroup("input"), HideLabel] protected BusKey _busKey;
         [SerializeField, HorizontalGroup("input", 90), HideLabel] protected AutoCall _autoCallType = AutoCall.None;
@@ -30,7 +30,7 @@ namespace EC.Bus
     {
         [SerializeField, LabelText("Old Key"), HorizontalGroup(), ShowIf("HasOldKey")] protected string _key; private bool HasOldKey => !string.IsNullOrEmpty(_key);
 #if UNITY_EDITOR
-        [SerializeField, HorizontalGroup(25), Button("➰"), ShowIf("HasOldKey"), Tooltip("Transfer to new Key")] private void BtnTransferKey() { _busKey.TransferKey(_key); _key = ""; }
+        [HorizontalGroup(25), Button("➰"), ShowIf("HasOldKey"), Tooltip("Transfer to new Key")] private void BtnTransferKey() { _busKey.TransferKey(_key); _key = ""; }
 #endif
         [SerializeField, HorizontalGroup("input"), HideLabel] protected BusKey _busKey;
         [SerializeField, HorizontalGroup("input", 90), HideLabel] protected AutoCall _autoCallType = AutoCall.None;

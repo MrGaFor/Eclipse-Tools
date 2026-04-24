@@ -16,9 +16,9 @@ namespace EC.Effects
         public override bool ThisVector2 => false;
         public override bool ThisVector3 => false;
 
-        [SerializeField, HideLabel, OnValueChanged("FloatUpdate", IncludeChildren = true), ShowIf("ThisFloat")] private EffectorComponentFuncData<RectTransform, FuncList, float> _dataFloat; public virtual void FloatUpdate() { _dataVector3.Func = _dataFloat.Func; _dataColor.Func = _dataFloat.Func; base.MarkDirty(); }
-        [SerializeField, HideLabel, OnValueChanged("Vector3Update", IncludeChildren = true), ShowIf("ThisVector3")] private EffectorComponentFuncData<RectTransform, FuncList, Vector3> _dataVector3; public virtual void Vector3Update() { _dataFloat.Func = _dataVector3.Func; _dataColor.Func = _dataVector3.Func; base.MarkDirty(); }
-        [SerializeField, HideLabel, OnValueChanged("ColorUpdate", IncludeChildren = true), ShowIf("ThisColor")] private EffectorComponentFuncData<RectTransform, FuncList, Color> _dataColor;public virtual void ColorUpdate() { _dataFloat.Func = _dataColor.Func; _dataVector3.Func = _dataColor.Func; base.MarkDirty(); }
+        [field: SerializeField, HideLabel, OnValueChanged("FloatUpdate", IncludeChildren = true), ShowIf("ThisFloat")] private EffectorComponentFuncData<RectTransform, FuncList, float> _dataFloat; public virtual void FloatUpdate() { _dataVector3.Func = _dataFloat.Func; _dataColor.Func = _dataFloat.Func; base.MarkDirty(); }
+        [field: SerializeField, HideLabel, OnValueChanged("Vector3Update", IncludeChildren = true), ShowIf("ThisVector3")] private EffectorComponentFuncData<RectTransform, FuncList, Vector3> _dataVector3; public virtual void Vector3Update() { _dataFloat.Func = _dataVector3.Func; _dataColor.Func = _dataVector3.Func; base.MarkDirty(); }
+        [field: SerializeField, HideLabel, OnValueChanged("ColorUpdate", IncludeChildren = true), ShowIf("ThisColor")] private EffectorComponentFuncData<RectTransform, FuncList, Color> _dataColor;public virtual void ColorUpdate() { _dataFloat.Func = _dataColor.Func; _dataVector3.Func = _dataColor.Func; base.MarkDirty(); }
 
         public override IEffectorData Data => _data;
         private EffectorComponentFunc<RectTransform, FuncList> _data => ThisFloat ? _dataFloat : ThisVector3 ? _dataVector3 : ThisColor ? _dataColor : null;
