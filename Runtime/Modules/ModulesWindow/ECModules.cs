@@ -36,6 +36,7 @@ namespace EC
             ("PlayerPrefs Viewer", "EC_PLAYERPREFS_VIEWER"),
             ("Smooth Scene Camera", "EC_SMOOTH_SCENE_CAMERA"),
             ("TimeScale Toolbar", "EC_TIMESCALE_TOOLBAR"),
+            ("Autosave", "EC_AUTOSAVE"),
             ("Android Extensions", "EC_ANDROID_EXTENSIONS")
         };
 
