@@ -28,9 +28,7 @@ namespace EC.GPU
         public static void ReInstance(Scene scene, LoadSceneMode mode = LoadSceneMode.Single) => ReInstance();
         public static void ReInstance()
         {
-            MeshRenderer[] renderers = GameObject.FindObjectsByType<MeshRenderer>(
-                FindObjectsInactive.Exclude
-            );
+            MeshRenderer[] renderers = GameObject.FindObjectsByType<MeshRenderer>(findObjectsInactive: FindObjectsInactive.Exclude);
 
             foreach (var renderer in renderers)
             {
