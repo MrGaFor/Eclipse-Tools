@@ -28,12 +28,23 @@ public static class QuantumGuard
 
         _initialized = true;
 
-        _runnerType = Type.GetType("Quantum.QuantumRunner, Quantum.Engine");
+        _runnerType = FindType("Quantum.QuantumRunner");
         if (_runnerType == null)
             return false;
 
         _defaultProp = _runnerType.GetProperty("Default", BindingFlags.Public | BindingFlags.Static);
         return _defaultProp != null;
+    }
+
+    private static Type FindType(string fullName)
+    {
+        foreach (var asm in AppDomain.CurrentDomain.GetAssemblies())
+        {
+            var type = asm.GetType(fullName);
+            if (type != null)
+                return type;
+        }
+        return null;
     }
 }
 #endif
