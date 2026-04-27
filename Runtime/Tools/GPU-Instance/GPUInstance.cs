@@ -28,7 +28,13 @@ namespace EC.GPU
         public static void ReInstance(Scene scene, LoadSceneMode mode = LoadSceneMode.Single) => ReInstance();
         public static void ReInstance()
         {
-            MeshRenderer[] renderers = GameObject.FindObjectsByType<MeshRenderer>(findObjectsInactive: FindObjectsInactive.Exclude);
+#if UNITY_6000_4_OR_NEWER
+            MeshRenderer[] renderers = GameObject.FindObjectsByType<MeshRenderer>(FindObjectsInactive.Exclude);
+#else
+#pragma warning disable CS0618 // Type or member is obsolete
+            MeshRenderer[] renderers = GameObject.FindObjectsOfType<MeshRenderer>(false);
+#pragma warning restore CS0618 // Type or member is obsolete
+#endif
 
             foreach (var renderer in renderers)
             {
@@ -50,6 +56,6 @@ namespace EC.GPU
 #endif
         }
 
-        #endregion
+#endregion
     }
 }

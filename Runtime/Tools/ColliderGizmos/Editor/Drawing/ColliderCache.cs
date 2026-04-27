@@ -57,7 +57,13 @@ public static class ColliderCache
 
     private static void CacheAll<T>() where T : Collider
     {
-        _allCache[typeof(T)] = Object.FindObjectsByType<T>(findObjectsInactive: FindObjectsInactive.Exclude);
+#if UNITY_6000_4_OR_NEWER
+        _allCache[typeof(T)] = Object.FindObjectsByType<T>(FindObjectsInactive.Exclude);
+#else
+#pragma warning disable CS0618 // Type or member is obsolete
+        _allCache[typeof(T)] = Object.FindObjectsOfType<T>(false);
+#pragma warning restore CS0618 // Type or member is obsolete
+#endif
     }
 
     private static void CacheSelected<T>() where T : Collider
